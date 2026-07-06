@@ -22,19 +22,11 @@
     <script src="https://www.youtube.com/iframe_api"></script>
 
     <style>
-        /* No Copy & No Selection Styles */
-        body {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
         /* Custom smooth range slider for 144fps timeline feel */
         .timeline-container {
             position: relative;
             width: 100%;
-            height: 4px;
+            height: 6px;
             background: #27272a;
             border-radius: 9999px;
             cursor: pointer;
@@ -50,52 +42,55 @@
             background: linear-gradient(90deg, #ef4444, #eab308);
             border-radius: 9999px;
             width: 0%;
+            background-size: 200% 200%;
+            animation: progressGlowing 2s ease infinite;
+        }
+
+        @keyframes progressGlowing {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .timeline-thumb {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 14px;
+            height: 14px;
             background: #ffffff;
             border: 2px solid #ef4444;
             border-radius: 50%;
             left: 0%;
             transform: translateX(-50%);
             pointer-events: none;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+        }
+
+        .timeline-container:hover .timeline-thumb {
+            transform: translateX(-50%) scale(1.2);
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* Block pointer clicks inside video to prevent channel name clicks */
-        .yt-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-            background: transparent;
-        }
     </style>
 </head>
-<body class="bg-black text-white font-sans antialiased selection:bg-transparent" oncontextmenu="return false;">
+<body class="bg-black text-white font-sans antialiased selection:bg-red-600 selection:text-white">
 
     <!-- TOP HEADER SECTION -->
     <header class="p-4 border-b border-zinc-800 flex justify-between items-start sticky top-0 bg-black/90 backdrop-blur z-30">
-        <div class="min-w-0 flex-1 pr-2">
-            <h1 class="text-4xl font-black tracking-tighter text-red-600 uppercase break-words">ZG X9T</h1>
-            <p class="text-xs font-bold text-zinc-400 tracking-widest uppercase mt-1 break-words">THE WORLD HUMMING KING</p>
-            <p class="text-xs font-bold text-red-500 mt-0.5 break-words">#JusticeForZubeenGarg</p>
+        <div>
+            <h1 class="text-4xl font-black tracking-tighter text-red-600 uppercase">ZG X9T</h1>
+            <p class="text-xs font-bold text-zinc-400 tracking-widest uppercase mt-1">THE WORLD HUMMING KING</p>
+            <p class="text-xs font-bold text-red-500 mt-0.5">#JusticeForZubeenGarg</p>
             
-            <div class="mt-3 text-sm font-bold text-zinc-300 flex flex-wrap items-center gap-2">
+            <div class="mt-3 text-sm font-bold text-zinc-300 flex items-center gap-2">
                 <span>App By</span>
-                <a href="https://www.facebook.com/share/1BQEf1Ndee/" target="_blank" class="inline-flex items-center gap-1 bg-zinc-900 hover:bg-blue-600 px-2 py-1 rounded text-xs transition-all border border-zinc-700 whitespace-nowrap">
+                <a href="https://www.facebook.com/share/1BQEf1Ndee/" target="_blank" class="inline-flex items-center gap-1 bg-zinc-900 hover:bg-blue-600 px-2 py-1 rounded text-xs transition-all border border-zinc-700">
                     <i class="fab fa-facebook text-blue-400"></i> @thedhruba2x
                 </a>
             </div>
         </div>
-        <div class="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center font-black text-xl shadow-lg border border-red-500 shrink-0">
+        <div class="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center font-black text-xl shadow-lg border border-red-500">
             ZG
         </div>
     </header>
@@ -111,13 +106,14 @@
         
         <div class="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-zinc-400 px-1">
             <span>All Song Collection</span>
-            <span id="totalSongsCount" class="bg-red-600/10 text-red-500 px-2 py-0.5 rounded-full border border-red-600/20 whitespace-nowrap">Loading...</span>
+            <span id="totalSongsCount" class="bg-red-600/10 text-red-500 px-2 py-0.5 rounded-full border border-red-600/20">Loading...</span>
         </div>
     </section>
 
     <!-- MAIN SINGLE COLUMN SONG LIST -->
-    <main class="p-4 pb-32">
+    <main class="p-4 pb-12">
         <div id="songsContainer" class="flex flex-col gap-3">
+            <!-- Loading state -->
             <div class="animate-pulse flex flex-col gap-3">
                 <div class="h-16 bg-zinc-900 rounded-lg"></div>
                 <div class="h-16 bg-zinc-900 rounded-lg"></div>
@@ -126,76 +122,39 @@
         </div>
     </main>
 
-    <!-- BOTTOM MINI PLAYER COMPONENT -->
-    <div id="miniPlayer" class="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-800 p-2 z-40 hidden flex-col gap-1 shadow-2xl">
-        <!-- Mini Player Timeline -->
-        <div id="miniTimeline" class="timeline-container w-full">
-            <div id="miniTimelineProgress" class="timeline-progress"></div>
-            <div id="miniTimelineThumb" class="timeline-thumb"></div>
-        </div>
-        
-        <div class="flex items-center justify-between gap-2 mt-1">
-            <!-- Left: Clickable area to open Fullscreen -->
-            <div onclick="openFullScreenPlayer()" class="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
-                <div class="w-14 h-9 bg-black rounded overflow-hidden border border-zinc-800 relative shrink-0">
-                    <div id="miniVideoWrapper" class="w-full h-full scale-125 pointer-events-none">
-                        <!-- YouTube Player container stays here until expanded -->
-                        <div id="ytPlayerContainer" class="w-full h-full"></div>
-                    </div>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <h4 id="miniPlayerTitle" class="text-xs font-bold truncate text-zinc-100">Song Title</h4>
-                    <p class="text-[9px] text-red-500 font-bold uppercase tracking-widest whitespace-nowrap">Tap to view full screen</p>
-                </div>
-            </div>
-
-            <!-- Right: Mini Controls -->
-            <div class="flex items-center gap-2.5 shrink-0 px-1">
-                <button onclick="playPrevious()" class="text-zinc-400 hover:text-white text-sm p-1"><i class="fas fa-backward-step"></i></button>
-                <button onclick="togglePlayPause()" class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white text-xs shrink-0"><i id="miniPlayIcon" class="fas fa-play pl-0.5"></i></button>
-                <button onclick="playNext()" class="text-zinc-400 hover:text-white text-sm p-1"><i class="fas fa-forward-step"></i></button>
-                <button onclick="closeVideo()" class="text-zinc-500 hover:text-red-500 text-sm p-1 ml-0.5"><i class="fas fa-times"></i></button>
-            </div>
-        </div>
-    </div>
-
     <!-- FULL SCREEN PLAYER COMPONENT -->
     <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden">
         <!-- Top bar inside fullscreen -->
         <div class="p-4 flex justify-between items-center border-b border-zinc-900 bg-gradient-to-b from-black/80 to-transparent">
-            <button onclick="closeFullScreenPlayer()" class="text-zinc-400 hover:text-white text-xl p-1"><i class="fas fa-chevron-down"></i></button>
+            <button onclick="closeFullScreenPlayer()" class="text-zinc-400 hover:text-white text-xl"><i class="fas fa-chevron-down"></i></button>
             <div class="text-center px-4 flex-1 min-w-0">
-                <span class="text-[10px] font-black tracking-widest text-red-500 uppercase block">Now Playing</span>
-                <h3 id="fullPlayerTitle" class="text-sm font-bold truncate text-white">Song Title</h3>
+                <span class="text-[10px] font-black tracking-widest text-red-500 uppercase">Now Playing</span>
+                <h3 id="fullPlayerTitle" class="text-sm font-bold truncate">Song Title</h3>
             </div>
-            <button onclick="toggleXTPanel()" class="bg-zinc-900 border border-zinc-800 px-3 py-1 rounded text-xs font-black tracking-wider text-red-500 hover:bg-zinc-800 transition-all shrink-0">XT OPTION</button>
+            <button onclick="toggleXTPanel()" class="bg-zinc-900 border border-zinc-800 px-3 py-1 rounded text-xs font-black tracking-wider text-red-500 hover:bg-zinc-800 transition-all">XT OPTION</button>
         </div>
 
         <!-- Middle: Main Video Container -->
         <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/30 relative gap-6">
             <div class="w-full max-w-lg aspect-video bg-black rounded-lg overflow-hidden border border-zinc-800 shadow-2xl relative">
-                <div id="fullVideoWrapper" class="w-full h-full">
-                    <!-- YouTube Player object moves here when fullscreen is requested -->
-                </div>
-                <!-- Overlay to block clicks on video title/channel -->
-                <div class="yt-overlay"></div>
+                <div id="ytPlayerContainer" class="w-full h-full"></div>
             </div>
 
-            <!-- BRANDING LOGO & CREDITS -->
-            <div class="text-center mt-2 px-4 select-none w-full max-w-xl">
-                <h2 class="text-1xl md:text-4xl font-extrabold tracking-wide text-white uppercase drop-shadow-lg break-words whitespace-normal">
-                    #<span class="text-yellow-400">Justice</span>For<span class="text-yellow-400">Zubeen</span>Garg
+            <!-- CUSTOM STYLISH BRANDING SECTION BELOW THE VIDEO -->
+            <div class="text-center mt-2 px-4 select-none">
+                <h2 class="text-1xl md:text-3xl font-black tracking-wide text-white uppercase drop-shadow-md">
+                    #<span class="text-yellow-400">Justice</span>For<span class="text-yellow-300">Zubeen</span>Garg
                 </h2>
-                <p class="text-sm md:text-lg font-black tracking-widest mt-3 bg-gradient-to-r from-white via-yellow-400 to-white bg-clip-text text-transparent uppercase break-words whitespace-normal px-2">
-                     DhrubaJyoti-A Zubeen Fan
+                <p class="text-sm md:text-base font-extrabold tracking-wider mt-2 bg-gradient-to-r from-white via-yellow-400 to-white bg-clip-text text-transparent uppercase">
+                      Jay Zubeen Da
                 </p>
             </div>
 
             <!-- XT Side Panel Overlay -->
-            <div id="xtPanel" class="absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-zinc-950/95 border-l border-zinc-800 z-50 transform translate-x-full transition-transform duration-300 flex flex-col hidden">
+            <div id="xtPanel" class="absolute right-0 top-0 bottom-0 w-80 bg-zinc-950/95 border-l border-zinc-800 z-50 transform translate-x-full transition-transform duration-300 flex flex-col hidden">
                 <div class="p-3 border-b border-zinc-800 flex justify-between items-center">
                     <span class="text-xs font-black text-red-500"><i class="fas fa-list"></i> XT QUEUE LIST</span>
-                    <button onclick="toggleXTPanel()" class="text-zinc-400 text-sm p-1"><i class="fas fa-times"></i></button>
+                    <button onclick="toggleXTPanel()" class="text-zinc-400 text-sm"><i class="fas fa-times"></i></button>
                 </div>
                 <div id="xtSongsList" class="flex-1 overflow-y-auto p-2 flex flex-col gap-2 no-scrollbar"></div>
             </div>
@@ -205,9 +164,9 @@
         <div class="p-6 bg-gradient-to-t from-black via-black/90 to-transparent">
             <!-- Timeline Area -->
             <div class="flex flex-col gap-2 mb-6">
-                <div id="fullTimeline" class="timeline-container">
-                    <div id="fullTimelineProgress" class="timeline-progress"></div>
-                    <div id="fullTimelineThumb" class="timeline-thumb"></div>
+                <div id="customTimeline" class="timeline-container">
+                    <div id="timelineProgress" class="timeline-progress"></div>
+                    <div id="timelineThumb" class="timeline-thumb"></div>
                 </div>
                 <div class="flex justify-between text-[11px] font-mono font-bold text-zinc-400 px-0.5">
                     <span id="currentTimeLabel">0:00</span>
@@ -220,6 +179,11 @@
                 <button onclick="playPrevious()" class="text-zinc-400 hover:text-white text-xl transition-colors"><i class="fas fa-backward-step"></i></button>
                 <button onclick="togglePlayPause()" class="w-16 h-16 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center text-white text-2xl transition-all transform active:scale-95 shadow-lg shadow-red-600/20"><i id="fullPlayIcon" class="fas fa-play pl-1"></i></button>
                 <button onclick="playNext()" class="text-zinc-400 hover:text-white text-xl transition-colors"><i class="fas fa-forward-step"></i></button>
+            </div>
+
+            <!-- Close Option -->
+            <div class="mt-4 text-center">
+                <button onclick="closeVideo()" class="text-xs font-bold tracking-widest text-zinc-500 hover:text-red-500 uppercase transition-all py-2 px-4 rounded-full border border-zinc-900 hover:border-red-600/30"><i class="fas fa-power-off mr-1"></i> Close & Exit Player</button>
             </div>
         </div>
     </div>
@@ -247,7 +211,6 @@
         let ytPlayer = null;
         let timelineInterval = null;
         let isDraggingTimeline = false;
-        let isPlayerFullscreen = false;
 
         // --- YOUTUBE ID EXTRACTOR ---
         function getYoutubeId(url) {
@@ -257,6 +220,7 @@
             return (match && match[2].length === 11) ? match[2] : '';
         }
 
+        // --- DEEP DATABASE OBJECT TREE SCANNER ---
         function extractSongs(obj) {
             let songsList = [];
             function recurse(current) {
@@ -274,37 +238,56 @@
             return songsList;
         }
 
+        // --- LOAD DATA FROM REALTIME DB ---
         function loadSongsFromDatabase() {
             database.ref('/').on('value', (snapshot) => {
                 const data = snapshot.val();
                 allSongs = extractSongs(data);
+                
                 if(allSongs.length === 0) {
-                    allSongs = [{ title: "Sample Song", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }];
+                    allSongs = [
+                        { title: "Sample Song - Connected but Empty", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
+                    ];
                 }
+
                 filteredSongs = [...allSongs];
                 document.getElementById('totalSongsCount').innerText = `${allSongs.length} Songs`;
                 renderSongsList();
                 renderXTSongsList();
+            }, (error) => {
+                console.error(error);
+                document.getElementById('totalSongsCount').innerText = "Error Loading";
             });
         }
 
+        // --- RENDER SINGLE COLUMN ULTRA SLIM CARDS ---
         function renderSongsList() {
             const container = document.getElementById('songsContainer');
             container.innerHTML = '';
+
+            if(filteredSongs.length === 0) {
+                container.innerHTML = `<p class="text-zinc-500 text-center py-8 text-sm">No songs found matching your search</p>`;
+                return;
+            }
+
             filteredSongs.forEach((song, index) => {
                 const ytId = getYoutubeId(song.url);
-                const thumbUrl = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
+                const thumbUrl = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=500';
 
                 const card = document.createElement('div');
-                card.className = "bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-lg p-2 flex items-center gap-3 cursor-pointer transition-all active:scale-[0.99] group min-w-0";
+                card.className = "bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-lg p-2 flex items-center gap-3 cursor-pointer transition-all active:scale-[0.99] group";
                 card.onclick = () => playSong(index);
 
                 card.innerHTML = `
-                    <div class="w-20 h-12 bg-black rounded overflow-hidden shrink-0 border border-zinc-800 relative">
+                    <div class="w-24 h-14 bg-black rounded overflow-hidden shrink-0 border border-zinc-800 relative">
                         <img src="${thumbUrl}" alt="thumbnail" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-play text-red-500 text-xs"></i>
+                        </div>
                     </div>
                     <div class="min-w-0 flex-1">
-                        <h3 class="text-sm font-bold text-zinc-100 group-hover:text-red-500 break-words whitespace-normal line-clamp-2">${song.title}</h3>
+                        <h3 class="text-sm font-bold text-zinc-100 truncate group-hover:text-red-500 transition-colors">${song.title}</h3>
+                        <p class="text-[10px] text-zinc-500 truncate mt-0.5"><i class="fab fa-youtube text-red-600"></i> Tap to Play Fullscreen</p>
                     </div>
                 `;
                 container.appendChild(card);
@@ -314,49 +297,64 @@
         function renderXTSongsList() {
             const xtContainer = document.getElementById('xtSongsList');
             xtContainer.innerHTML = '';
+
             allSongs.forEach((song, index) => {
+                const ytId = getYoutubeId(song.url);
+                const thumbUrl = ytId ? `https://img.youtube.com/vi/${ytId}/default.jpg` : '';
+
                 const card = document.createElement('div');
-                card.className = "bg-zinc-900 hover:bg-zinc-800 p-2 rounded flex items-center gap-2 cursor-pointer transition-all border border-zinc-800 text-xs font-bold break-words whitespace-normal";
-                card.innerText = song.title;
-                card.onclick = () => { 
-                    playSong(allSongs.indexOf(song)); 
-                    toggleXTPanel(); 
+                card.className = "bg-zinc-900 hover:bg-zinc-800 p-2 rounded flex items-center gap-2 cursor-pointer transition-all border border-zinc-800";
+                card.onclick = () => {
+                    playSong(allSongs.indexOf(song));
+                    toggleXTPanel();
                 };
+
+                card.innerHTML = `
+                    <img src="${thumbUrl}" class="w-12 h-8 object-cover rounded bg-zinc-800">
+                    <span class="text-xs font-bold truncate flex-1">${song.title}</span>
+                `;
                 xtContainer.appendChild(card);
             });
         }
 
-        // --- PLAYER CONTROLLER ENGINE ---
+        // --- SEARCH ENGINE TRIGGER ---
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            if (query === '') {
+                filteredSongs = [...allSongs];
+            } else {
+                filteredSongs = allSongs.filter(song => song.title.toLowerCase().includes(query));
+                filteredSongs.sort((a, b) => a.title.toLowerCase().indexOf(query) - b.title.toLowerCase().indexOf(query));
+            }
+            renderSongsList();
+        });
+
+        // --- PLAYER ENGINE CONTROLLER ---
         function playSong(index) {
             currentSongIndex = index;
             const song = filteredSongs[index];
             const ytId = getYoutubeId(song.url);
 
-            if(!ytId) return alert("Invalid YouTube URL!");
+            if(!ytId) {
+                alert("Invalid YouTube Video URL!");
+                return;
+            }
 
             document.getElementById('fullPlayerTitle').innerText = song.title;
-            document.getElementById('miniPlayerTitle').innerText = song.title;
-            
-            // Show Mini Player
-            document.getElementById('miniPlayer').classList.remove('hidden');
-            document.getElementById('miniPlayer').classList.add('flex');
-
-            // If fullscreen is open, make sure player container is in full screen wrapper
-            if (isPlayerFullscreen) {
-                const p = document.getElementById('ytPlayerContainer');
-                document.getElementById('fullVideoWrapper').appendChild(p);
-            } else {
-                // Keep it in mini player wrapper
-                const p = document.getElementById('ytPlayerContainer');
-                document.getElementById('miniVideoWrapper').appendChild(p);
-            }
+            openFullScreenPlayer();
 
             if (!ytPlayer) {
                 ytPlayer = new YT.Player('ytPlayerContainer', {
                     height: '100%',
                     width: '100%',
                     videoId: ytId,
-                    playerVars: { 'controls': 0, 'disablekb': 1, 'rel': 0, 'modestbranding': 1, 'iv_load_policy': 3, 'fs': 0 },
+                    playerVars: {
+                        'controls': 0,
+                        'disablekb': 1,
+                        'rel': 0,
+                        'modestbranding': 1,
+                        'fs': 0
+                    },
                     events: {
                         'onReady': (e) => { e.target.playVideo(); startTimelineSync(); },
                         'onStateChange': onPlayerStateChange
@@ -368,41 +366,42 @@
         }
 
         function onPlayerStateChange(event) {
-            const fIcon = document.getElementById('fullPlayIcon');
-            const mIcon = document.getElementById('miniPlayIcon');
+            const fullPlayIcon = document.getElementById('fullPlayIcon');
 
             if (event.data == YT.PlayerState.PLAYING) {
-                fIcon.className = "fas fa-pause";
-                mIcon.className = "fas fa-pause";
+                fullPlayIcon.className = "fas fa-pause";
                 startTimelineSync();
             } else {
-                fIcon.className = "fas fa-play pl-1";
-                mIcon.className = "fas fa-play pl-0.5";
+                fullPlayIcon.className = "fas fa-play";
                 clearInterval(timelineInterval);
             }
-            if (event.data == YT.PlayerState.ENDED) playNext();
+
+            if (event.data == YT.PlayerState.ENDED) {
+                playNext();
+            }
         }
 
+        // --- SMOOTH TIMELINE SYNC ENGINE ---
         function startTimelineSync() {
             clearInterval(timelineInterval);
+            
+            const progress = document.getElementById('timelineProgress');
+            const thumb = document.getElementById('timelineThumb');
+
             timelineInterval = setInterval(() => {
                 if (ytPlayer && ytPlayer.getCurrentTime && !isDraggingTimeline) {
                     const current = ytPlayer.getCurrentTime();
                     const duration = ytPlayer.getDuration() || 0;
-                    const pct = duration > 0 ? (current / duration) * 100 : 0;
                     
-                    // Sync Full Screen Timeline
-                    document.getElementById('fullTimelineProgress').style.width = `${pct}%`;
-                    document.getElementById('fullTimelineThumb').style.left = `${pct}%`;
+                    const progressPercent = duration > 0 ? (current / duration) * 100 : 0;
                     
-                    // Sync Mini Player Timeline
-                    document.getElementById('miniTimelineProgress').style.width = `${pct}%`;
-                    document.getElementById('miniTimelineThumb').style.left = `${pct}%`;
-
+                    progress.style.width = `${progressPercent}%`;
+                    thumb.style.left = `${progressPercent}%`;
+                    
                     document.getElementById('currentTimeLabel').innerText = formatTime(current);
                     document.getElementById('totalTimeLabel').innerText = formatTime(duration);
                 }
-            }, 250);
+            }, 1000 / 60);
         }
 
         function formatTime(seconds) {
@@ -411,97 +410,135 @@
             return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
         }
 
-        // --- INTERACTION FOR BOTH TIMELINES ---
-        function attachTimelineEvents(containerId, progressId, thumbId) {
-            const container = document.getElementById(containerId);
-            function handleInteraction(e) {
-                if (!ytPlayer || !ytPlayer.getDuration) return;
-                const rect = container.getBoundingClientRect();
-                let clickX = (e.clientX || e.touches[0].clientX) - rect.left;
-                clickX = Math.max(0, Math.min(clickX, rect.width));
-                const pct = clickX / rect.width;
-                const targetTime = pct * (ytPlayer.getDuration() || 0);
-
-                document.getElementById(progressId).style.width = `${pct * 100}%`;
-                document.getElementById(thumbId).style.left = `${pct * 100}%`;
-                return targetTime;
-            }
-            container.addEventListener('mousedown', (e) => {
-                isDraggingTimeline = true;
-                let t = handleInteraction(e);
-                function move(me) { t = handleInteraction(me); }
-                function up() { isDraggingTimeline = false; ytPlayer.seekTo(t, true); window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); }
-                window.addEventListener('mousemove', move); window.addEventListener('mouseup', up);
-            });
-            container.addEventListener('touchstart', (e) => {
-                isDraggingTimeline = true;
-                let t = handleInteraction(e);
-                function move(me) { t = handleInteraction(me); }
-                function up() { isDraggingTimeline = false; ytPlayer.seekTo(t, true); window.removeEventListener('touchmove', move); window.removeEventListener('touchend', up); }
-                window.addEventListener('touchmove', move); window.addEventListener('touchend', up);
-            });
-        }
-        attachTimelineEvents('fullTimeline', 'fullTimelineProgress', 'fullTimelineThumb');
-        attachTimelineEvents('miniTimeline', 'miniTimelineProgress', 'miniTimelineThumb');
-
-        // --- WINDOW MANAGER (FULL <-> MINI) ---
-        function openFullScreenPlayer() {
-            isPlayerFullscreen = true;
-            document.getElementById('fullScreenPlayer').classList.remove('hidden');
-            document.getElementById('fullScreenPlayer').classList.add('flex');
+        // --- TIMELINE INTERACTION EVENTS ---
+        const timeline = document.getElementById('customTimeline');
+        
+        function handleTimelineInteraction(e) {
+            if (!ytPlayer || !ytPlayer.getDuration) return;
             
-            // Move Player Container to Full Screen Wrapper
-            const p = document.getElementById('ytPlayerContainer');
-            document.getElementById('fullVideoWrapper').appendChild(p);
+            const rect = timeline.getBoundingClientRect();
+            let clickX = (e.clientX || e.touches[0].clientX) - rect.left;
+            if(clickX < 0) clickX = 0;
+            if(clickX > rect.width) clickX = rect.width;
+            
+            const percentage = clickX / rect.width;
+            const duration = ytPlayer.getDuration() || 0;
+            const targetTime = percentage * duration;
+
+            document.getElementById('timelineProgress').style.width = `${percentage * 100}%`;
+            document.getElementById('timelineThumb').style.left = `${percentage * 100}%`;
+            document.getElementById('currentTimeLabel').innerText = formatTime(targetTime);
+
+            return targetTime;
+        }
+
+        timeline.addEventListener('mousedown', (e) => {
+            isDraggingTimeline = true;
+            const targetTime = handleTimelineInteraction(e);
+            
+            function onMouseMove(moveEvent) {
+                handleTimelineInteraction(moveEvent);
+            }
+            
+            function onMouseUp(upEvent) {
+                const finalTime = handleTimelineInteraction(upEvent);
+                if(ytPlayer && ytPlayer.seekTo) {
+                    ytPlayer.seekTo(finalTime, true);
+                }
+                isDraggingTimeline = false;
+                window.removeEventListener('mousemove', onMouseMove);
+                window.removeEventListener('mouseup', onMouseUp);
+            }
+            
+            window.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('mouseup', onMouseUp);
+        });
+
+        timeline.addEventListener('touchstart', (e) => {
+            isDraggingTimeline = true;
+            handleTimelineInteraction(e);
+            
+            function onTouchMove(moveEvent) {
+                handleTimelineInteraction(moveEvent);
+            }
+            
+            function onTouchEnd() {
+                const thumbLeft = parseFloat(document.getElementById('timelineThumb').style.left);
+                const duration = ytPlayer.getDuration() || 0;
+                const finalTime = (thumbLeft / 100) * duration;
+                
+                if(ytPlayer && ytPlayer.seekTo) {
+                    ytPlayer.seekTo(finalTime, true);
+                }
+                isDraggingTimeline = false;
+                window.removeEventListener('touchmove', onTouchMove);
+                window.removeEventListener('touchend', onTouchEnd);
+            }
+            
+            window.addEventListener('touchmove', onTouchMove);
+            window.addEventListener('touchend', onTouchEnd);
+        });
+
+        // --- SYSTEM UX CONTROLS ---
+        function togglePlayPause() {
+            if(!ytPlayer) return;
+            const state = ytPlayer.getPlayerState();
+            if(state == YT.PlayerState.PLAYING) {
+                ytPlayer.pauseVideo();
+            } else {
+                ytPlayer.playVideo();
+            }
+        }
+
+        function playNext() {
+            if(currentSongIndex < filteredSongs.length - 1) {
+                playSong(currentSongIndex + 1);
+            } else {
+                playSong(0);
+            }
+        }
+
+        function playPrevious() {
+            if(currentSongIndex > 0) {
+                playSong(currentSongIndex - 1);
+            } else {
+                playSong(filteredSongs.length - 1);
+            }
+        }
+
+        function openFullScreenPlayer() {
+            const fsPanel = document.getElementById('fullScreenPlayer');
+            fsPanel.classList.remove('hidden');
+            fsPanel.classList.add('flex');
         }
 
         function closeFullScreenPlayer() {
-            isPlayerFullscreen = false;
-            document.getElementById('fullScreenPlayer').classList.add('hidden');
-            document.getElementById('fullScreenPlayer').classList.remove('flex');
-            
-            // Move Player Container back to Mini Player Wrapper
-            const p = document.getElementById('ytPlayerContainer');
-            document.getElementById('miniVideoWrapper').appendChild(p);
+            const fsPanel = document.getElementById('fullScreenPlayer');
+            fsPanel.classList.add('hidden');
+            fsPanel.classList.remove('flex');
         }
 
-        function togglePlayPause() {
-            if(!ytPlayer) return;
-            ytPlayer.getPlayerState() == YT.PlayerState.PLAYING ? ytPlayer.pauseVideo() : ytPlayer.playVideo();
-        }
-
-        function playNext() { if(currentSongIndex < filteredSongs.length - 1) playSong(currentSongIndex + 1); else playSong(0); }
-        function playPrevious() { if(currentSongIndex > 0) playSong(currentSongIndex - 1); else playSong(filteredSongs.length - 1); }
-
+        // Exit player logic
         function closeVideo() {
             if(ytPlayer) ytPlayer.stopVideo();
             clearInterval(timelineInterval);
-            document.getElementById('miniPlayer').classList.add('hidden');
-            document.getElementById('fullScreenPlayer').classList.add('hidden');
-            isPlayerFullscreen = false;
+            closeFullScreenPlayer();
         }
 
         function toggleXTPanel() {
-            const p = document.getElementById('xtPanel');
-            p.classList.toggle('hidden');
-            p.classList.toggle('translate-x-full');
+            const panel = document.getElementById('xtPanel');
+            if(panel.classList.contains('hidden')) {
+                panel.classList.remove('hidden');
+                setTimeout(() => panel.classList.remove('translate-x-full'), 10);
+            } else {
+                panel.classList.add('translate-x-full');
+                setTimeout(() => panel.classList.add('hidden'), 300);
+            }
         }
 
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase().trim();
-            filteredSongs = query === '' ? [...allSongs] : allSongs.filter(s => s.title.toLowerCase().includes(query));
-            renderSongsList();
-        });
-
-        // Anti-Copy Shortcut Blocker
-        window.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'a' || e.key === 'u' || e.key === 's')) {
-                e.preventDefault();
-                return false;
-            }
-        });
-
-        window.onload = loadSongsFromDatabase;
+        window.onload = () => {
+            loadSongsFromDatabase();
+        };
     </script>
 </body>
 </html>

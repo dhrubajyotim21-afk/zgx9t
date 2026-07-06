@@ -133,7 +133,6 @@
     <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden">
         <!-- Top bar inside fullscreen -->
         <div class="p-4 flex justify-between items-center border-b border-zinc-900 bg-gradient-to-b from-black/80 to-transparent">
-            <!-- এখানে closeFullScreenPlayer() এর জায়গায় closeVideo() দেওয়া হয়েছে যাতে ক্লিক করলে গান বন্ধ হয়ে যায় -->
             <button onclick="closeVideo()" class="text-zinc-400 hover:text-white text-xl"><i class="fas fa-chevron-down"></i></button>
             <div class="text-center px-4 flex-1 min-w-0">
                 <span class="text-[10px] font-black tracking-widest text-red-500 uppercase">Now Playing</span>
@@ -146,6 +145,8 @@
         <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/30 relative gap-6">
             <div class="w-full max-w-lg aspect-video bg-black rounded-lg overflow-hidden border border-zinc-800 shadow-2xl relative">
                 <div id="ytPlayerContainer" class="w-full h-full"></div>
+                <!-- ভিডিওর ওপর ক্লিক বা ট্যাপ লক করার জন্য অদৃশ্য লেয়ার (Invisible Layer) -->
+                <div class="absolute inset-0 z-10 bg-transparent" onclick="togglePlayPause()"></div>
             </div>
 
             <!-- CUSTOM STYLISH BRANDING SECTION BELOW THE VIDEO -->
@@ -361,7 +362,9 @@
                         'disablekb': 1,
                         'rel': 0,
                         'modestbranding': 1,
-                        'fs': 0
+                        'fs': 0,
+                        'showinfo': 0,
+                        'ecver': 2
                     },
                     events: {
                         'onReady': (e) => { e.target.playVideo(); startTimelineSync(); },
@@ -498,6 +501,7 @@
             }
         }
 
+        // ... বাকি ফাংশনগুলো অপরিবর্তিত থাকবে ...
         function playNext() {
             if(currentSongIndex < filteredSongs.length - 1) {
                 playSong(currentSongIndex + 1);

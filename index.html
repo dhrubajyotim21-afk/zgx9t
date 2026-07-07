@@ -13,7 +13,7 @@
     <meta name="apple-mobile-web-app-title" content="ZG X9T">
     <meta name="mobile-web-app-capable" content="yes">
     
-    <!-- SECRET SEO KEYWORDS (Hidden from UI, active for Search Engines) -->
+    <!-- SECRET SEO KEYWORDS -->
     <meta name="keywords" content="ZGX9T,zgx9t,zg,zgx,ZGX, Dhruba, Zubeen Da, Zubeen garg song , zubeen, zubeen song, assamese song, zubeen garg">
     
     <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlpHIFg5VCAtIE9OTFkgWlVCRUVOIFNPTkciLAogICJzaG9ydF9uYW1lIjogIlpHIFg5VCIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwK  ImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIKfQ==">
@@ -89,7 +89,6 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Strong Double-Layer Shield to completely block native YT Controls & User Taps */
         .yt-strict-blocker {
             position: absolute;
             top: 0;
@@ -102,7 +101,6 @@
             cursor: default;
         }
 
-        /* Performance Optimized High Frequency Disco Animation Engine */
         @keyframes dynamicDiscoGlow {
             0% { background-color: #ff0000; box-shadow: 0 0 25px #ff0000; }
             20% { background-color: #ff00ff; box-shadow: 0 0 30px #ff00ff; }
@@ -115,11 +113,15 @@
         .disco-active {
             animation: dynamicDiscoGlow var(--disco-speed, 0.2s) infinite alternate ease-in-out !important;
         }
+
+        .fullscreen-lock {
+            overflow: hidden !important;
+            touch-action: none !important;
+        }
     </style>
 </head>
 <body class="antialiased" oncontextmenu="return false;">
 
-    <!-- Secret SEO Spiders Target Container (Completely Invisible to Users) -->
     <div style="display: none !important; visibility: hidden !important; opacity: 0 !important; width: 0; height: 0; overflow: hidden;">
         <h2>ZUBEEN GARG SONG - ZGX9T ONLY ZUBEEN SONG Collection</h2>
         <p>Listen to latest assamese song, zubeen song, and tracks by Zubeen Da. Project curated by Dhruba featuring ZGX music dashboard.</p>
@@ -134,25 +136,30 @@
                     <span class="text-yellow-400">ZG</span> <span class="text-white">X9T</span>
                 </h1>
                 <p class="text-xs font-black text-zinc-400 tracking-widest uppercase mt-1 break-words">ONLY ZUBEEN DA SONG</p>
-                <!-- Kotha boro kora hoyeche (text-lg md:text-xl) -->
                 <p class="text-lg md:text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-white-400 to-yellow-600 mt-5 break-words animate-pulse">#JusticeForZubeenGarg</p>
-                <div class="mt-5 text-sm font-bold text-zinc-400 flex flex-wrap items-center gap-2">
-                    <span>App By</span>
-                    <a href="https://www.facebook.com/share/1BQEf1Ndee/" target="_blank" class="inline-flex items-center gap-1 bg-zinc-900 px-2 py-1 rounded text-xs text-white border border-zinc-800">
-                        <i class="fab fa-facebook text-blue-400"></i> @thedhruba2x
-                    </a>
+                
+                <!-- App By layer with Search input side-by-side -->
+                <div class="mt-5 text-sm font-bold text-zinc-400 flex flex-wrap items-center justify-between gap-3 w-full">
+                    <div class="flex items-center gap-2 shrink-0">
+                        <span>App By</span>
+                        <a href="https://www.facebook.com/share/1BQEf1Ndee/" target="_blank" class="inline-flex items-center gap-1 bg-zinc-900 px-2 py-1 rounded text-xs text-white border border-zinc-800">
+                            <i class="fab fa-facebook text-blue-400"></i> @thedhruba2x
+                        </a>
+                    </div>
+                    
+                    <!-- Search Input Shifted Here (Right Side) -->
+                    <div class="relative flex-1 min-w-[160px] max-w-xs">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-500 text-xs">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" id="searchInput" placeholder="Search song..." class="w-full bg-zinc-900 border border-zinc-800 rounded-lg pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:border-yellow-500 text-white">
+                    </div>
                 </div>
             </div>
-            <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-600 rounded-xl flex items-center justify-center font-black text-xl text-black shadow-lg shrink-0">ZG</div>
+            <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-600 rounded-xl flex items-center justify-center font-black text-xl text-black shadow-lg shrink-0 m-1">ZG</div>
         </header>
 
         <section class="p-4 bg-zinc-950/40">
-            <div class="relative mb-3">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-500">
-                    <i class="fas fa-search"></i>
-                </span>
-                <input type="text" id="searchInput" placeholder="Search song name..." class="w-full bg-zinc-900 border border-zinc-800 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-yellow-500 text-white">
-            </div>
             <div class="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-zinc-400 px-1">
                 <span>All Song Collection</span>
                 <span id="totalSongsCount" class="bg-yellow-400/10 text-yellow-400 px-2 py-0.5 rounded-full border border-yellow-400/20">Loading...</span>
@@ -170,9 +177,8 @@
     </div>
 
     <!-- SHARED INDEPENDENT FIXED PORTAL WRAPPER -->
-    <div id="unifiedVideoHolder" class="fixed bottom-14 left-2 w-20 h-11 z-[42] bg-black rounded overflow-hidden border border-zinc-800 hidden pointer-events-none transition-all duration-300">
+    <div id="unifiedVideoHolder" class="fixed bottom-14 left-2 w-20 h-11 z-[42] bg-black rounded overflow-hidden border border-zinc-800 hidden pointer-events-none">
         <div id="ytPlayerContainer" class="w-full h-full scale-105"></div>
-        <!-- Click interaction completely disabled (Empty function handler) -->
         <div class="yt-strict-blocker" onclick="handleCenterVideoTap(event)"></div>
     </div>
 
@@ -199,7 +205,7 @@
         </div>
     </div>
 
-    <!-- FULL SCREEN PLAYER COMPONENT (Scroll hidden completely via touch-none & overscroll) -->
+    <!-- FULL SCREEN PLAYER COMPONENT -->
     <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden touch-none select-none" style="overscroll-behavior: contain;">
         <div class="p-4 flex justify-between items-center border-b border-zinc-900 bg-gradient-to-b from-black/90 to-transparent z-10">
             <button onclick="closeFullScreenPlayer()" class="text-zinc-400 hover:text-white text-xl p-1"><i class="fas fa-chevron-down"></i></button>
@@ -210,21 +216,17 @@
         </div>
 
         <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/20 relative gap-4 overflow-hidden">
-            <!-- DISCO LIGHT USER INTERACTIVE ON/OFF CONTROLLER SWITCH -->
             <div class="z-10 bg-zinc-900/80 border border-zinc-800 px-3 py-1 rounded-full flex items-center gap-2 text-xs font-bold">
                 <span class="text-zinc-400 uppercase text-[10px]">Disco Effect</span>
                 <button id="discoToggleBtn" onclick="toggleDiscoSystem()" class="bg-yellow-400 text-black px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider">ON</button>
             </div>
 
             <div class="w-full max-w-lg flex flex-col gap-3 z-10">
-                <!-- EXTREME ADAPTIVE SOUND DISCO LIGHT BOX CONTAINER -->
                 <div id="visualizerLightBar" class="w-full h-14 rounded-xl bg-zinc-900 flex items-center justify-center px-4 overflow-hidden shadow-lg border border-zinc-800/50 transition-all duration-200">
                     <span id="visualizerText" class="text-lg md:text-xl font-black text-white tracking-wider uppercase truncate drop-shadow-[0_2px_6px_rgba(0,0,0,1)] text-center">Jai Zubeen Da</span>
                 </div>
                 
-                <!-- Safe Absolute Centered Aspect Frame Aspect Shield Player -->
                 <div id="fullPlayerAnchor" class="w-full aspect-video bg-zinc-900/20 rounded-xl border border-zinc-900 shadow-2xl relative overflow-hidden">
-                    <!-- Frame is fully locked down from click interaction inside wrapper -->
                 </div>
             </div>
 
@@ -236,11 +238,9 @@
             </div>
         </div>
 
-        <!-- FULL TIMELINE CONTROLS WITH 5-SECOND JUMP OPTIONS -->
         <div class="p-6 bg-gradient-to-t from-black via-black/95 to-transparent z-10">
             <div class="flex flex-col gap-2 mb-5">
                 <div class="flex items-center gap-3 w-full">
-                    <!-- Seek 5s Backward Button -->
                     <button onclick="seekSeconds(-5)" class="text-zinc-400 hover:text-yellow-400 text-sm p-1 shrink-0 active:scale-95 transition-transform" title="Backward 5s">
                         <i class="fas fa-rotate-left"></i> <span class="text-[10px] font-bold font-mono">5s</span>
                     </button>
@@ -250,7 +250,6 @@
                         <div id="fullTimelineThumb" class="timeline-thumb"></div>
                     </div>
                     
-                    <!-- Seek 5s Forward Button -->
                     <button onclick="seekSeconds(5)" class="text-zinc-400 hover:text-yellow-400 text-sm p-1 shrink-0 active:scale-95 transition-transform" title="Forward 5s">
                         <span class="text-[10px] font-bold font-mono">5s</span> <i class="fas fa-rotate-right"></i>
                     </button>
@@ -269,7 +268,6 @@
     </div>
 
     <script>
-        // --- FIREBASE CONFIGURATION ---
         const firebaseConfig = { 
             apiKey: "AIzaSyDISW7EbMP_eEt4GuR6cijgMyYKxgb7xIg", 
             authDomain: "music-b05e1.firebaseapp.com", 
@@ -294,7 +292,6 @@
         let isPlayerFullscreen = false;
         let isPlayerReady = false;
         let isDiscoEnabled = true; 
-        
         let textRotationIndex = 0;
 
         function getYoutubeId(url) {
@@ -361,8 +358,6 @@
 
         function refreshVideoFramePosition() {
             const holder = document.getElementById('unifiedVideoHolder');
-            if(!isPlayerReady) return;
-
             holder.classList.remove('hidden');
             if(isPlayerFullscreen) {
                 const anchor = document.getElementById('fullPlayerAnchor');
@@ -404,19 +399,21 @@
 
             localStorage.setItem('zg_last_index', currentSongIndex);
 
-            if (isPlayerReady && ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
+            const holder = document.getElementById('unifiedVideoHolder');
+            holder.classList.remove('hidden');
+            refreshVideoFramePosition();
+
+            if (ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
                 if (!isSameSong) {
                     ytPlayer.loadVideoById({
                         videoId: ytId,
                         startSeconds: startAtSeconds
                     });
                 }
-                refreshVideoFramePosition();
             } else {
+                document.getElementById('ytPlayerContainer').innerHTML = '';
                 isPlayerReady = false;
-                document.getElementById('unifiedVideoHolder').classList.remove('hidden');
                 
-                // Block/Hide user channel text, logo & overlays maximum possible configuration
                 ytPlayer = new YT.Player('ytPlayerContainer', {
                     height: '100%',
                     width: '100%',
@@ -430,7 +427,8 @@
                         'fs': 0, 
                         'playsinline': 1,
                         'showinfo': 0,
-                        'autohide': 1
+                        'autohide': 1,
+                        'origin': window.location.origin
                     },
                     events: {
                         'onReady': (e) => { 
@@ -464,6 +462,7 @@
             if (event.data == YT.PlayerState.ENDED) playNext();
         }
 
+        // Disco Lights Controller Toggle System Setup
         function toggleDiscoSystem() {
             isDiscoEnabled = !isDiscoEnabled;
             const btn = document.getElementById('discoToggleBtn');
@@ -549,7 +548,6 @@
             return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
         }
 
-        // 5-Seconds Seeking Functionality (Forward/Backward)
         function seekSeconds(seconds) {
             if (ytPlayer && typeof ytPlayer.getCurrentTime === 'function' && typeof ytPlayer.getDuration === 'function') {
                 const currentTime = ytPlayer.getCurrentTime();
@@ -561,7 +559,6 @@
                 
                 ytPlayer.seekTo(targetTime, true);
                 
-                // Force sync progress bar UI instantly
                 const pct = duration > 0 ? (targetTime / duration) * 100 : 0;
                 document.getElementById('fullTimelineProgress').style.width = `${pct}%`;
                 document.getElementById('fullTimelineThumb').style.left = `${pct}%`;
@@ -569,7 +566,6 @@
             }
         }
 
-        // Video frame click lock: action disabled on user tap
         function handleCenterVideoTap(e) {
             e.stopPropagation();
         }
@@ -606,6 +602,7 @@
         function openFullScreenPlayer() {
             if(!ytPlayer) return;
             isPlayerFullscreen = true;
+            document.body.classList.add('fullscreen-lock');
             document.getElementById('fullScreenPlayer').classList.remove('hidden');
             document.getElementById('fullScreenPlayer').classList.add('flex');
             refreshVideoFramePosition();
@@ -614,6 +611,7 @@
         function closeFullScreenPlayer() {
             if(!ytPlayer) return;
             isPlayerFullscreen = false;
+            document.body.classList.remove('fullscreen-lock');
             document.getElementById('fullScreenPlayer').classList.add('hidden');
             document.getElementById('fullScreenPlayer').classList.remove('flex');
             refreshVideoFramePosition();
@@ -631,6 +629,7 @@
         function closeVideo() {
             clearInterval(timelineInterval); clearInterval(textRotationInterval); clearInterval(discoControlInterval);
             if(ytPlayer) { try { ytPlayer.stopVideo(); } catch(e){} }
+            document.body.classList.remove('fullscreen-lock');
             document.getElementById('miniPlayer').classList.add('hidden');
             document.getElementById('fullScreenPlayer').classList.add('hidden');
             document.getElementById('unifiedVideoHolder').classList.add('hidden');

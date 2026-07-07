@@ -43,7 +43,7 @@
             color: #ffffff;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             overflow-x: hidden;
-            position: fixed; /* Prevents background scroll when player is full screen */
+            position: fixed; 
             width: 100%;
             height: 100%;
         }
@@ -105,7 +105,7 @@
         .seek-left { left: 0; }
         .seek-right { right: 0; }
 
-        /* Dynamic Beat Adaptive Sound Visualizer Box */
+        /* Dynamic Beat Adaptive Sound Visualizer Box (Only applied to the box, not video frame) */
         @keyframes dynamicFlicker {
             0% { background-color: #ef4444; box-shadow: 0 0 12px #ef4444; transform: scale(0.99); }
             25% { background-color: #f97316; box-shadow: 0 0 20px #f97316; transform: scale(1.01); }
@@ -114,12 +114,11 @@
             100% { background-color: #3b82f6; box-shadow: 0 0 24px #3b82f6; transform: scale(1.02); }
         }
         
-        /* Speed state rules managed dynamically by JS */
         .flicker-box-fast {
-            animation: dynamicFlicker 0.18s infinite alternate ease-in-out !important;
+            animation: dynamicFlicker 0.15s infinite alternate ease-in-out !important;
         }
         .flicker-box-slow {
-            animation: dynamicFlicker 0.45s infinite alternate ease-in-out !important;
+            animation: dynamicFlicker 0.4s infinite alternate ease-in-out !important;
         }
     </style>
 </head>
@@ -175,9 +174,9 @@
         </main>
     </div>
 
-    <!-- GLOBAL YOUTUBE PLAYER HIDDEN ELEMENT (Shared Frame to avoid re-loads) -->
-    <div id="sharedPlayerRoot" class="fixed pointer-events-none opacity-0 z-0">
-        <div id="ytPlayerContainer"></div>
+    <!-- MAIN INTERACTIVE CONTAINER HOUSING THE YOUTUBE PLAYER CONTAINER -->
+    <div id="sharedPlayerRoot" class="w-full h-full">
+        <div id="ytPlayerContainer" class="w-full h-full scale-105 pointer-events-none"></div>
     </div>
 
     <!-- BOTTOM MINI PLAYER COMPONENT -->
@@ -190,7 +189,6 @@
         <div class="flex items-center justify-between gap-2 mt-1">
             <div onclick="openFullScreenPlayer()" class="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
                 <div class="w-20 h-11 bg-black rounded overflow-hidden border border-zinc-800 relative shrink-0 flex items-center justify-center">
-                    <!-- Dynamic Bridge Portal for Video Element -->
                     <div id="miniVideoPortal" class="w-full h-full relative"></div>
                     <div class="yt-overlay-blocker"></div>
                 </div>
@@ -209,7 +207,7 @@
         </div>
     </div>
 
-    <!-- FULL SCREEN PLAYER COMPONENT (Strict Fit, No Layout Scroll Bug) -->
+    <!-- FULL SCREEN PLAYER COMPONENT -->
     <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden touch-none select-none">
         <div class="p-4 flex justify-between items-center border-b border-zinc-900 bg-gradient-to-b from-black/90 to-transparent">
             <button onclick="closeFullScreenPlayer()" class="text-zinc-400 hover:text-white text-xl p-1"><i class="fas fa-chevron-down"></i></button>
@@ -221,14 +219,13 @@
         </div>
 
         <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/20 relative gap-5 overflow-hidden">
-            <!-- Thick Card Like Dynamic Audio Match Box Container -->
+            <!-- Thick Dynamic Audio Match Box with Big Bold White Text -->
             <div class="w-full max-w-lg flex flex-col gap-3">
-                <div id="visualizerLightBar" class="w-full h-12 rounded-xl bg-zinc-900 flex items-center justify-center px-4 transition-all duration-300 overflow-hidden shadow-lg border border-zinc-800/50">
-                    <span id="visualizerText" class="text-sm md:text-base font-black text-white tracking-wide uppercase truncate transition-opacity duration-200 opacity-100 drop-shadow">#JusticeForZubeenGarg</span>
+                <div id="visualizerLightBar" class="w-full h-14 rounded-xl bg-zinc-900 flex items-center justify-center px-4 transition-all duration-300 overflow-hidden shadow-lg border border-zinc-800/50">
+                    <span id="visualizerText" class="text-base md:text-lg font-black text-white tracking-wide uppercase truncate transition-opacity duration-200 opacity-100 drop-shadow">#JusticeForZubeenGarg</span>
                 </div>
                 
                 <div class="w-full aspect-video bg-black rounded-xl overflow-hidden border border-zinc-900 shadow-2xl relative">
-                    <!-- Dynamic Bridge Portal for Video Element -->
                     <div id="fullVideoPortal" class="w-full h-full"></div>
                     
                     <div class="yt-overlay-blocker"></div>
@@ -242,11 +239,11 @@
                     #<span class="text-yellow-400">Only</span>Zubeen<span class="text-yellow-400">Garg</span>
                 </h2>
                 <p class="text-xs md:text-sm font-bold tracking-widest mt-2 text-zinc-400 uppercase">
-                    জুবিন দা-ৰ চিৰсеউজ গানৰ এক অনন্য সংৰক্ষণ
+                    জুবিন দা-ৰ চিৰসেউজ গানৰ এক অনন্য সংৰক্ষণ
                 </p>
             </div>
 
-            <!-- XT Side Panel (Slim Sikon Card Design) -->
+            <!-- XT Side Panel -->
             <div id="xtPanel" class="absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-zinc-950/98 border-l border-zinc-900 z-50 transform translate-x-full transition-transform duration-300 flex flex-col hidden">
                 <div class="p-3 border-b border-zinc-800 flex justify-between items-center">
                     <span class="text-xs font-black text-yellow-400"><i class="fas fa-list"></i> XT QUEUE LIST</span>
@@ -302,12 +299,13 @@
         let waveSimulatorInterval = null;
         let isDraggingTimeline = false;
         let isPlayerFullscreen = false;
+        let isPlayerReady = false;
         
         let lastLeftTap = 0;
         let lastRightTap = 0;
         let textRotationIndex = 0;
 
-        // Disables any multi-touch pitch zooming completely via JS
+        // Disables pinch zooming gestures completely
         document.addEventListener('touchstart', (e) => {
             if (e.touches.length > 1) e.preventDefault();
         }, { passive: false });
@@ -400,20 +398,16 @@
             });
         }
 
-        // Global Dynamic Portal Switcher - Zero Load Latency (Instant Transfer)
+        // Dynamic Iframe Teleporter Engine 
         function teleportPlayerFrame() {
-            const root = document.getElementById('sharedPlayerRoot');
+            const frameRoot = document.getElementById('sharedPlayerRoot');
             const miniPortal = document.getElementById('miniVideoPortal');
             const fullPortal = document.getElementById('fullVideoPortal');
             
             if (isPlayerFullscreen) {
-                // Teleport directly inside full screen view layout without restarting
-                fullPortal.appendChild(root);
-                root.className = "w-full h-full scale-105 pointer-events-none opacity-100 transition-opacity";
+                fullPortal.appendChild(frameRoot);
             } else {
-                // Teleport directly down inside small bottom layout player view
-                miniPortal.appendChild(root);
-                root.className = "w-full h-full scale-105 pointer-events-none opacity-100 transition-opacity";
+                miniPortal.appendChild(frameRoot);
             }
         }
 
@@ -435,19 +429,20 @@
 
             localStorage.setItem('zg_last_index', currentSongIndex);
 
-            // Same song hole dynamic frame teleportation run kore break hobe jeno buffering na hoy
-            if (isSameSong && ytPlayer) {
-                teleportPlayerFrame();
-                return;
-            }
-
-            // Entirely different song targeted, reset player internals instantly
-            clearInterval(timelineInterval);
-            if (ytPlayer) {
-                try { ytPlayer.loadVideoById(ytId, startAtSeconds); } catch(e){}
+            // Instant Switch Mechanisum 
+            if (isPlayerReady && ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
+                if (!isSameSong) {
+                    ytPlayer.loadVideoById({
+                        videoId: ytId,
+                        startSeconds: startAtSeconds
+                    });
+                }
                 teleportPlayerFrame();
             } else {
-                // Initialize for the first time globally inside root
+                // Initial creation fallback loop
+                if(ytPlayer) { try{ ytPlayer.destroy(); }catch(e){} }
+                isPlayerReady = false;
+                
                 ytPlayer = new YT.Player('ytPlayerContainer', {
                     height: '100%',
                     width: '100%',
@@ -455,6 +450,7 @@
                     playerVars: { 'controls': 0, 'disablekb': 1, 'rel': 0, 'modestbranding': 1, 'iv_load_policy': 3, 'fs': 0, 'playsinline': 1 },
                     events: {
                         'onReady': (e) => { 
+                            isPlayerReady = true;
                             if(startAtSeconds > 0) e.target.seekTo(startAtSeconds, true);
                             e.target.playVideo(); 
                             teleportPlayerFrame();
@@ -492,11 +488,11 @@
             const textBox = document.getElementById('visualizerText');
 
             if (!shouldRun) {
-                lightBar.className = "w-full h-12 rounded-xl bg-zinc-900 flex items-center justify-center px-4 transition-all duration-300";
+                lightBar.className = "w-full h-14 rounded-xl bg-zinc-900 flex items-center justify-center px-4 transition-all duration-300 border border-zinc-800/50";
                 return;
             }
 
-            // 1. Smooth Text Cycle Rotation Engine (3 Seconds Intervals)
+            // Text Rotation Index Machine (3 seconds)
             textRotationIndex = 0;
             textRotationInterval = setInterval(() => {
                 if(!allSongs[currentSongIndex]) return;
@@ -512,17 +508,15 @@
                 }, 200);
             }, 3000);
 
-            // 2. Adaptive Beats Speed Switch Simulator (Listens to timeline flow change states)
+            // Audio Frequency Level Visualizer Speed Shifter Box Simulator
             waveSimulatorInterval = setInterval(() => {
                 const randomBeatFactor = Math.random(); 
-                
-                // Audio speed variation mimicking fast/slow frequencies
                 if (randomBeatFactor > 0.45) {
-                    lightBar.className = "w-full h-12 rounded-xl flex items-center justify-center px-4 transition-all flicker-box-fast";
+                    lightBar.className = "w-full h-14 rounded-xl flex items-center justify-center px-4 transition-all border border-zinc-800/50 flicker-box-fast";
                 } else {
-                    lightBar.className = "w-full h-12 rounded-xl flex items-center justify-center px-4 transition-all flicker-box-slow";
+                    lightBar.className = "w-full h-14 rounded-xl flex items-center justify-center px-4 transition-all border border-zinc-800/50 flicker-box-slow";
                 }
-            }, 800);
+            }, 600);
         }
 
         function startTimelineSync() {
@@ -618,7 +612,6 @@
             document.getElementById('fullScreenPlayer').classList.remove('hidden');
             document.getElementById('fullScreenPlayer').classList.add('flex');
             
-            // Instantly teleports the frame without breaking live song buffer 
             teleportPlayerFrame();
         }
 
@@ -629,7 +622,6 @@
             document.getElementById('fullScreenPlayer').classList.add('hidden');
             document.getElementById('fullScreenPlayer').classList.remove('flex');
             
-            // Instantly teleports the frame back to bottom layout bar
             teleportPlayerFrame();
         }
 
@@ -639,6 +631,7 @@
             state === YT.PlayerState.PLAYING ? ytPlayer.pauseVideo() : ytPlayer.playVideo();
         }
 
+        // Infinite Queue Loop Flow handles 
         function playNext() { if(currentSongIndex < allSongs.length - 1) playSong(currentSongIndex + 1); else playSong(0); }
         function playPrevious() { if(currentSongIndex > 0) playSong(currentSongIndex - 1); else playSong(allSongs.length - 1); }
 
@@ -646,20 +639,21 @@
             clearInterval(timelineInterval);
             clearInterval(textRotationInterval);
             clearInterval(waveSimulatorInterval);
-            if(ytPlayer) {
-                try { ytPlayer.stopVideo(); } catch(e){}
-            }
+            if(ytPlayer) { try { ytPlayer.stopVideo(); } catch(e){} }
+            
             document.getElementById('miniPlayer').classList.add('hidden');
             document.getElementById('fullScreenPlayer').classList.add('hidden');
             isPlayerFullscreen = false;
             
-            // Return root container to back safety row
-            document.getElementById('sharedPlayerRoot').className = "fixed pointer-events-none opacity-0 z-0";
-            document.getElementById('sharedPlayerRoot').appendChild(document.getElementById('ytPlayerContainer'));
+            // Send back frame elements inside layout safe core anchor
+            const root = document.getElementById('sharedPlayerRoot');
+            root.innerHTML = '<div id="ytPlayerContainer" class="w-full h-full scale-105 pointer-events-none"></div>';
             
             localStorage.removeItem('zg_last_index');
             localStorage.removeItem('zg_last_time');
             currentSongIndex = -1;
+            isPlayerReady = false;
+            ytPlayer = null;
         }
 
         function recoverSavedSession() {

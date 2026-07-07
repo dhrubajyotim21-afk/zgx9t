@@ -134,7 +134,8 @@
                     <span class="text-yellow-400">ZG</span> <span class="text-white">X9T</span>
                 </h1>
                 <p class="text-xs font-black text-zinc-400 tracking-widest uppercase mt-1 break-words">ONLY ZUBEEN DA SONG</p>
-                <p class="text-sm font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-white-400 to-yellow-600 mt-5 break-words animate-pulse">#JusticeForZubeenGarg</p>
+                <!-- Kotha boro kora hoyeche (text-lg md:text-xl) -->
+                <p class="text-lg md:text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-white-400 to-yellow-600 mt-5 break-words animate-pulse">#JusticeForZubeenGarg</p>
                 <div class="mt-5 text-sm font-bold text-zinc-400 flex flex-wrap items-center gap-2">
                     <span>App By</span>
                     <a href="https://www.facebook.com/share/1BQEf1Ndee/" target="_blank" class="inline-flex items-center gap-1 bg-zinc-900 px-2 py-1 rounded text-xs text-white border border-zinc-800">
@@ -198,8 +199,8 @@
         </div>
     </div>
 
-    <!-- FULL SCREEN PLAYER COMPONENT -->
-    <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden select-none">
+    <!-- FULL SCREEN PLAYER COMPONENT (Scroll hidden completely via touch-none & overscroll) -->
+    <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden touch-none select-none" style="overscroll-behavior: contain;">
         <div class="p-4 flex justify-between items-center border-b border-zinc-900 bg-gradient-to-b from-black/90 to-transparent z-10">
             <button onclick="closeFullScreenPlayer()" class="text-zinc-400 hover:text-white text-xl p-1"><i class="fas fa-chevron-down"></i></button>
             <div class="text-center px-4 flex-1 min-w-0 mr-6">
@@ -415,11 +416,22 @@
                 isPlayerReady = false;
                 document.getElementById('unifiedVideoHolder').classList.remove('hidden');
                 
+                // Block/Hide user channel text, logo & overlays maximum possible configuration
                 ytPlayer = new YT.Player('ytPlayerContainer', {
                     height: '100%',
                     width: '100%',
                     videoId: ytId,
-                    playerVars: { 'controls': 0, 'disablekb': 1, 'rel': 0, 'modestbranding': 1, 'iv_load_policy': 3, 'fs': 0, 'playsinline': 1 },
+                    playerVars: { 
+                        'controls': 0, 
+                        'disablekb': 1, 
+                        'rel': 0, 
+                        'modestbranding': 1, 
+                        'iv_load_policy': 3, 
+                        'fs': 0, 
+                        'playsinline': 1,
+                        'showinfo': 0,
+                        'autohide': 1
+                    },
                     events: {
                         'onReady': (e) => { 
                             isPlayerReady = true;
@@ -560,7 +572,6 @@
         // Video frame click lock: action disabled on user tap
         function handleCenterVideoTap(e) {
             e.stopPropagation();
-            // Intentionally empty - clicks inside the frame will do nothing now.
         }
 
         function attachTimelineEvents(containerId, progressId, thumbId) {

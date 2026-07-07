@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZG X9T - ONLY ZUBEEN SONG</title>
+    <title>ZG X9T - ONLY ZUBEEN DA SONG</title>
     
     <!-- PWA Setup -->
-    <meta name="description" content="ZG X9T - ONLY ZUBEEN SONG. Dedicated to Zubeen Garg.">
+    <meta name="description" content="ZG X9T - ONLY DA ZUBEEN SONG. Dedicated to Zubeen Garg.">
     <meta name="author" content="@thedhruba2x">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ZG X9T">
     <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- SECRET SEO KEYWORDS (Hidden from UI, active for Search Engines) -->
+    <meta name="keywords" content="ZGX9T,zgx9t,zg,zgx,ZGX, Dhruba, Zubeen Da, Zubeen garg song , zubeen, zubeen song, assamese song, zubeen garg">
     
     <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlpHIFg5VCAtIE9OTFkgWlVCRUVOIFNPTkciLAogICJzaG9ydF9uYW1lIjogIlpHIFg5VCIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwK  ImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIKfQ==">
     
@@ -86,7 +89,7 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Strong Double-Layer Shield to completely block native YT Controls */
+        /* Strong Double-Layer Shield to completely block native YT Controls & User Taps */
         .yt-strict-blocker {
             position: absolute;
             top: 0;
@@ -96,19 +99,8 @@
             z-index: 40;
             background: transparent;
             pointer-events: auto;
+            cursor: default;
         }
-
-        .seek-zone {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 50%;
-            z-index: 45;
-            background: transparent;
-            pointer-events: auto;
-        }
-        .seek-left { left: 0; }
-        .seek-right { right: 0; }
 
         /* Performance Optimized High Frequency Disco Animation Engine */
         @keyframes dynamicDiscoGlow {
@@ -127,6 +119,13 @@
 </head>
 <body class="antialiased" oncontextmenu="return false;">
 
+    <!-- Secret SEO Spiders Target Container (Completely Invisible to Users) -->
+    <div style="display: none !important; visibility: hidden !important; opacity: 0 !important; width: 0; height: 0; overflow: hidden;">
+        <h2>ZUBEEN GARG SONG - ZGX9T ONLY ZUBEEN SONG Collection</h2>
+        <p>Listen to latest assamese song, zubeen song, and tracks by Zubeen Da. Project curated by Dhruba featuring ZGX music dashboard.</p>
+        <span>Keywords: ZGX9T, ZGX, Dhruba, Zubeen Da, ZUBEEN GARG SONG, zubeen, zubeen song, assamese song, zubeen garg</span>
+    </div>
+
     <!-- APP MAIN CONTENT LIST LAYOUT -->
     <div id="appScrollBody" class="w-full h-full pb-36 no-scrollbar allow-scroll">
         <header class="p-4 border-b border-zinc-900 flex justify-between items-start sticky top-0 bg-black/95 backdrop-blur z-30">
@@ -134,8 +133,8 @@
                 <h1 class="text-4xl font-black tracking-tighter uppercase break-words">
                     <span class="text-yellow-400">ZG</span> <span class="text-white">X9T</span>
                 </h1>
-                <p class="text-xs font-black text-zinc-400 tracking-widest uppercase mt-1 break-words">ONLY ZUBEEN SONG</p>
-                <p class="text-sm font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-yellow-400 mt-1 break-words animate-pulse">#JusticeForZubeenGarg</p>
+                <p class="text-xs font-black text-zinc-400 tracking-widest uppercase mt-1 break-words">ONLY DA ZUBEEN SONG</p>
+                <p class="text-sm font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-white-400 to-yellow-400 mt-2 break-words animate-pulse">#JusticeForZubeenGarg</p>
                 <div class="mt-3 text-sm font-bold text-zinc-400 flex flex-wrap items-center gap-2">
                     <span>App By</span>
                     <a href="https://www.facebook.com/share/1BQEf1Ndee/" target="_blank" class="inline-flex items-center gap-1 bg-zinc-900 px-2 py-1 rounded text-xs text-white border border-zinc-800">
@@ -169,9 +168,10 @@
         </main>
     </div>
 
-    <!-- SHARED INDEPENDENT FIXED PORTAL WRAPPER (Never broken during render loop) -->
+    <!-- SHARED INDEPENDENT FIXED PORTAL WRAPPER -->
     <div id="unifiedVideoHolder" class="fixed bottom-14 left-2 w-20 h-11 z-[42] bg-black rounded overflow-hidden border border-zinc-800 hidden pointer-events-none transition-all duration-300">
         <div id="ytPlayerContainer" class="w-full h-full scale-105"></div>
+        <!-- Click interaction completely disabled (Empty function handler) -->
         <div class="yt-strict-blocker" onclick="handleCenterVideoTap(event)"></div>
     </div>
 
@@ -183,7 +183,6 @@
         </div>
         <div class="flex items-center justify-between gap-2 mt-1">
             <div onclick="openFullScreenPlayer()" class="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
-                <!-- Sizing placeholder block for Layout alignment -->
                 <div class="w-20 h-11 shrink-0 bg-zinc-900/10 rounded"></div>
                 <div class="min-w-0 flex-1">
                     <h4 id="miniPlayerTitle" class="text-xs font-bold truncate text-zinc-100">Song Title</h4>
@@ -203,11 +202,10 @@
     <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden select-none">
         <div class="p-4 flex justify-between items-center border-b border-zinc-900 bg-gradient-to-b from-black/90 to-transparent z-10">
             <button onclick="closeFullScreenPlayer()" class="text-zinc-400 hover:text-white text-xl p-1"><i class="fas fa-chevron-down"></i></button>
-            <div class="text-center px-4 flex-1 min-w-0">
+            <div class="text-center px-4 flex-1 min-w-0 mr-6">
                 <span class="text-[10px] font-black tracking-widest text-yellow-400 uppercase block">Now Playing</span>
                 <h3 id="fullPlayerTitle" class="text-sm font-bold truncate text-white">Song Title</h3>
             </div>
-            <button onclick="toggleXTPanel()" class="bg-zinc-900 border border-zinc-800 px-3 py-1 rounded text-xs font-black tracking-wider text-yellow-400 shrink-0 z-20">XT OPTION</button>
         </div>
 
         <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/20 relative gap-4 overflow-hidden">
@@ -220,42 +218,43 @@
             <div class="w-full max-w-lg flex flex-col gap-3 z-10">
                 <!-- EXTREME ADAPTIVE SOUND DISCO LIGHT BOX CONTAINER -->
                 <div id="visualizerLightBar" class="w-full h-14 rounded-xl bg-zinc-900 flex items-center justify-center px-4 overflow-hidden shadow-lg border border-zinc-800/50 transition-all duration-200">
-                    <span id="visualizerText" class="text-lg md:text-xl font-black text-white tracking-wider uppercase truncate drop-shadow-[0_2px_6px_rgba(0,0,0,1)] text-center">Joy Zubeen Da</span>
+                    <span id="visualizerText" class="text-lg md:text-xl font-black text-white tracking-wider uppercase truncate drop-shadow-[0_2px_6px_rgba(0,0,0,1)] text-center">Jai Zubeen Da</span>
                 </div>
                 
                 <!-- Safe Absolute Centered Aspect Frame Aspect Shield Player -->
                 <div id="fullPlayerAnchor" class="w-full aspect-video bg-zinc-900/20 rounded-xl border border-zinc-900 shadow-2xl relative overflow-hidden">
-                    <div class="seek-zone seek-left" onclick="handleLeftSeek(event)"></div>
-                    <div class="seek-zone seek-right" onclick="handleRightSeek(event)"></div>
+                    <!-- Frame is fully locked down from click interaction inside wrapper -->
                 </div>
             </div>
 
             <div class="text-center px-4 w-full max-w-xl z-10">
                 <h2 class="text-xl md:text-3xl font-extrabold tracking-wide text-white uppercase">
-                    #<span class="text-yellow-400">Only</span>Zubeen<span class="text-yellow-400">Garg</span>
+                    <span class="text-yellow-400">Only</span>Zubeen<span class="text-yellow-400">Garg</span>
                 </h2>
-                <p class="text-xs md:text-sm font-bold tracking-widest mt-1 text-zinc-400 uppercase">জুবিন দা-ৰ চিৰসেউজ গানৰ এক অনন্য সংৰক্ষণ</p>
-            </div>
-
-            <!-- XT PANEL OVERLAY - FIX FOR MAXIMUM SCROLL PERMISSION -->
-            <div id="xtPanel" class="absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-zinc-950/98 border-l border-zinc-900 z-50 transform translate-x-full transition-transform duration-300 flex flex-col hidden">
-                <div class="p-3 border-b border-zinc-800 flex justify-between items-center shrink-0">
-                    <span class="text-xs font-black text-yellow-400"><i class="fas fa-list"></i> XT QUEUE LIST</span>
-                    <button onclick="toggleXTPanel()" class="text-zinc-400 text-sm p-1"><i class="fas fa-times"></i></button>
-                </div>
-                <div id="xtSongsList" class="flex-1 overflow-y-auto p-2.5 flex flex-col gap-2 no-scrollbar allow-scroll" style="height: calc(100% - 50px); overflow-y: scroll !important;">
-                    <!-- Cards will render naturally with native touch paths -->
-                </div>
+                <p class="text-xs md:text-sm font-bold tracking-widest mt-2 text-zinc-400 uppercase"> JAI ZUBEEN DA </p>
             </div>
         </div>
 
+        <!-- FULL TIMELINE CONTROLS WITH 5-SECOND JUMP OPTIONS -->
         <div class="p-6 bg-gradient-to-t from-black via-black/95 to-transparent z-10">
             <div class="flex flex-col gap-2 mb-5">
-                <div id="fullTimeline" class="timeline-container">
-                    <div id="fullTimelineProgress" class="timeline-progress"></div>
-                    <div id="fullTimelineThumb" class="timeline-thumb"></div>
+                <div class="flex items-center gap-3 w-full">
+                    <!-- Seek 5s Backward Button -->
+                    <button onclick="seekSeconds(-5)" class="text-zinc-400 hover:text-yellow-400 text-sm p-1 shrink-0 active:scale-95 transition-transform" title="Backward 5s">
+                        <i class="fas fa-rotate-left"></i> <span class="text-[10px] font-bold font-mono">5s</span>
+                    </button>
+                    
+                    <div id="fullTimeline" class="timeline-container flex-1">
+                        <div id="fullTimelineProgress" class="timeline-progress"></div>
+                        <div id="fullTimelineThumb" class="timeline-thumb"></div>
+                    </div>
+                    
+                    <!-- Seek 5s Forward Button -->
+                    <button onclick="seekSeconds(5)" class="text-zinc-400 hover:text-yellow-400 text-sm p-1 shrink-0 active:scale-95 transition-transform" title="Forward 5s">
+                        <span class="text-[10px] font-bold font-mono">5s</span> <i class="fas fa-rotate-right"></i>
+                    </button>
                 </div>
-                <div class="flex justify-between text-[11px] font-mono font-bold text-zinc-400 px-0.5">
+                <div class="flex justify-between text-[11px] font-mono font-bold text-zinc-400 px-8">
                     <span id="currentTimeLabel">0:00</span>
                     <span id="totalTimeLabel">0:00</span>
                 </div>
@@ -295,8 +294,6 @@
         let isPlayerReady = false;
         let isDiscoEnabled = true; 
         
-        let lastLeftTap = 0;
-        let lastRightTap = 0;
         let textRotationIndex = 0;
 
         function getYoutubeId(url) {
@@ -333,7 +330,6 @@
                 filteredSongs = [...allSongs];
                 document.getElementById('totalSongsCount').innerText = `${allSongs.length} Songs`;
                 renderSongsList();
-                renderXTSongsList();
                 recoverSavedSession();
             });
         }
@@ -362,29 +358,6 @@
             });
         }
 
-        function renderXTSongsList() {
-            const xtContainer = document.getElementById('xtSongsList');
-            xtContainer.innerHTML = '';
-            allSongs.forEach((song, index) => {
-                const ytId = getYoutubeId(song.url);
-                const thumbUrl = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
-
-                const card = document.createElement('div');
-                card.className = "bg-zinc-900/80 hover:bg-zinc-800 p-2 rounded-lg flex items-center gap-3 cursor-pointer border border-zinc-800/60 min-w-0 group touch-pan-y";
-                card.onclick = () => { playSong(index); toggleXTPanel(); };
-                card.innerHTML = `
-                    <div class="w-16 h-10 bg-black rounded overflow-hidden shrink-0 border border-zinc-800">
-                        <img src="${thumbUrl}" alt="thumbnail" class="w-full h-full object-cover" loading="lazy">
-                    </div>
-                    <div class="min-w-0 flex-1">
-                        <p class="text-xs font-bold text-zinc-300 group-hover:text-yellow-400 truncate">${song.title}</p>
-                    </div>
-                `;
-                xtContainer.appendChild(card);
-            });
-        }
-
-        // Native layout framework mapping layout architecture 
         function refreshVideoFramePosition() {
             const holder = document.getElementById('unifiedVideoHolder');
             if(!isPlayerReady) return;
@@ -522,15 +495,14 @@
                 }, 150);
             }, 2600);
 
-            // True Dynamic Vibe Velocity Shifter
             discoControlInterval = setInterval(() => {
                 const waveFactor = Math.random();
                 let velocity = "0.22s";
 
-                if (waveFactor > 0.80) velocity = "0.05s"; // Heavy dynamic flash drop
-                else if (waveFactor > 0.50) velocity = "0.12s"; // Fast high beat mode
-                else if (waveFactor > 0.20) velocity = "0.35s"; // Middle standard chorus rhythm
-                else velocity = "0.75s"; // Soft vocal low melody wave
+                if (waveFactor > 0.80) velocity = "0.05s";
+                else if (waveFactor > 0.50) velocity = "0.12s";
+                else if (waveFactor > 0.20) velocity = "0.35s";
+                else velocity = "0.75s";
 
                 lightBar.style.setProperty('--disco-speed', velocity);
             }, 400);
@@ -565,31 +537,30 @@
             return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
         }
 
-        function handleLeftSeek(e) {
-            e.stopPropagation();
-            let now = new Date().getTime();
-            if (now - lastLeftTap < 300) {
-                if (ytPlayer && ytPlayer.getCurrentTime) {
-                    ytPlayer.seekTo(Math.max(0, ytPlayer.getCurrentTime() - 5), true);
-                }
+        // 5-Seconds Seeking Functionality (Forward/Backward)
+        function seekSeconds(seconds) {
+            if (ytPlayer && typeof ytPlayer.getCurrentTime === 'function' && typeof ytPlayer.getDuration === 'function') {
+                const currentTime = ytPlayer.getCurrentTime();
+                const duration = ytPlayer.getDuration() || 0;
+                let targetTime = currentTime + seconds;
+                
+                if (targetTime < 0) targetTime = 0;
+                if (targetTime > duration) targetTime = duration;
+                
+                ytPlayer.seekTo(targetTime, true);
+                
+                // Force sync progress bar UI instantly
+                const pct = duration > 0 ? (targetTime / duration) * 100 : 0;
+                document.getElementById('fullTimelineProgress').style.width = `${pct}%`;
+                document.getElementById('fullTimelineThumb').style.left = `${pct}%`;
+                document.getElementById('currentTimeLabel').innerText = formatTime(targetTime);
             }
-            lastLeftTap = now;
         }
 
-        function handleRightSeek(e) {
-            e.stopPropagation();
-            let now = new Date().getTime();
-            if (now - lastRightTap < 300) {
-                if (ytPlayer && ytPlayer.getCurrentTime) {
-                    ytPlayer.seekTo(Math.min(ytPlayer.getDuration() || 0, ytPlayer.getCurrentTime() + 5), true);
-                }
-            }
-            lastRightTap = now;
-        }
-
+        // Video frame click lock: action disabled on user tap
         function handleCenterVideoTap(e) {
             e.stopPropagation();
-            togglePlayPause();
+            // Intentionally empty - clicks inside the frame will do nothing now.
         }
 
         function attachTimelineEvents(containerId, progressId, thumbId) {
@@ -634,11 +605,6 @@
             isPlayerFullscreen = false;
             document.getElementById('fullScreenPlayer').classList.add('hidden');
             document.getElementById('fullScreenPlayer').classList.remove('flex');
-            
-            const p = document.getElementById('xtPanel');
-            p.classList.add('hidden');
-            p.classList.add('translate-x-full');
-            
             refreshVideoFramePosition();
         }
 
@@ -676,12 +642,6 @@
             filteredSongs = query === '' ? [...allSongs] : allSongs.filter(s => s.title.toLowerCase().includes(query));
             renderSongsList();
         });
-
-        function toggleXTPanel() {
-            const p = document.getElementById('xtPanel');
-            p.classList.toggle('hidden'); 
-            p.classList.toggle('translate-x-full');
-        }
 
         window.onload = loadSongsFromDatabase;
     </script>

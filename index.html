@@ -3,12 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZG X9T - THE WORLD HUMMING KING</title>
+    <title>ZG X9T - ONLY ZUBEEN SONG</title>
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="ZG X9T - THE WORLD HUMMING KING. Dedicated to Zubeen Garg. #JusticeForZubeenGarg.">
-    <meta name="keywords" content="ZG X9T, Zubeen Garg, Humming King, Music Player, @thedhruba2x">
+    <meta name="description" content="ZG X9T - ONLY ZUBEEN SONG. Dedicated to Zubeen Garg.">
+    <meta name="keywords" content="ZG X9T, Zubeen Garg, Only Zubeen Song, Music Player">
     <meta name="author" content="@thedhruba2x">
+    
+    <!-- PWA Meta Tags for Add to Home Screen -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="ZG X9T">
     
     <!-- Tailwind CSS & FontAwesome -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -22,19 +27,25 @@
     <script src="https://www.youtube.com/iframe_api"></script>
 
     <style>
-        /* No Copy & No Selection Styles */
-        body {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
+        /* Strict No Copy & No Selection */
+        * {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
         }
 
-        /* Custom smooth range slider for 144fps timeline feel */
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
         .timeline-container {
             position: relative;
             width: 100%;
-            height: 4px;
+            height: 5px;
             background: #27272a;
             border-radius: 9999px;
             cursor: pointer;
@@ -47,17 +58,17 @@
             left: 0;
             top: 0;
             height: 100%;
-            background: linear-gradient(90deg, #ef4444, #eab308);
+            background: linear-gradient(90deg, #facc15, #ffffff);
             border-radius: 9999px;
             width: 0%;
         }
 
         .timeline-thumb {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             background: #ffffff;
-            border: 2px solid #ef4444;
+            border: 2px solid #facc15;
             border-radius: 50%;
             left: 0%;
             transform: translateX(-50%);
@@ -67,55 +78,79 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Block pointer clicks inside video to prevent channel name clicks */
-        .yt-overlay {
+        /* Captures clicks safely so YouTube interaction is disabled */
+        .yt-overlay-blocker {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 10;
+            z-index: 20;
             background: transparent;
+        }
+
+        /* Split zones for Double Tap to Seek in Fullscreen */
+        .seek-zone {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 50%;
+            z-index: 25;
+            background: transparent;
+        }
+        .seek-left { left: 0; }
+        .seek-right { right: 0; }
+
+        /* Audio Visualizer Light Flickering Slide */
+        @keyframes flicker {
+            0%, 100% { opacity: 0.3; background-color: #ef4444; boxShadow: 0 0 4px #ef4444; }
+            50% { opacity: 1; background-color: #facc15; boxShadow: 0 0 12px #facc15; }
+        }
+        .flicker-bar-active {
+            animation: flicker 0.6s infinite alternate;
         }
     </style>
 </head>
-<body class="bg-black text-white font-sans antialiased selection:bg-transparent" oncontextmenu="return false;">
+<body class="antialiased" oncontextmenu="return false;">
 
     <!-- TOP HEADER SECTION -->
-    <header class="p-4 border-b border-zinc-800 flex justify-between items-start sticky top-0 bg-black/90 backdrop-blur z-30">
+    <header class="p-4 border-b border-zinc-900 flex justify-between items-start sticky top-0 bg-black/95 backdrop-blur z-30">
         <div class="min-w-0 flex-1 pr-2">
-            <h1 class="text-4xl font-black tracking-tighter text-red-600 uppercase break-words">ZG X9T</h1>
-            <p class="text-xs font-bold text-zinc-400 tracking-widest uppercase mt-1 break-words">THE WORLD HUMMING KING</p>
-            <p class="text-xs font-bold text-red-500 mt-0.5 break-words">#JusticeForZubeenGarg</p>
+            <!-- Yellow White Mixed Brand Name -->
+            <h1 class="text-4xl font-black tracking-tighter uppercase break-words">
+                <span class="text-yellow-400">ZG</span> <span class="text-white">X9T</span>
+            </h1>
+            <p class="text-xs font-black text-zinc-400 tracking-widest uppercase mt-1 break-words">ONLY ZUBEEN SONG</p>
+            <p class="text-sm font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-yellow-400 mt-1 break-words animate-pulse">#JusticeForZubeenGarg</p>
             
-            <div class="mt-3 text-sm font-bold text-zinc-300 flex flex-wrap items-center gap-2">
+            <div class="mt-3 text-sm font-bold text-zinc-400 flex flex-wrap items-center gap-2">
                 <span>App By</span>
-                <a href="https://www.facebook.com/share/1BQEf1Ndee/" target="_blank" class="inline-flex items-center gap-1 bg-zinc-900 hover:bg-blue-600 px-2 py-1 rounded text-xs transition-all border border-zinc-700 whitespace-nowrap">
+                <a href="https://www.facebook.com/share/1BQEf1Ndee/" target="_blank" class="inline-flex items-center gap-1 bg-zinc-900 hover:bg-blue-600 px-2 py-1 rounded text-xs text-white transition-all border border-zinc-800 whitespace-nowrap">
                     <i class="fab fa-facebook text-blue-400"></i> @thedhruba2x
                 </a>
             </div>
         </div>
-        <div class="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center font-black text-xl shadow-lg border border-red-500 shrink-0">
+        <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-600 rounded-xl flex items-center justify-center font-black text-xl text-black shadow-lg shrink-0">
             ZG
         </div>
     </header>
 
     <!-- SEARCH & COUNTER -->
-    <section class="p-4 bg-zinc-950/50">
+    <section class="p-4 bg-zinc-950/40">
         <div class="relative mb-3">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-zinc-500">
                 <i class="fas fa-search"></i>
             </span>
-            <input type="text" id="searchInput" placeholder="Search song name or video..." class="w-full bg-zinc-900 border border-zinc-800 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-red-600 text-white transition-all">
+            <input type="text" id="searchInput" placeholder="Search song name or video..." class="w-full bg-zinc-900 border border-zinc-800 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-yellow-500 text-white transition-all">
         </div>
         
         <div class="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-zinc-400 px-1">
             <span>All Song Collection</span>
-            <span id="totalSongsCount" class="bg-red-600/10 text-red-500 px-2 py-0.5 rounded-full border border-red-600/20 whitespace-nowrap">Loading...</span>
+            <span id="totalSongsCount" class="bg-yellow-400/10 text-yellow-400 px-2 py-0.5 rounded-full border border-yellow-400/20 whitespace-nowrap">Loading...</span>
         </div>
     </section>
 
-    <!-- MAIN SINGLE COLUMN SONG LIST -->
+    <!-- MAIN SONG LIST -->
     <main class="p-4 pb-32">
         <div id="songsContainer" class="flex flex-col gap-3">
             <div class="animate-pulse flex flex-col gap-3">
@@ -127,35 +162,29 @@
     </main>
 
     <!-- BOTTOM MINI PLAYER COMPONENT -->
-    <div id="miniPlayer" class="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-800 p-2 z-40 hidden flex-col gap-1 shadow-2xl">
-        <!-- Mini Player Timeline -->
+    <div id="miniPlayer" class="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-900 p-2 z-40 hidden flex-col gap-1 shadow-2xl">
         <div id="miniTimeline" class="timeline-container w-full">
             <div id="miniTimelineProgress" class="timeline-progress"></div>
             <div id="miniTimelineThumb" class="timeline-thumb"></div>
         </div>
         
         <div class="flex items-center justify-between gap-2 mt-1">
-            <!-- Left: Clickable area to open Fullscreen -->
             <div onclick="openFullScreenPlayer()" class="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
-                <!-- 16:9 Scaled Live Miniature Video Wrapper -->
                 <div class="w-20 h-11 bg-black rounded overflow-hidden border border-zinc-800 relative shrink-0">
                     <div id="miniVideoWrapper" class="w-full h-full relative">
-                        <!-- YouTube Player Container stays here when running in mini player mode -->
-                        <div id="ytPlayerContainer" class="w-full h-full pointer-events-none scale-105"></div>
+                        <div id="ytPlayerContainer" class="w-full h-full scale-105 pointer-events-none"></div>
                     </div>
-                    <!-- Transparent cover so user clicks trigger fullscreen instead of pausing inside mini-video -->
-                    <div class="yt-overlay"></div>
+                    <div class="yt-overlay-blocker"></div>
                 </div>
                 <div class="min-w-0 flex-1">
                     <h4 id="miniPlayerTitle" class="text-xs font-bold truncate text-zinc-100">Song Title</h4>
-                    <p class="text-[9px] text-red-500 font-bold uppercase tracking-widest whitespace-nowrap">Tap to view full screen</p>
+                    <p class="text-[9px] text-yellow-400 font-bold uppercase tracking-widest whitespace-nowrap">Tap to view full screen</p>
                 </div>
             </div>
 
-            <!-- Right: Mini Controls -->
             <div class="flex items-center gap-2.5 shrink-0 px-1">
                 <button onclick="playPrevious()" class="text-zinc-400 hover:text-white text-sm p-1"><i class="fas fa-backward-step"></i></button>
-                <button onclick="togglePlayPause()" class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white text-xs shrink-0"><i id="miniPlayIcon" class="fas fa-play pl-0.5"></i></button>
+                <button onclick="togglePlayPause()" class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center text-black text-xs shrink-0 font-bold"><i id="miniPlayIcon" class="fas fa-play pl-0.5"></i></button>
                 <button onclick="playNext()" class="text-zinc-400 hover:text-white text-sm p-1"><i class="fas fa-forward-step"></i></button>
                 <button onclick="closeVideo()" class="text-zinc-500 hover:text-red-500 text-sm p-1 ml-0.5"><i class="fas fa-times"></i></button>
             </div>
@@ -164,49 +193,50 @@
 
     <!-- FULL SCREEN PLAYER COMPONENT -->
     <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden">
-        <!-- Top bar inside fullscreen -->
-        <div class="p-4 flex justify-between items-center border-b border-zinc-900 bg-gradient-to-b from-black/80 to-transparent">
+        <div class="p-4 flex justify-between items-center border-b border-zinc-900 bg-gradient-to-b from-black/90 to-transparent">
             <button onclick="closeFullScreenPlayer()" class="text-zinc-400 hover:text-white text-xl p-1"><i class="fas fa-chevron-down"></i></button>
             <div class="text-center px-4 flex-1 min-w-0">
-                <span class="text-[10px] font-black tracking-widest text-red-500 uppercase block">Now Playing</span>
+                <span class="text-[10px] font-black tracking-widest text-yellow-400 uppercase block">Now Playing</span>
                 <h3 id="fullPlayerTitle" class="text-sm font-bold truncate text-white">Song Title</h3>
             </div>
-            <button onclick="toggleXTPanel()" class="bg-zinc-900 border border-zinc-800 px-3 py-1 rounded text-xs font-black tracking-wider text-red-500 hover:bg-zinc-800 transition-all shrink-0">XT OPTION</button>
+            <button onclick="toggleXTPanel()" class="bg-zinc-900 border border-zinc-800 px-3 py-1 rounded text-xs font-black tracking-wider text-yellow-400 hover:bg-zinc-800 transition-all shrink-0">XT OPTION</button>
         </div>
 
-        <!-- Middle: Main Video Container -->
-        <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/30 relative gap-6">
-            <div class="w-full max-w-lg aspect-video bg-black rounded-lg overflow-hidden border border-zinc-800 shadow-2xl relative">
-                <div id="fullVideoWrapper" class="w-full h-full">
-                    <!-- YouTube Player object moves here when fullscreen is requested -->
+        <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/20 relative gap-6">
+            <!-- Flickering Bar Container -->
+            <div class="w-full max-w-lg flex flex-col gap-1.5">
+                <div id="visualizerLightBar" class="w-full h-[3px] rounded bg-zinc-800 transition-all duration-100"></div>
+                
+                <div class="w-full aspect-video bg-black rounded-lg overflow-hidden border border-zinc-900 shadow-2xl relative">
+                    <div id="fullVideoWrapper" class="w-full h-full"></div>
+                    
+                    <!-- Separate interaction handling overlay Layer -->
+                    <div class="yt-overlay-blocker"></div>
+                    <div class="seek-zone seek-left" onclick="handleLeftSeek(event)"></div>
+                    <div class="seek-zone seek-right" onclick="handleRightSeek(event)"></div>
                 </div>
-                <!-- Overlay to block clicks on video title/channel -->
-                <div class="yt-overlay"></div>
             </div>
 
-            <!-- BRANDING LOGO & CREDITS -->
-            <div class="text-center mt-2 px-4 select-none w-full max-w-xl">
-                <h2 class="text-2xl md:text-4xl font-extrabold tracking-wide text-white uppercase drop-shadow-lg break-words whitespace-normal">
-                    #<span class="text-yellow-400">Justice</span>For<span class="text-yellow-400">Zubeen</span>Garg
+            <div class="text-center mt-2 px-4 w-full max-w-xl">
+                <h2 class="text-2xl md:text-4xl font-extrabold tracking-wide text-white uppercase drop-shadow-lg">
+                    #<span class="text-yellow-400">Only</span>Zubeen<span class="text-yellow-400">Garg</span>
                 </h2>
-                <p class="text-sm md:text-lg font-black tracking-widest mt-3 bg-gradient-to-r from-white via-yellow-400 to-white bg-clip-text text-transparent uppercase break-words whitespace-normal px-2">
-                    All Golden Collection By - A Zubeen Fan DhrubaJyoti
+                <p class="text-sm md:text-lg font-black tracking-widest mt-3 bg-gradient-to-r from-white via-yellow-400 to-white bg-clip-text text-transparent uppercase px-2">
+                    জুবিন দা-ৰ চিৰсеউজ গানৰ এক অনন্য সংৰক্ষণ
                 </p>
             </div>
 
-            <!-- XT Side Panel Overlay -->
-            <div id="xtPanel" class="absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-zinc-950/95 border-l border-zinc-800 z-50 transform translate-x-full transition-transform duration-300 flex flex-col hidden">
+            <!-- XT Side Queue Panel with Full Thumbnails -->
+            <div id="xtPanel" class="absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-zinc-950/98 border-l border-zinc-900 z-50 transform translate-x-full transition-transform duration-300 flex flex-col hidden">
                 <div class="p-3 border-b border-zinc-800 flex justify-between items-center">
-                    <span class="text-xs font-black text-red-500"><i class="fas fa-list"></i> XT QUEUE LIST</span>
+                    <span class="text-xs font-black text-yellow-400"><i class="fas fa-list"></i> XT QUEUE LIST</span>
                     <button onclick="toggleXTPanel()" class="text-zinc-400 text-sm p-1"><i class="fas fa-times"></i></button>
                 </div>
-                <div id="xtSongsList" class="flex-1 overflow-y-auto p-2 flex flex-col gap-2 no-scrollbar"></div>
+                <div id="xtSongsList" class="flex-1 overflow-y-auto p-3 flex flex-col gap-3 no-scrollbar"></div>
             </div>
         </div>
 
-        <!-- Bottom Controls & Smooth Timeline -->
-        <div class="p-6 bg-gradient-to-t from-black via-black/90 to-transparent">
-            <!-- Timeline Area -->
+        <div class="p-6 bg-gradient-to-t from-black via-black/95 to-transparent">
             <div class="flex flex-col gap-2 mb-6">
                 <div id="fullTimeline" class="timeline-container">
                     <div id="fullTimelineProgress" class="timeline-progress"></div>
@@ -218,10 +248,9 @@
                 </div>
             </div>
 
-            <!-- Main Control Buttons -->
             <div class="flex items-center justify-center gap-8 mb-4">
                 <button onclick="playPrevious()" class="text-zinc-400 hover:text-white text-xl transition-colors"><i class="fas fa-backward-step"></i></button>
-                <button onclick="togglePlayPause()" class="w-16 h-16 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center text-white text-2xl transition-all transform active:scale-95 shadow-lg shadow-red-600/20"><i id="fullPlayIcon" class="fas fa-play pl-1"></i></button>
+                <button onclick="togglePlayPause()" class="w-16 h-16 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center text-black text-2xl transition-all transform active:scale-95 shadow-lg shadow-yellow-400/20"><i id="fullPlayIcon" class="fas fa-play pl-1"></i></button>
                 <button onclick="playNext()" class="text-zinc-400 hover:text-white text-xl transition-colors"><i class="fas fa-forward-step"></i></button>
             </div>
         </div>
@@ -251,8 +280,10 @@
         let timelineInterval = null;
         let isDraggingTimeline = false;
         let isPlayerFullscreen = false;
+        
+        let lastLeftTap = 0;
+        let lastRightTap = 0;
 
-        // --- YOUTUBE ID EXTRACTOR ---
         function getYoutubeId(url) {
             if (!url) return '';
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -288,6 +319,9 @@
                 document.getElementById('totalSongsCount').innerText = `${allSongs.length} Songs`;
                 renderSongsList();
                 renderXTSongsList();
+                
+                // Recover Session state after data fetch completes
+                recoverSavedSession();
             });
         }
 
@@ -299,40 +333,51 @@
                 const thumbUrl = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
 
                 const card = document.createElement('div');
-                card.className = "bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-lg p-2 flex items-center gap-3 cursor-pointer transition-all active:scale-[0.99] group min-w-0";
-                card.onclick = () => playSong(index);
+                card.className = "bg-zinc-900/60 hover:bg-zinc-800 border border-zinc-900 rounded-lg p-2 flex items-center gap-3 cursor-pointer transition-all active:scale-[0.99] group min-w-0";
+                card.onclick = () => playSong(allSongs.indexOf(song));
 
                 card.innerHTML = `
                     <div class="w-20 h-12 bg-black rounded overflow-hidden shrink-0 border border-zinc-800 relative">
                         <img src="${thumbUrl}" alt="thumbnail" class="w-full h-full object-cover">
                     </div>
                     <div class="min-w-0 flex-1">
-                        <h3 class="text-sm font-bold text-zinc-100 group-hover:text-red-500 break-words whitespace-normal line-clamp-2">${song.title}</h3>
+                        <h3 class="text-sm font-bold text-zinc-100 group-hover:text-yellow-400 break-words whitespace-normal line-clamp-2">${song.title}</h3>
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
 
+        // XT option with full size visual thumbnails
         function renderXTSongsList() {
             const xtContainer = document.getElementById('xtSongsList');
             xtContainer.innerHTML = '';
             allSongs.forEach((song, index) => {
+                const ytId = getYoutubeId(song.url);
+                const thumbUrl = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
+
                 const card = document.createElement('div');
-                card.className = "bg-zinc-900 hover:bg-zinc-800 p-2 rounded flex items-center gap-2 cursor-pointer transition-all border border-zinc-800 text-xs font-bold break-words whitespace-normal";
-                card.innerText = song.title;
+                card.className = "bg-zinc-900 hover:bg-zinc-800 rounded overflow-hidden flex flex-col cursor-pointer transition-all border border-zinc-800 group";
                 card.onclick = () => { 
-                    playSong(allSongs.indexOf(song)); 
+                    playSong(index); 
                     toggleXTPanel(); 
                 };
+                card.innerHTML = `
+                    <div class="w-full aspect-video bg-black border-b border-zinc-800">
+                        <img src="${thumbUrl}" alt="thumbnail" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-2">
+                        <p class="text-xs font-bold text-zinc-200 group-hover:text-yellow-400 line-clamp-2">${song.title}</p>
+                    </div>
+                `;
                 xtContainer.appendChild(card);
             });
         }
 
-        // --- PLAYER CONTROLLER ENGINE ---
-        function playSong(index) {
+        function playSong(index, startAtSeconds = 0) {
+            if (index < 0 || index >= allSongs.length) return;
             currentSongIndex = index;
-            const song = filteredSongs[index];
+            const song = allSongs[index];
             const ytId = getYoutubeId(song.url);
 
             if(!ytId) return alert("Invalid YouTube URL!");
@@ -340,11 +385,9 @@
             document.getElementById('fullPlayerTitle').innerText = song.title;
             document.getElementById('miniPlayerTitle').innerText = song.title;
             
-            // Show Mini Player Bottom Sheet
             document.getElementById('miniPlayer').classList.remove('hidden');
             document.getElementById('miniPlayer').classList.add('flex');
 
-            // Route dynamic iframe structure according to full screen state
             const p = document.getElementById('ytPlayerContainer');
             if (isPlayerFullscreen) {
                 document.getElementById('fullVideoWrapper').appendChild(p);
@@ -352,33 +395,43 @@
                 document.getElementById('miniVideoWrapper').appendChild(p);
             }
 
+            // Save persistent state details
+            localStorage.setItem('zg_last_index', currentSongIndex);
+
             if (!ytPlayer) {
                 ytPlayer = new YT.Player('ytPlayerContainer', {
                     height: '100%',
                     width: '100%',
                     videoId: ytId,
-                    playerVars: { 'controls': 0, 'disablekb': 1, 'rel': 0, 'modestbranding': 1, 'iv_load_policy': 3, 'fs': 0, 'playsinline': 1 },
+                    playerVars: { 'controls': 0, 'disablekb': 1, 'rel': 0, 'modestbranding': 1, 'iv_load_policy': 3, 'fs': 0, 'playsinline': 1, 'start': startAtSeconds },
                     events: {
-                        'onReady': (e) => { e.target.playVideo(); startTimelineSync(); },
+                        'onReady': (e) => { 
+                            if(startAtSeconds > 0) e.target.seekTo(startAtSeconds, true);
+                            e.target.playVideo(); 
+                            startTimelineSync(); 
+                        },
                         'onStateChange': onPlayerStateChange
                     }
                 });
             } else {
-                ytPlayer.loadVideoById(ytId);
+                ytPlayer.loadVideoById({ videoId: ytId, startSeconds: startAtSeconds || 0 });
             }
         }
 
         function onPlayerStateChange(event) {
             const fIcon = document.getElementById('fullPlayIcon');
             const mIcon = document.getElementById('miniPlayIcon');
+            const lightBar = document.getElementById('visualizerLightBar');
 
             if (event.data == YT.PlayerState.PLAYING) {
                 fIcon.className = "fas fa-pause";
                 mIcon.className = "fas fa-pause";
+                lightBar.classList.add('flicker-bar-active');
                 startTimelineSync();
             } else {
                 fIcon.className = "fas fa-play pl-1";
                 mIcon.className = "fas fa-play pl-0.5";
+                lightBar.classList.remove('flicker-bar-active');
                 clearInterval(timelineInterval);
             }
             if (event.data == YT.PlayerState.ENDED) playNext();
@@ -392,16 +445,17 @@
                     const duration = ytPlayer.getDuration() || 0;
                     const pct = duration > 0 ? (current / duration) * 100 : 0;
                     
-                    // Sync Full Screen Timeline
                     document.getElementById('fullTimelineProgress').style.width = `${pct}%`;
                     document.getElementById('fullTimelineThumb').style.left = `${pct}%`;
                     
-                    // Sync Mini Player Timeline
                     document.getElementById('miniTimelineProgress').style.width = `${pct}%`;
                     document.getElementById('miniTimelineThumb').style.left = `${pct}%`;
 
                     document.getElementById('currentTimeLabel').innerText = formatTime(current);
                     document.getElementById('totalTimeLabel').innerText = formatTime(duration);
+
+                    // Continuous update state for structural safe refresh recovery
+                    localStorage.setItem('zg_last_time', current);
                 }
             }, 250);
         }
@@ -410,6 +464,31 @@
             const mins = Math.floor(seconds / 60);
             const secs = Math.floor(seconds % 60);
             return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // --- DOUBLE TAP SEEK LOGIC ---
+        function handleLeftSeek(e) {
+            e.stopPropagation();
+            let now = new Date().getTime();
+            if (now - lastLeftTap < 300) {
+                if (ytPlayer && ytPlayer.getCurrentTime) {
+                    let target = Math.max(0, ytPlayer.getCurrentTime() - 5);
+                    ytPlayer.seekTo(target, true);
+                }
+            }
+            lastLeftTap = now;
+        }
+
+        function handleRightSeek(e) {
+            e.stopPropagation();
+            let now = new Date().getTime();
+            if (now - lastRightTap < 300) {
+                if (ytPlayer && ytPlayer.getCurrentTime) {
+                    let target = Math.min(ytPlayer.getDuration() || 0, ytPlayer.getCurrentTime() + 5);
+                    ytPlayer.seekTo(target, true);
+                }
+            }
+            lastRightTap = now;
         }
 
         // --- INTERACTION FOR BOTH TIMELINES ---
@@ -445,13 +524,12 @@
         attachTimelineEvents('fullTimeline', 'fullTimelineProgress', 'fullTimelineThumb');
         attachTimelineEvents('miniTimeline', 'miniTimelineProgress', 'miniTimelineThumb');
 
-        // --- WINDOW MANAGER (FULL <-> MINI) ---
+        // --- LAYER MANAGERS WITH INSTANT SYNC ---
         function openFullScreenPlayer() {
             isPlayerFullscreen = true;
             document.getElementById('fullScreenPlayer').classList.remove('hidden');
             document.getElementById('fullScreenPlayer').classList.add('flex');
             
-            // Move Player Container to Full Screen Wrapper
             const p = document.getElementById('ytPlayerContainer');
             document.getElementById('fullVideoWrapper').appendChild(p);
         }
@@ -461,7 +539,6 @@
             document.getElementById('fullScreenPlayer').classList.add('hidden');
             document.getElementById('fullScreenPlayer').classList.remove('flex');
             
-            // Move Player Container back to Mini Player Wrapper safely
             const p = document.getElementById('ytPlayerContainer');
             document.getElementById('miniVideoWrapper').appendChild(p);
         }
@@ -471,8 +548,8 @@
             ytPlayer.getPlayerState() == YT.PlayerState.PLAYING ? ytPlayer.pauseVideo() : ytPlayer.playVideo();
         }
 
-        function playNext() { if(currentSongIndex < filteredSongs.length - 1) playSong(currentSongIndex + 1); else playSong(0); }
-        function playPrevious() { if(currentSongIndex > 0) playSong(currentSongIndex - 1); else playSong(filteredSongs.length - 1); }
+        function playNext() { if(currentSongIndex < allSongs.length - 1) playSong(currentSongIndex + 1); else playSong(0); }
+        function playPrevious() { if(currentSongIndex > 0) playSong(currentSongIndex - 1); else playSong(allSongs.length - 1); }
 
         function closeVideo() {
             if(ytPlayer) ytPlayer.stopVideo();
@@ -480,7 +557,31 @@
             document.getElementById('miniPlayer').classList.add('hidden');
             document.getElementById('fullScreenPlayer').classList.add('hidden');
             isPlayerFullscreen = false;
+            localStorage.removeItem('zg_last_index');
+            localStorage.removeItem('zg_last_time');
         }
+
+        // --- SESSION RECOVERY ENGINE ---
+        function recoverSavedSession() {
+            const savedIndex = localStorage.getItem('zg_last_index');
+            const savedTime = localStorage.getItem('zg_last_time');
+            if (savedIndex !== null) {
+                const index = parseInt(savedIndex);
+                const startSecs = savedTime ? parseFloat(savedTime) : 0;
+                if(index >= 0 && index < allSongs.length) {
+                    playSong(index, startSecs);
+                }
+            }
+        }
+
+        // Block Refresh in Fullscreen Mode
+        window.addEventListener('beforeunload', (e) => {
+            if (isPlayerFullscreen) {
+                e.preventDefault();
+                e.returnValue = 'Player is in Fullscreen mode.';
+                return 'Player is in Fullscreen mode.';
+            }
+        });
 
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase().trim();
@@ -494,7 +595,7 @@
             p.classList.toggle('translate-x-full');
         }
 
-        // Anti-Copy Shortcut Blocker
+        // Deep Anti-Copy Shortcut Blocker
         window.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'a' || e.key === 'u' || e.key === 's')) {
                 e.preventDefault();

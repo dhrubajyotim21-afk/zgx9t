@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ZG X9T - ONLY ZUBEEN SONG</title>
     
+    <!-- PWA Setup -->
     <meta name="description" content="ZG X9T - ONLY ZUBEEN SONG. Dedicated to Zubeen Garg.">
     <meta name="author" content="@thedhruba2x">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,18 +13,20 @@
     <meta name="apple-mobile-web-app-title" content="ZG X9T">
     <meta name="mobile-web-app-capable" content="yes">
     
-    <link class="sw-manifest" rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlpHIFg5VCAtIE9OTFkgWlVCRUVOIFNPTkciLAogICJzaG9ydF9uYW1lIjogIlpHIFg5VCIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwK  ImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIKfQ==">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlpHIFg5VCAtIE9OTFkgWlVCRUVOIFNPTkciLAogICJzaG9ydF9uYW1lIjogIlpHIFg5VCIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwK  ImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIKfQ==">
     
+    <!-- Tailwind CSS & FontAwesome -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
+    <!-- YouTube Iframe API -->
     <script src="https://www.youtube.com/iframe_api"></script>
 
     <style>
-        /* Strict Global No-Selection, App Rules */
         * {
             -webkit-user-select: none !important;
             -moz-user-select: none !important;
@@ -36,20 +39,15 @@
             background-color: #000000;
             color: #ffffff;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            overflow-x: hidden;
+            overflow: hidden;
             width: 100vw;
             height: 100vh;
         }
 
-        /* Essential for native element scrolling lists */
         .allow-scroll {
-            touch-action: auto !important;
+            touch-action: pan-y !important;
             -webkit-overflow-scrolling: touch !important;
-        }
-
-        body.lock-scroll {
-            overflow: hidden !important;
-            position: fixed !important;
+            overflow-y: auto !important;
         }
 
         .timeline-container {
@@ -88,14 +86,16 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .yt-overlay-blocker {
+        /* Strong Double-Layer Shield to completely block native YT Controls */
+        .yt-strict-blocker {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 20;
+            z-index: 40;
             background: transparent;
+            pointer-events: auto;
         }
 
         .seek-zone {
@@ -103,32 +103,32 @@
             top: 0;
             bottom: 0;
             width: 50%;
-            z-index: 25;
+            z-index: 45;
             background: transparent;
+            pointer-events: auto;
         }
         .seek-left { left: 0; }
         .seek-right { right: 0; }
 
-        /* Real Intense Audio Disco Flash Glow Filter Engine */
-        @keyframes extremeDiscoFlash {
-            0% { background-color: #ff0000; box-shadow: 0 0 35px #ff0000, inset 0 0 15px rgba(255,0,0,0.6); }
-            14% { background-color: #ff00ff; box-shadow: 0 0 40px #ff00ff, inset 0 0 15px rgba(255,0,255,0.6); }
-            28% { background-color: #0000ff; box-shadow: 0 0 35px #0000ff, inset 0 0 15px rgba(0,0,255,0.6); }
-            42% { background-color: #00ffff; box-shadow: 0 0 45px #00ffff, inset 0 0 15px rgba(0,255,255,0.6); }
-            56% { background-color: #00ff00; box-shadow: 0 0 35px #00ff00, inset 0 0 15px rgba(0,255,0,0.6); }
-            70% { background-color: #ffff00; box-shadow: 0 0 50px #ffff00, inset 0 0 15px rgba(255,255,0,0.6); }
-            84% { background-color: #ff7700; box-shadow: 0 0 40px #ff7700, inset 0 0 15px rgba(255,119,0,0.6); }
-            100% { background-color: #ff0055; box-shadow: 0 0 45px #ff0055, inset 0 0 15px rgba(255,0,85,0.6); }
+        /* Performance Optimized High Frequency Disco Animation Engine */
+        @keyframes dynamicDiscoGlow {
+            0% { background-color: #ff0000; box-shadow: 0 0 25px #ff0000; }
+            20% { background-color: #ff00ff; box-shadow: 0 0 30px #ff00ff; }
+            40% { background-color: #0000ff; box-shadow: 0 0 25px #0000ff; }
+            60% { background-color: #00ffff; box-shadow: 0 0 35px #00ffff; }
+            80% { background-color: #00ff00; box-shadow: 0 0 25px #00ff00; }
+            100% { background-color: #ffff00; box-shadow: 0 0 35px #ffff00; }
         }
 
-        .disco-box-active {
-            animation: extremeDiscoFlash var(--disco-speed, 0.25s) infinite alternate cubic-bezier(0.1, 0.8, 0.3, 1) !important;
+        .disco-active {
+            animation: dynamicDiscoGlow var(--disco-speed, 0.2s) infinite alternate ease-in-out !important;
         }
     </style>
 </head>
 <body class="antialiased" oncontextmenu="return false;">
 
-    <div id="appScrollBody" class="w-full h-full overflow-y-auto no-scrollbar pb-36 allow-scroll">
+    <!-- APP MAIN CONTENT LIST LAYOUT -->
+    <div id="appScrollBody" class="w-full h-full pb-36 no-scrollbar allow-scroll">
         <header class="p-4 border-b border-zinc-900 flex justify-between items-start sticky top-0 bg-black/95 backdrop-blur z-30">
             <div class="min-w-0 flex-1 pr-2">
                 <h1 class="text-4xl font-black tracking-tighter uppercase break-words">
@@ -169,11 +169,13 @@
         </main>
     </div>
 
-    <div id="unifiedVideoHolder" class="fixed z-[60] bg-black rounded overflow-hidden shadow-2xl hidden pointer-events-none">
+    <!-- SHARED INDEPENDENT FIXED PORTAL WRAPPER (Never broken during render loop) -->
+    <div id="unifiedVideoHolder" class="fixed bottom-14 left-2 w-20 h-11 z-[42] bg-black rounded overflow-hidden border border-zinc-800 hidden pointer-events-none transition-all duration-300">
         <div id="ytPlayerContainer" class="w-full h-full scale-105"></div>
-        <div class="yt-overlay-blocker"></div>
+        <div class="yt-strict-blocker" onclick="handleCenterVideoTap(event)"></div>
     </div>
 
+    <!-- BOTTOM MINI PLAYER COMPONENT -->
     <div id="miniPlayer" class="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-900 p-2 z-40 hidden flex-col gap-1 shadow-2xl select-none">
         <div id="miniTimeline" class="timeline-container w-full">
             <div id="miniTimelineProgress" class="timeline-progress"></div>
@@ -181,7 +183,8 @@
         </div>
         <div class="flex items-center justify-between gap-2 mt-1">
             <div onclick="openFullScreenPlayer()" class="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
-                <div id="miniPlayerAnchor" class="w-20 h-11 shrink-0 bg-zinc-900/40 border border-zinc-800 rounded"></div>
+                <!-- Sizing placeholder block for Layout alignment -->
+                <div class="w-20 h-11 shrink-0 bg-zinc-900/10 rounded"></div>
                 <div class="min-w-0 flex-1">
                     <h4 id="miniPlayerTitle" class="text-xs font-bold truncate text-zinc-100">Song Title</h4>
                     <p class="text-[9px] text-yellow-400 font-bold uppercase tracking-widest">Tap to view full screen</p>
@@ -196,6 +199,7 @@
         </div>
     </div>
 
+    <!-- FULL SCREEN PLAYER COMPONENT -->
     <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden select-none">
         <div class="p-4 flex justify-between items-center border-b border-zinc-900 bg-gradient-to-b from-black/90 to-transparent z-10">
             <button onclick="closeFullScreenPlayer()" class="text-zinc-400 hover:text-white text-xl p-1"><i class="fas fa-chevron-down"></i></button>
@@ -206,13 +210,21 @@
             <button onclick="toggleXTPanel()" class="bg-zinc-900 border border-zinc-800 px-3 py-1 rounded text-xs font-black tracking-wider text-yellow-400 shrink-0 z-20">XT OPTION</button>
         </div>
 
-        <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/20 relative gap-5 overflow-hidden">
+        <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/20 relative gap-4 overflow-hidden">
+            <!-- DISCO LIGHT USER INTERACTIVE ON/OFF CONTROLLER SWITCH -->
+            <div class="z-10 bg-zinc-900/80 border border-zinc-800 px-3 py-1 rounded-full flex items-center gap-2 text-xs font-bold">
+                <span class="text-zinc-400 uppercase text-[10px]">Disco Effect</span>
+                <button id="discoToggleBtn" onclick="toggleDiscoSystem()" class="bg-yellow-400 text-black px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider">ON</button>
+            </div>
+
             <div class="w-full max-w-lg flex flex-col gap-3 z-10">
-                <div id="visualizerLightBar" class="w-full h-14 rounded-xl bg-zinc-900 flex items-center justify-center px-4 transition-all duration-150 overflow-hidden shadow-lg border border-zinc-800/50">
-                    <span id="visualizerText" class="text-lg md:text-xl font-black text-white tracking-wider uppercase truncate drop-shadow-[0_2px_8px_rgba(0,0,0,1)] text-center">Joy Zubeen Da</span>
+                <!-- EXTREME ADAPTIVE SOUND DISCO LIGHT BOX CONTAINER -->
+                <div id="visualizerLightBar" class="w-full h-14 rounded-xl bg-zinc-900 flex items-center justify-center px-4 overflow-hidden shadow-lg border border-zinc-800/50 transition-all duration-200">
+                    <span id="visualizerText" class="text-lg md:text-xl font-black text-white tracking-wider uppercase truncate drop-shadow-[0_2px_6px_rgba(0,0,0,1)] text-center">Joy Zubeen Da</span>
                 </div>
                 
-                <div id="fullPlayerAnchor" class="w-full aspect-video bg-zinc-900/30 rounded-xl border border-zinc-900 shadow-2xl relative overflow-hidden">
+                <!-- Safe Absolute Centered Aspect Frame Aspect Shield Player -->
+                <div id="fullPlayerAnchor" class="w-full aspect-video bg-zinc-900/20 rounded-xl border border-zinc-900 shadow-2xl relative overflow-hidden">
                     <div class="seek-zone seek-left" onclick="handleLeftSeek(event)"></div>
                     <div class="seek-zone seek-right" onclick="handleRightSeek(event)"></div>
                 </div>
@@ -222,16 +234,18 @@
                 <h2 class="text-xl md:text-3xl font-extrabold tracking-wide text-white uppercase">
                     #<span class="text-yellow-400">Only</span>Zubeen<span class="text-yellow-400">Garg</span>
                 </h2>
-                <p class="text-xs md:text-sm font-bold tracking-widest mt-2 text-zinc-400 uppercase">জুবিন দা-ৰ চিৰসেউজ গানৰ এক অনন্য সংৰক্ষণ</p>
+                <p class="text-xs md:text-sm font-bold tracking-widest mt-1 text-zinc-400 uppercase">জুবিন দা-ৰ চিৰসেউজ গানৰ এক অনন্য সংৰক্ষণ</p>
             </div>
 
+            <!-- XT PANEL OVERLAY - FIX FOR MAXIMUM SCROLL PERMISSION -->
             <div id="xtPanel" class="absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-zinc-950/98 border-l border-zinc-900 z-50 transform translate-x-full transition-transform duration-300 flex flex-col hidden">
                 <div class="p-3 border-b border-zinc-800 flex justify-between items-center shrink-0">
                     <span class="text-xs font-black text-yellow-400"><i class="fas fa-list"></i> XT QUEUE LIST</span>
                     <button onclick="toggleXTPanel()" class="text-zinc-400 text-sm p-1"><i class="fas fa-times"></i></button>
                 </div>
-                <div id="xtSongsList" class="flex-1 overflow-y-auto p-2.5 flex flex-col gap-2 no-scrollbar allow-scroll">
-                    </div>
+                <div id="xtSongsList" class="flex-1 overflow-y-auto p-2.5 flex flex-col gap-2 no-scrollbar allow-scroll" style="height: calc(100% - 50px); overflow-y: scroll !important;">
+                    <!-- Cards will render naturally with native touch paths -->
+                </div>
             </div>
         </div>
 
@@ -279,15 +293,11 @@
         let isDraggingTimeline = false;
         let isPlayerFullscreen = false;
         let isPlayerReady = false;
+        let isDiscoEnabled = true; 
         
         let lastLeftTap = 0;
         let lastRightTap = 0;
         let textRotationIndex = 0;
-
-        // Block accidental browser zooms, keeping natural list touches alive
-        document.addEventListener('touchstart', (e) => {
-            if (e.touches.length > 1 && !e.target.closest('.allow-scroll')) e.preventDefault();
-        }, { passive: false });
 
         function getYoutubeId(url) {
             if (!url) return '';
@@ -360,13 +370,13 @@
                 const thumbUrl = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
 
                 const card = document.createElement('div');
-                card.className = "bg-zinc-900/80 hover:bg-zinc-800 p-1.5 rounded-lg flex items-center gap-3 cursor-pointer border border-zinc-900 min-w-0 group select-none";
+                card.className = "bg-zinc-900/80 hover:bg-zinc-800 p-2 rounded-lg flex items-center gap-3 cursor-pointer border border-zinc-800/60 min-w-0 group touch-pan-y";
                 card.onclick = () => { playSong(index); toggleXTPanel(); };
                 card.innerHTML = `
-                    <div class="w-16 h-10 bg-black rounded overflow-hidden shrink-0 border border-zinc-800 pointer-events-none">
+                    <div class="w-16 h-10 bg-black rounded overflow-hidden shrink-0 border border-zinc-800">
                         <img src="${thumbUrl}" alt="thumbnail" class="w-full h-full object-cover" loading="lazy">
                     </div>
-                    <div class="min-w-0 flex-1 pointer-events-none">
+                    <div class="min-w-0 flex-1">
                         <p class="text-xs font-bold text-zinc-300 group-hover:text-yellow-400 truncate">${song.title}</p>
                     </div>
                 `;
@@ -374,33 +384,33 @@
             });
         }
 
+        // Native layout framework mapping layout architecture 
         function refreshVideoFramePosition() {
             const holder = document.getElementById('unifiedVideoHolder');
             if(!isPlayerReady) return;
 
-            const targetAnchorId = isPlayerFullscreen ? 'fullPlayerAnchor' : 'miniPlayerAnchor';
-            const anchor = document.getElementById(targetAnchorId);
-            
-            if(!anchor) return;
-            const bounds = anchor.getBoundingClientRect();
-
             holder.classList.remove('hidden');
-            holder.style.top = `${bounds.top}px`;
-            holder.style.left = `${bounds.left}px`;
-            holder.style.width = `${bounds.width}px`;
-            holder.style.height = `${bounds.height}px`;
-
             if(isPlayerFullscreen) {
+                const anchor = document.getElementById('fullPlayerAnchor');
+                const bounds = anchor.getBoundingClientRect();
+                holder.style.top = `${bounds.top}px`;
+                holder.style.left = `${bounds.left}px`;
+                holder.style.width = `${bounds.width}px`;
+                holder.style.height = `${bounds.height}px`;
                 holder.style.zIndex = "51";
                 holder.style.borderRadius = "12px";
             } else {
+                holder.style.bottom = "8px";
+                holder.style.left = "8px";
+                holder.style.top = "auto";
+                holder.style.width = "80px";
+                holder.style.height = "44px";
                 holder.style.zIndex = "41";
                 holder.style.borderRadius = "4px";
             }
         }
 
         window.addEventListener('resize', refreshVideoFramePosition);
-        window.addEventListener('orientationchange', () => setTimeout(refreshVideoFramePosition, 150));
 
         function playSong(index, startAtSeconds = 0) {
             if (index < 0 || index >= allSongs.length) return;
@@ -469,22 +479,34 @@
             if (event.data == YT.PlayerState.ENDED) playNext();
         }
 
-        // DYNAMIC INTENSE DISCO MODIFIER SHIFTER FLASHER ENGINE
+        function toggleDiscoSystem() {
+            isDiscoEnabled = !isDiscoEnabled;
+            const btn = document.getElementById('discoToggleBtn');
+            if(isDiscoEnabled) {
+                btn.innerText = "ON";
+                btn.className = "bg-yellow-400 text-black px-2 py-0.5 rounded text-[10px] font-black";
+                if(ytPlayer && ytPlayer.getPlayerState() === YT.PlayerState.PLAYING) runDynamicDiscoEngine(true);
+            } else {
+                btn.innerText = "OFF";
+                btn.className = "bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded text-[10px] font-black";
+                runDynamicDiscoEngine(false);
+            }
+        }
+
         function runDynamicDiscoEngine(shouldRun) {
             clearInterval(textRotationInterval);
             clearInterval(discoControlInterval);
             const lightBar = document.getElementById('visualizerLightBar');
             const textBox = document.getElementById('visualizerText');
 
-            if (!shouldRun) {
+            if (!shouldRun || !isDiscoEnabled) {
+                lightBar.classList.remove('disco-active');
                 lightBar.className = "w-full h-14 rounded-xl bg-zinc-900 flex items-center justify-center px-4 border border-zinc-800/50";
-                lightBar.style.removeProperty('--disco-speed');
                 return;
             }
 
-            lightBar.classList.add('disco-box-active');
+            lightBar.classList.add('disco-active');
 
-            // Text Rotation Controller Loop including "Joy Zubeen Da"
             textRotationIndex = 0;
             textRotationInterval = setInterval(() => {
                 if(!allSongs[currentSongIndex]) return;
@@ -500,22 +522,18 @@
                 }, 150);
             }, 2600);
 
-            // Dynamic Adaptive Rhythmic Wave Simulator for speed matching vibes
+            // True Dynamic Vibe Velocity Shifter
             discoControlInterval = setInterval(() => {
-                const randomWave = Math.random();
-                let selectedSpeed = "0.22s"; // Normal speed default
+                const waveFactor = Math.random();
+                let velocity = "0.22s";
 
-                if (randomWave > 0.75) {
-                    selectedSpeed = "0.06s"; // Ultra Fast high-bass flash beat
-                } else if (randomWave > 0.45) {
-                    selectedSpeed = "0.14s"; // Aggressive dance dynamic mode
-                } else if (randomWave > 0.15) {
-                    selectedSpeed = "0.32s"; // Standard vocal chorus vibe rhythm
-                } else {
-                    selectedSpeed = "0.65s"; // Calm low speed slow frequency melody drop
-                }
-                lightBar.style.setProperty('--disco-speed', selectedSpeed);
-            }, 380);
+                if (waveFactor > 0.80) velocity = "0.05s"; // Heavy dynamic flash drop
+                else if (waveFactor > 0.50) velocity = "0.12s"; // Fast high beat mode
+                else if (waveFactor > 0.20) velocity = "0.35s"; // Middle standard chorus rhythm
+                else velocity = "0.75s"; // Soft vocal low melody wave
+
+                lightBar.style.setProperty('--disco-speed', velocity);
+            }, 400);
         }
 
         function startTimelineSync() {
@@ -569,6 +587,11 @@
             lastRightTap = now;
         }
 
+        function handleCenterVideoTap(e) {
+            e.stopPropagation();
+            togglePlayPause();
+        }
+
         function attachTimelineEvents(containerId, progressId, thumbId) {
             const container = document.getElementById(containerId);
             function handleInteraction(e) {
@@ -601,7 +624,6 @@
         function openFullScreenPlayer() {
             if(!ytPlayer) return;
             isPlayerFullscreen = true;
-            document.body.classList.add('lock-scroll');
             document.getElementById('fullScreenPlayer').classList.remove('hidden');
             document.getElementById('fullScreenPlayer').classList.add('flex');
             refreshVideoFramePosition();
@@ -610,7 +632,6 @@
         function closeFullScreenPlayer() {
             if(!ytPlayer) return;
             isPlayerFullscreen = false;
-            document.body.classList.remove('lock-scroll');
             document.getElementById('fullScreenPlayer').classList.add('hidden');
             document.getElementById('fullScreenPlayer').classList.remove('flex');
             
@@ -633,7 +654,6 @@
         function closeVideo() {
             clearInterval(timelineInterval); clearInterval(textRotationInterval); clearInterval(discoControlInterval);
             if(ytPlayer) { try { ytPlayer.stopVideo(); } catch(e){} }
-            document.body.classList.remove('lock-scroll');
             document.getElementById('miniPlayer').classList.add('hidden');
             document.getElementById('fullScreenPlayer').classList.add('hidden');
             document.getElementById('unifiedVideoHolder').classList.add('hidden');

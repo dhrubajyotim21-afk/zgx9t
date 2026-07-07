@@ -5,15 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZG X9T - ONLY ZUBEEN SONG</title>
     
-    <!-- SEO Meta Tags -->
+    <!-- SEO & Web App Meta Tags for Add to Home Screen -->
     <meta name="description" content="ZG X9T - ONLY ZUBEEN SONG. Dedicated to Zubeen Garg.">
     <meta name="keywords" content="ZG X9T, Zubeen Garg, Only Zubeen Song, Music Player">
     <meta name="author" content="@thedhruba2x">
     
-    <!-- PWA Meta Tags for Add to Home Screen -->
+    <!-- PWA iOS & Android Support -->
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ZG X9T">
+    <meta name="mobile-web-app-capable" content="yes">
     
     <!-- Tailwind CSS & FontAwesome -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -27,7 +28,7 @@
     <script src="https://www.youtube.com/iframe_api"></script>
 
     <style>
-        /* Strict No Copy & No Selection */
+        /* Strict No Copy & No Selection Across All Browsers */
         * {
             -webkit-user-select: none !important;
             -moz-user-select: none !important;
@@ -39,7 +40,7 @@
         body {
             background-color: #000000;
             color: #ffffff;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         .timeline-container {
@@ -78,7 +79,7 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Captures clicks safely so YouTube interaction is disabled */
+        /* Block direct web clicks on YouTube iframe elements */
         .yt-overlay-blocker {
             position: absolute;
             top: 0;
@@ -89,7 +90,7 @@
             background: transparent;
         }
 
-        /* Split zones for Double Tap to Seek in Fullscreen */
+        /* Seek Split Targets */
         .seek-zone {
             position: absolute;
             top: 0;
@@ -101,13 +102,13 @@
         .seek-left { left: 0; }
         .seek-right { right: 0; }
 
-        /* Audio Visualizer Light Flickering Slide */
+        /* Light Flickering Audio Visualizer Slide Bar */
         @keyframes flicker {
-            0%, 100% { opacity: 0.3; background-color: #ef4444; boxShadow: 0 0 4px #ef4444; }
-            50% { opacity: 1; background-color: #facc15; boxShadow: 0 0 12px #facc15; }
+            0%, 100% { opacity: 0.3; background-color: #ef4444; box-shadow: 0 0 4px #ef4444; }
+            50% { opacity: 1; background-color: #facc15; box-shadow: 0 0 12px #facc15; }
         }
         .flicker-bar-active {
-            animation: flicker 0.6s infinite alternate;
+            animation: flicker 0.5s infinite alternate;
         }
     </style>
 </head>
@@ -116,7 +117,6 @@
     <!-- TOP HEADER SECTION -->
     <header class="p-4 border-b border-zinc-900 flex justify-between items-start sticky top-0 bg-black/95 backdrop-blur z-30">
         <div class="min-w-0 flex-1 pr-2">
-            <!-- Yellow White Mixed Brand Name -->
             <h1 class="text-4xl font-black tracking-tighter uppercase break-words">
                 <span class="text-yellow-400">ZG</span> <span class="text-white">X9T</span>
             </h1>
@@ -203,14 +203,13 @@
         </div>
 
         <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/20 relative gap-6">
-            <!-- Flickering Bar Container -->
+            <!-- Visualizer Light Flickering Slide Bar Wrapper -->
             <div class="w-full max-w-lg flex flex-col gap-1.5">
-                <div id="visualizerLightBar" class="w-full h-[3px] rounded bg-zinc-800 transition-all duration-100"></div>
+                <div id="visualizerLightBar" class="w-full h-[3px] rounded bg-zinc-800 transition-all duration-700"></div>
                 
                 <div class="w-full aspect-video bg-black rounded-lg overflow-hidden border border-zinc-900 shadow-2xl relative">
                     <div id="fullVideoWrapper" class="w-full h-full"></div>
                     
-                    <!-- Separate interaction handling overlay Layer -->
                     <div class="yt-overlay-blocker"></div>
                     <div class="seek-zone seek-left" onclick="handleLeftSeek(event)"></div>
                     <div class="seek-zone seek-right" onclick="handleRightSeek(event)"></div>
@@ -222,17 +221,17 @@
                     #<span class="text-yellow-400">Only</span>Zubeen<span class="text-yellow-400">Garg</span>
                 </h2>
                 <p class="text-sm md:text-lg font-black tracking-widest mt-3 bg-gradient-to-r from-white via-yellow-400 to-white bg-clip-text text-transparent uppercase px-2">
-                    জুবিন দা-ৰ চিৰсеউজ গানৰ এক অনন্য সংৰক্ষণ
+                    জুবিন دا-ৰ চিৰсеউজ গানৰ এক অনন্য সংৰক্ষণ
                 </p>
             </div>
 
-            <!-- XT Side Queue Panel with Full Thumbnails -->
+            <!-- XT Side Panel (Slim Sikon Card Design) -->
             <div id="xtPanel" class="absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-zinc-950/98 border-l border-zinc-900 z-50 transform translate-x-full transition-transform duration-300 flex flex-col hidden">
                 <div class="p-3 border-b border-zinc-800 flex justify-between items-center">
                     <span class="text-xs font-black text-yellow-400"><i class="fas fa-list"></i> XT QUEUE LIST</span>
                     <button onclick="toggleXTPanel()" class="text-zinc-400 text-sm p-1"><i class="fas fa-times"></i></button>
                 </div>
-                <div id="xtSongsList" class="flex-1 overflow-y-auto p-3 flex flex-col gap-3 no-scrollbar"></div>
+                <div id="xtSongsList" class="flex-1 overflow-y-auto p-2.5 flex flex-col gap-2 no-scrollbar"></div>
             </div>
         </div>
 
@@ -319,8 +318,6 @@
                 document.getElementById('totalSongsCount').innerText = `${allSongs.length} Songs`;
                 renderSongsList();
                 renderXTSongsList();
-                
-                // Recover Session state after data fetch completes
                 recoverSavedSession();
             });
         }
@@ -328,27 +325,28 @@
         function renderSongsList() {
             const container = document.getElementById('songsContainer');
             container.innerHTML = '';
-            filteredSongs.forEach((song, index) => {
+            filteredSongs.forEach((song) => {
+                const globalIndex = allSongs.indexOf(song);
                 const ytId = getYoutubeId(song.url);
                 const thumbUrl = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
 
                 const card = document.createElement('div');
                 card.className = "bg-zinc-900/60 hover:bg-zinc-800 border border-zinc-900 rounded-lg p-2 flex items-center gap-3 cursor-pointer transition-all active:scale-[0.99] group min-w-0";
-                card.onclick = () => playSong(allSongs.indexOf(song));
+                card.onclick = () => playSong(globalIndex);
 
                 card.innerHTML = `
                     <div class="w-20 h-12 bg-black rounded overflow-hidden shrink-0 border border-zinc-800 relative">
-                        <img src="${thumbUrl}" alt="thumbnail" class="w-full h-full object-cover">
+                        <img src="${thumbUrl}" alt="thumbnail" class="w-full h-full object-cover" loading="lazy">
                     </div>
                     <div class="min-w-0 flex-1">
-                        <h3 class="text-sm font-bold text-zinc-100 group-hover:text-yellow-400 break-words whitespace-normal line-clamp-2">${song.title}</h3>
+                        <h3 class="text-sm font-bold text-zinc-100 group-hover:text-yellow-400 break-words line-clamp-2">${song.title}</h3>
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
 
-        // XT option with full size visual thumbnails
+        // Beautiful Slim Horizontal Sikon Card Design for XT option
         function renderXTSongsList() {
             const xtContainer = document.getElementById('xtSongsList');
             xtContainer.innerHTML = '';
@@ -357,17 +355,17 @@
                 const thumbUrl = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
 
                 const card = document.createElement('div');
-                card.className = "bg-zinc-900 hover:bg-zinc-800 rounded overflow-hidden flex flex-col cursor-pointer transition-all border border-zinc-800 group";
+                card.className = "bg-zinc-900/80 hover:bg-zinc-800 p-1.5 rounded-lg flex items-center gap-3 cursor-pointer transition-all border border-zinc-900 min-w-0 group";
                 card.onclick = () => { 
                     playSong(index); 
                     toggleXTPanel(); 
                 };
                 card.innerHTML = `
-                    <div class="w-full aspect-video bg-black border-b border-zinc-800">
-                        <img src="${thumbUrl}" alt="thumbnail" class="w-full h-full object-cover">
+                    <div class="w-16 h-10 bg-black rounded overflow-hidden shrink-0 border border-zinc-800">
+                        <img src="${thumbUrl}" alt="thumbnail" class="w-full h-full object-cover" loading="lazy">
                     </div>
-                    <div class="p-2">
-                        <p class="text-xs font-bold text-zinc-200 group-hover:text-yellow-400 line-clamp-2">${song.title}</p>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-xs font-bold text-zinc-300 group-hover:text-yellow-400 truncate">${song.title}</p>
                     </div>
                 `;
                 xtContainer.appendChild(card);
@@ -395,7 +393,6 @@
                 document.getElementById('miniVideoWrapper').appendChild(p);
             }
 
-            // Save persistent state details
             localStorage.setItem('zg_last_index', currentSongIndex);
 
             if (!ytPlayer) {
@@ -403,7 +400,7 @@
                     height: '100%',
                     width: '100%',
                     videoId: ytId,
-                    playerVars: { 'controls': 0, 'disablekb': 1, 'rel': 0, 'modestbranding': 1, 'iv_load_policy': 3, 'fs': 0, 'playsinline': 1, 'start': startAtSeconds },
+                    playerVars: { 'controls': 0, 'disablekb': 1, 'rel': 0, 'modestbranding': 1, 'iv_load_policy': 3, 'fs': 0, 'playsinline': 1 },
                     events: {
                         'onReady': (e) => { 
                             if(startAtSeconds > 0) e.target.seekTo(startAtSeconds, true);
@@ -414,6 +411,7 @@
                     }
                 });
             } else {
+                // Instantly clean layout state load
                 ytPlayer.loadVideoById({ videoId: ytId, startSeconds: startAtSeconds || 0 });
             }
         }
@@ -454,7 +452,6 @@
                     document.getElementById('currentTimeLabel').innerText = formatTime(current);
                     document.getElementById('totalTimeLabel').innerText = formatTime(duration);
 
-                    // Continuous update state for structural safe refresh recovery
                     localStorage.setItem('zg_last_time', current);
                 }
             }, 250);
@@ -466,7 +463,6 @@
             return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
         }
 
-        // --- DOUBLE TAP SEEK LOGIC ---
         function handleLeftSeek(e) {
             e.stopPropagation();
             let now = new Date().getTime();
@@ -491,7 +487,6 @@
             lastRightTap = now;
         }
 
-        // --- INTERACTION FOR BOTH TIMELINES ---
         function attachTimelineEvents(containerId, progressId, thumbId) {
             const container = document.getElementById(containerId);
             function handleInteraction(e) {
@@ -524,7 +519,6 @@
         attachTimelineEvents('fullTimeline', 'fullTimelineProgress', 'fullTimelineThumb');
         attachTimelineEvents('miniTimeline', 'miniTimelineProgress', 'miniTimelineThumb');
 
-        // --- LAYER MANAGERS WITH INSTANT SYNC ---
         function openFullScreenPlayer() {
             isPlayerFullscreen = true;
             document.getElementById('fullScreenPlayer').classList.remove('hidden');
@@ -544,8 +538,9 @@
         }
 
         function togglePlayPause() {
-            if(!ytPlayer) return;
-            ytPlayer.getPlayerState() == YT.PlayerState.PLAYING ? ytPlayer.pauseVideo() : ytPlayer.playVideo();
+            if(!ytPlayer || typeof ytPlayer.getPlayerState !== 'function') return;
+            const state = ytPlayer.getPlayerState();
+            state === YT.PlayerState.PLAYING ? ytPlayer.pauseVideo() : ytPlayer.playVideo();
         }
 
         function playNext() { if(currentSongIndex < allSongs.length - 1) playSong(currentSongIndex + 1); else playSong(0); }
@@ -561,7 +556,6 @@
             localStorage.removeItem('zg_last_time');
         }
 
-        // --- SESSION RECOVERY ENGINE ---
         function recoverSavedSession() {
             const savedIndex = localStorage.getItem('zg_last_index');
             const savedTime = localStorage.getItem('zg_last_time');
@@ -574,12 +568,11 @@
             }
         }
 
-        // Block Refresh in Fullscreen Mode
         window.addEventListener('beforeunload', (e) => {
             if (isPlayerFullscreen) {
                 e.preventDefault();
-                e.returnValue = 'Player is in Fullscreen mode.';
-                return 'Player is in Fullscreen mode.';
+                e.returnValue = 'Fullscreen is active.';
+                return 'Fullscreen is active.';
             }
         });
 
@@ -595,13 +588,22 @@
             p.classList.toggle('translate-x-full');
         }
 
-        // Deep Anti-Copy Shortcut Blocker
         window.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'a' || e.key === 'u' || e.key === 's')) {
                 e.preventDefault();
                 return false;
             }
         });
+
+        // Register Inline Mock Service Worker for PWA compliance
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                self.addEventListener('install', e => self.skipWaiting());
+                self.addEventListener('fetch', e => e.respondWith(fetch(e.request)));
+            `;
+            const blob = new Blob([swCode], {type: 'application/javascript'});
+            navigator.serviceWorker.register(URL.createObjectURL(blob));
+        }
 
         window.onload = loadSongsFromDatabase;
     </script>

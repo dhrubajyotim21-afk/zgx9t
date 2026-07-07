@@ -97,13 +97,16 @@
         .seek-left { left: 0; }
         .seek-right { right: 0; }
 
-        /* Light Flickering Audio Visualizer Slide Bar */
-        @keyframes flicker {
-            0%, 100% { opacity: 0.3; background-color: #ef4444; box-shadow: 0 0 4px #ef4444; }
-            50% { opacity: 1; background-color: #facc15; box-shadow: 0 0 12px #facc15; }
+        /* Real Visualizer Flickering Box with Light Glow Effect */
+        @keyframes dynamicFlicker {
+            0% { background-color: rgba(239, 68, 68, 0.8); box-shadow: 0 0 10px rgba(239, 68, 68, 0.7); }
+            25% { background-color: rgba(249, 115, 22, 0.9); box-shadow: 0 0 16px rgba(249, 115, 22, 0.8); }
+            50% { background-color: rgba(250, 204, 21, 1); box-shadow: 0 0 22px rgba(250, 204, 21, 0.9); }
+            75% { background-color: rgba(34, 197, 94, 0.8); box-shadow: 0 0 14px rgba(34, 197, 94, 0.7); }
+            100% { background-color: rgba(239, 68, 68, 0.9); box-shadow: 0 0 12px rgba(239, 68, 68, 0.8); }
         }
-        .flicker-bar-active {
-            animation: flicker 0.5s infinite alternate;
+        .flicker-box-active {
+            animation: dynamicFlicker 0.35s infinite alternate ease-in-out;
         }
     </style>
 </head>
@@ -163,8 +166,7 @@
             <div onclick="openFullScreenPlayer()" class="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
                 <div class="w-20 h-11 bg-black rounded overflow-hidden border border-zinc-800 relative shrink-0">
                     <div id="miniVideoWrapper" class="w-full h-full relative">
-                        <div id="ytPlayerContainer" class="w-full h-full scale-105 pointer-events-none"></div>
-                    </div>
+                        </div>
                     <div class="yt-overlay-blocker"></div>
                 </div>
                 <div class="min-w-0 flex-1">
@@ -193,8 +195,10 @@
         </div>
 
         <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/20 relative gap-6">
-            <div class="w-full max-w-lg flex flex-col gap-1.5">
-                <div id="visualizerLightBar" class="w-full h-[3px] rounded bg-zinc-800 transition-all duration-700"></div>
+            <div class="w-full max-w-lg flex flex-col gap-2">
+                <div id="visualizerLightBar" class="w-full h-7 rounded-lg bg-zinc-800 flex items-center justify-center px-3 transition-all duration-300 overflow-hidden">
+                    <span id="visualizerText" class="text-xs font-black text-black tracking-wide uppercase truncate transition-opacity duration-300 opacity-90">#JusticeForZubeenGarg</span>
+                </div>
                 
                 <div class="w-full aspect-video bg-black rounded-lg overflow-hidden border border-zinc-900 shadow-2xl relative">
                     <div id="fullVideoWrapper" class="w-full h-full"></div>
@@ -210,7 +214,7 @@
                     #<span class="text-yellow-400">Only</span>Zubeen<span class="text-yellow-400">Garg</span>
                 </h2>
                 <p class="text-sm md:text-lg font-black tracking-widest mt-3 bg-gradient-to-r from-white via-yellow-400 to-white bg-clip-text text-transparent uppercase px-2">
-                    জুবিন দা-ৰ চিৰсеউজ গানৰ এক অনন্য সংৰক্ষণ
+                    জুবিন দা-ৰ চিৰসেউজ গানৰ এক অনন্য সংৰক্ষণ
                 </p>
             </div>
 
@@ -265,11 +269,13 @@
         let currentSongIndex = -1;
         let ytPlayer = null;
         let timelineInterval = null;
+        let visualizerInterval = null;
         let isDraggingTimeline = false;
         let isPlayerFullscreen = false;
         
         let lastLeftTap = 0;
         let lastRightTap = 0;
+        let textRotationIndex = 0;
 
         function getYoutubeId(url) {
             if (!url) return '';
@@ -373,18 +379,18 @@
             document.getElementById('miniPlayer').classList.remove('hidden');
             document.getElementById('miniPlayer').classList.add('flex');
 
-            // Iframe wrapper handle korar jonno ager player thakle sathe sathe vete (destroy) notun kore dynamic banano hoy
+            // Iframe Container-টিকে সঠিকভাবে রেন্ডার করার জন্য আগের প্লেয়ার থাকলে ডেস্ট্রয় করা হচ্ছে
             if (ytPlayer) {
                 clearInterval(timelineInterval);
-                try {
-                    ytPlayer.destroy();
-                } catch(e) { console.log(e); }
+                try { ytPlayer.destroy(); } catch(e) {}
                 ytPlayer = null;
             }
 
-            // Notun element container layout e add kora hobe
-            const wrapper = isPlayerFullscreen ? document.getElementById('fullVideoWrapper') : document.getElementById('miniVideoWrapper');
-            wrapper.innerHTML = '<div id="ytPlayerContainer" class="w-full h-full scale-105 pointer-events-none"></div>';
+            // একদম ফ্রেশ ডিভ তৈরি করা হচ্ছে নির্দিষ্ট রানিং প্লেয়ার ফ্রেমের ভেতর
+            const targetWrapper = isPlayerFullscreen ? document.getElementById('fullVideoWrapper') : document.getElementById('miniVideoWrapper');
+            document.getElementById('fullVideoWrapper').innerHTML = '';
+            document.getElementById('miniVideoWrapper').innerHTML = '';
+            targetWrapper.innerHTML = '<div id="ytPlayerContainer" class="w-full h-full scale-105 pointer-events-none"></div>';
 
             localStorage.setItem('zg_last_index', currentSongIndex);
 
@@ -412,15 +418,37 @@
             if (event.data == YT.PlayerState.PLAYING) {
                 fIcon.className = "fas fa-pause";
                 mIcon.className = "fas fa-pause";
-                lightBar.classList.add('flicker-bar-active');
+                lightBar.classList.add('flicker-box-active');
                 startTimelineSync();
+                startVisualizerTextRotation();
             } else {
                 fIcon.className = "fas fa-play pl-1";
                 mIcon.className = "fas fa-play pl-0.5";
-                lightBar.classList.remove('flicker-bar-active');
+                lightBar.classList.remove('flicker-box-active');
                 clearInterval(timelineInterval);
+                clearInterval(visualizerInterval);
             }
             if (event.data == YT.PlayerState.ENDED) playNext();
+        }
+
+        // Flickering Box Text Machine (Rotates text inside the visualizer box)
+        function startVisualizerTextRotation() {
+            clearInterval(visualizerInterval);
+            const textBox = document.getElementById('visualizerText');
+            
+            visualizerInterval = setInterval(() => {
+                if(!allSongs[currentSongIndex]) return;
+                const songTitle = allSongs[currentSongIndex].title;
+                const items = ["#JusticeForZubeenGarg", songTitle, "Web By Dhruba"];
+                
+                textRotationIndex = (textRotationIndex + 1) % items.length;
+                
+                textBox.style.opacity = 0;
+                setTimeout(() => {
+                    textBox.innerText = items[textRotationIndex];
+                    textBox.style.opacity = 0.9;
+                }, 300);
+            }, 3000); // Changes every 3 seconds
         }
 
         function startTimelineSync() {
@@ -517,6 +545,7 @@
             document.getElementById('fullScreenPlayer').classList.remove('hidden');
             document.getElementById('fullScreenPlayer').classList.add('flex');
             
+            // Re-render matching frames to bring the live video view up instantly
             playSong(currentSongIndex, currentSeconds);
         }
 
@@ -528,6 +557,7 @@
             document.getElementById('fullScreenPlayer').classList.add('hidden');
             document.getElementById('fullScreenPlayer').classList.remove('flex');
             
+            // Re-render down matching frames smoothly
             playSong(currentSongIndex, currentSeconds);
         }
 
@@ -546,6 +576,7 @@
             }
             ytPlayer = null;
             clearInterval(timelineInterval);
+            clearInterval(visualizerInterval);
             document.getElementById('miniPlayer').classList.add('hidden');
             document.getElementById('fullScreenPlayer').classList.add('hidden');
             isPlayerFullscreen = false;

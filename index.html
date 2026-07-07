@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ZG X9T - ONLY ZUBEEN SONG</title>
     
-    <!-- PWA / Add to Home Screen Full Standalone App Setup -->
     <meta name="description" content="ZG X9T - ONLY ZUBEEN SONG. Dedicated to Zubeen Garg.">
     <meta name="author" content="@thedhruba2x">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,29 +12,24 @@
     <meta name="apple-mobile-web-app-title" content="ZG X9T">
     <meta name="mobile-web-app-capable" content="yes">
     
-    <!-- JSON Manifest for Native App Link/Install via Chrome -->
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlpHIFg5VCAtIE9OTFkgWlVCRUVOIFNPTkciLAogICJzaG9ydF9uYW1lIjogIlpHIFg5VCIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwK  ImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIKfQ==">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlpHIFg5VCAtIE9OTFkgWlVCRUVOIFNPTkciLAogICJzaG9ydF9uYW1lIjogIlpHIFg5VCIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAmY2hpcDsgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIKfQ==">
     
-    <!-- Tailwind CSS & FontAwesome -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Firebase SDKs (Legacy V8) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
-    <!-- YouTube Iframe API -->
     <script src="https://www.youtube.com/iframe_api"></script>
 
     <style>
-        /* Strict No Copy, No Selection & Disable Zooming/Gestures */
         * {
             -webkit-user-select: none !important;
             -moz-user-select: none !important;
             -ms-user-select: none !important;
             user-select: none !important;
             -webkit-touch-callout: none !important;
-            touch-action: pan-y; /* Disables double tap zoom */
+            touch-action: pan-y;
         }
 
         body {
@@ -105,28 +99,26 @@
         .seek-left { left: 0; }
         .seek-right { right: 0; }
 
-        /* Dynamic Beat Adaptive Sound Visualizer Box (Only applied to the box, not video frame) */
+        /* Smooth Only Flickering Box, NOT Video frame */
         @keyframes dynamicFlicker {
-            0% { background-color: #ef4444; box-shadow: 0 0 12px #ef4444; transform: scale(0.99); }
-            25% { background-color: #f97316; box-shadow: 0 0 20px #f97316; transform: scale(1.01); }
-            50% { background-color: #eab308; box-shadow: 0 0 28px #eab308; transform: scale(1.03); }
-            75% { background-color: #22c55e; box-shadow: 0 0 18px #22c55e; transform: scale(1.01); }
-            100% { background-color: #3b82f6; box-shadow: 0 0 24px #3b82f6; transform: scale(1.02); }
+            0% { background-color: #ef4444; box-shadow: 0 0 14px #ef4444; }
+            25% { background-color: #f97316; box-shadow: 0 0 22px #f97316; }
+            50% { background-color: #eab308; box-shadow: 0 0 32px #eab308; }
+            75% { background-color: #22c55e; box-shadow: 0 0 20px #22c55e; }
+            100% { background-color: #3b82f6; box-shadow: 0 0 26px #3b82f6; }
         }
         
         .flicker-box-fast {
-            animation: dynamicFlicker 0.15s infinite alternate ease-in-out !important;
+            animation: dynamicFlicker 0.12s infinite alternate ease-in-out !important;
         }
         .flicker-box-slow {
-            animation: dynamicFlicker 0.4s infinite alternate ease-in-out !important;
+            animation: dynamicFlicker 0.45s infinite alternate ease-in-out !important;
         }
     </style>
 </head>
 <body class="antialiased" oncontextmenu="return false;">
 
-    <!-- APP CONTENT SCROLL CONTAINER -->
     <div id="appScrollBody" class="w-full h-full overflow-y-auto no-scrollbar pb-36">
-        <!-- TOP HEADER SECTION -->
         <header class="p-4 border-b border-zinc-900 flex justify-between items-start sticky top-0 bg-black/95 backdrop-blur z-30">
             <div class="min-w-0 flex-1 pr-2">
                 <h1 class="text-4xl font-black tracking-tighter uppercase break-words">
@@ -134,39 +126,32 @@
                 </h1>
                 <p class="text-xs font-black text-zinc-400 tracking-widest uppercase mt-1 break-words">ONLY ZUBEEN SONG</p>
                 <p class="text-sm font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-yellow-400 mt-1 break-words animate-pulse">#JusticeForZubeenGarg</p>
-                
                 <div class="mt-3 text-sm font-bold text-zinc-400 flex flex-wrap items-center gap-2">
                     <span>App By</span>
-                    <a href="https://www.facebook.com/share/1BQEf1Ndee/" target="_blank" class="inline-flex items-center gap-1 bg-zinc-900 hover:bg-blue-600 px-2 py-1 rounded text-xs text-white transition-all border border-zinc-800 whitespace-nowrap">
+                    <a href="https://www.facebook.com/share/1BQEf1Ndee/" target="_blank" class="inline-flex items-center gap-1 bg-zinc-900 px-2 py-1 rounded text-xs text-white border border-zinc-800">
                         <i class="fab fa-facebook text-blue-400"></i> @thedhruba2x
                     </a>
                 </div>
             </div>
-            <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-600 rounded-xl flex items-center justify-center font-black text-xl text-black shadow-lg shrink-0">
-                ZG
-            </div>
+            <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-600 rounded-xl flex items-center justify-center font-black text-xl text-black shadow-lg shrink-0">ZG</div>
         </header>
 
-        <!-- SEARCH & COUNTER -->
         <section class="p-4 bg-zinc-950/40">
             <div class="relative mb-3">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-zinc-500">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-500">
                     <i class="fas fa-search"></i>
                 </span>
-                <input type="text" id="searchInput" placeholder="Search song name or video..." class="w-full bg-zinc-900 border border-zinc-800 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-yellow-500 text-white transition-all">
+                <input type="text" id="searchInput" placeholder="Search song name..." class="w-full bg-zinc-900 border border-zinc-800 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-yellow-500 text-white">
             </div>
-            
             <div class="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-zinc-400 px-1">
                 <span>All Song Collection</span>
-                <span id="totalSongsCount" class="bg-yellow-400/10 text-yellow-400 px-2 py-0.5 rounded-full border border-yellow-400/20 whitespace-nowrap">Loading...</span>
+                <span id="totalSongsCount" class="bg-yellow-400/10 text-yellow-400 px-2 py-0.5 rounded-full border border-yellow-400/20">Loading...</span>
             </div>
         </section>
 
-        <!-- MAIN SONG LIST -->
         <main class="p-4">
             <div id="songsContainer" class="flex flex-col gap-3">
                 <div class="animate-pulse flex flex-col gap-3">
-                    <div class="h-16 bg-zinc-900 rounded-lg"></div>
                     <div class="h-16 bg-zinc-900 rounded-lg"></div>
                     <div class="h-16 bg-zinc-900 rounded-lg"></div>
                 </div>
@@ -174,30 +159,24 @@
         </main>
     </div>
 
-    <!-- MAIN INTERACTIVE CONTAINER HOUSING THE YOUTUBE PLAYER CONTAINER -->
-    <div id="sharedPlayerRoot" class="w-full h-full">
+    <div id="unifiedVideoHolder" class="fixed bottom-2 left-2 w-20 h-11 z-40 bg-black rounded overflow-hidden border border-zinc-800 hidden">
         <div id="ytPlayerContainer" class="w-full h-full scale-105 pointer-events-none"></div>
+        <div class="yt-overlay-blocker"></div>
     </div>
 
-    <!-- BOTTOM MINI PLAYER COMPONENT -->
-    <div id="miniPlayer" class="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-900 p-2 z-40 hidden flex-col gap-1 shadow-2xl">
+    <div id="miniPlayer" class="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-900 p-2 z-30 hidden flex-col gap-1 shadow-2xl select-none">
         <div id="miniTimeline" class="timeline-container w-full">
             <div id="miniTimelineProgress" class="timeline-progress"></div>
             <div id="miniTimelineThumb" class="timeline-thumb"></div>
         </div>
-        
         <div class="flex items-center justify-between gap-2 mt-1">
             <div onclick="openFullScreenPlayer()" class="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
-                <div class="w-20 h-11 bg-black rounded overflow-hidden border border-zinc-800 relative shrink-0 flex items-center justify-center">
-                    <div id="miniVideoPortal" class="w-full h-full relative"></div>
-                    <div class="yt-overlay-blocker"></div>
-                </div>
+                <div class="w-20 h-11 shrink-0 bg-transparent rounded"></div>
                 <div class="min-w-0 flex-1">
                     <h4 id="miniPlayerTitle" class="text-xs font-bold truncate text-zinc-100">Song Title</h4>
-                    <p class="text-[9px] text-yellow-400 font-bold uppercase tracking-widest whitespace-nowrap">Tap to view full screen</p>
+                    <p class="text-[9px] text-yellow-400 font-bold uppercase tracking-widest">Tap to view full screen</p>
                 </div>
             </div>
-
             <div class="flex items-center gap-2.5 shrink-0 px-1">
                 <button onclick="playPrevious()" class="text-zinc-400 hover:text-white text-sm p-1"><i class="fas fa-backward-step"></i></button>
                 <button onclick="togglePlayPause()" class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center text-black text-xs shrink-0 font-bold"><i id="miniPlayIcon" class="fas fa-play pl-0.5"></i></button>
@@ -207,7 +186,6 @@
         </div>
     </div>
 
-    <!-- FULL SCREEN PLAYER COMPONENT -->
     <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden touch-none select-none">
         <div class="p-4 flex justify-between items-center border-b border-zinc-900 bg-gradient-to-b from-black/90 to-transparent">
             <button onclick="closeFullScreenPlayer()" class="text-zinc-400 hover:text-white text-xl p-1"><i class="fas fa-chevron-down"></i></button>
@@ -215,20 +193,16 @@
                 <span class="text-[10px] font-black tracking-widest text-yellow-400 uppercase block">Now Playing</span>
                 <h3 id="fullPlayerTitle" class="text-sm font-bold truncate text-white">Song Title</h3>
             </div>
-            <button onclick="toggleXTPanel()" class="bg-zinc-900 border border-zinc-800 px-3 py-1 rounded text-xs font-black tracking-wider text-yellow-400 hover:bg-zinc-800 transition-all shrink-0">XT OPTION</button>
+            <button onclick="toggleXTPanel()" class="bg-zinc-900 border border-zinc-800 px-3 py-1 rounded text-xs font-black tracking-wider text-yellow-400 shrink-0">XT OPTION</button>
         </div>
 
         <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/20 relative gap-5 overflow-hidden">
-            <!-- Thick Dynamic Audio Match Box with Big Bold White Text -->
             <div class="w-full max-w-lg flex flex-col gap-3">
                 <div id="visualizerLightBar" class="w-full h-14 rounded-xl bg-zinc-900 flex items-center justify-center px-4 transition-all duration-300 overflow-hidden shadow-lg border border-zinc-800/50">
-                    <span id="visualizerText" class="text-base md:text-lg font-black text-white tracking-wide uppercase truncate transition-opacity duration-200 opacity-100 drop-shadow">#JusticeForZubeenGarg</span>
+                    <span id="visualizerText" class="text-lg md:text-xl font-black text-white tracking-wide uppercase truncate drop-shadow text-center">#JusticeForZubeenGarg</span>
                 </div>
                 
                 <div class="w-full aspect-video bg-black rounded-xl overflow-hidden border border-zinc-900 shadow-2xl relative">
-                    <div id="fullVideoPortal" class="w-full h-full"></div>
-                    
-                    <div class="yt-overlay-blocker"></div>
                     <div class="seek-zone seek-left" onclick="handleLeftSeek(event)"></div>
                     <div class="seek-zone seek-right" onclick="handleRightSeek(event)"></div>
                 </div>
@@ -238,12 +212,9 @@
                 <h2 class="text-xl md:text-3xl font-extrabold tracking-wide text-white uppercase">
                     #<span class="text-yellow-400">Only</span>Zubeen<span class="text-yellow-400">Garg</span>
                 </h2>
-                <p class="text-xs md:text-sm font-bold tracking-widest mt-2 text-zinc-400 uppercase">
-                    জুবিন দা-ৰ চিৰসেউজ গানৰ এক অনন্য সংৰক্ষণ
-                </p>
+                <p class="text-xs md:text-sm font-bold tracking-widest mt-2 text-zinc-400 uppercase">জুবিন দা-ৰ চিৰসেউজ গানৰ এক অনন্য সংৰক্ষণ</p>
             </div>
 
-            <!-- XT Side Panel -->
             <div id="xtPanel" class="absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-zinc-950/98 border-l border-zinc-900 z-50 transform translate-x-full transition-transform duration-300 flex flex-col hidden">
                 <div class="p-3 border-b border-zinc-800 flex justify-between items-center">
                     <span class="text-xs font-black text-yellow-400"><i class="fas fa-list"></i> XT QUEUE LIST</span>
@@ -264,11 +235,10 @@
                     <span id="totalTimeLabel">0:00</span>
                 </div>
             </div>
-
             <div class="flex items-center justify-center gap-8 mb-2">
-                <button onclick="playPrevious()" class="text-zinc-400 hover:text-white text-xl transition-colors"><i class="fas fa-backward-step"></i></button>
-                <button onclick="togglePlayPause()" class="w-16 h-16 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center text-black text-2xl transition-all transform active:scale-95 shadow-lg shadow-yellow-400/20"><i id="fullPlayIcon" class="fas fa-play pl-1"></i></button>
-                <button onclick="playNext()" class="text-zinc-400 hover:text-white text-xl transition-colors"><i class="fas fa-forward-step"></i></button>
+                <button onclick="playPrevious()" class="text-zinc-400 hover:text-white text-xl"><i class="fas fa-backward-step"></i></button>
+                <button onclick="togglePlayPause()" class="w-16 h-16 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center text-black text-2xl shadow-lg"><i id="fullPlayIcon" class="fas fa-play pl-1"></i></button>
+                <button onclick="playNext()" class="text-zinc-400 hover:text-white text-xl"><i class="fas fa-forward-step"></i></button>
             </div>
         </div>
     </div>
@@ -285,9 +255,7 @@
             appId: "1:771714302354:web:43b3f590e1ff70a851014b" 
         };
         
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
         let allSongs = [];
@@ -305,7 +273,6 @@
         let lastRightTap = 0;
         let textRotationIndex = 0;
 
-        // Disables pinch zooming gestures completely
         document.addEventListener('touchstart', (e) => {
             if (e.touches.length > 1) e.preventDefault();
         }, { passive: false });
@@ -381,11 +348,8 @@
                 const thumbUrl = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
 
                 const card = document.createElement('div');
-                card.className = "bg-zinc-900/80 hover:bg-zinc-800 p-1.5 rounded-lg flex items-center gap-3 cursor-pointer transition-all border border-zinc-900 min-w-0 group";
-                card.onclick = () => { 
-                    playSong(index); 
-                    toggleXTPanel(); 
-                };
+                card.className = "bg-zinc-900/80 hover:bg-zinc-800 p-1.5 rounded-lg flex items-center gap-3 cursor-pointer border border-zinc-900 min-w-0 group";
+                card.onclick = () => { playSong(index); toggleXTPanel(); };
                 card.innerHTML = `
                     <div class="w-16 h-10 bg-black rounded overflow-hidden shrink-0 border border-zinc-800">
                         <img src="${thumbUrl}" alt="thumbnail" class="w-full h-full object-cover" loading="lazy">
@@ -398,16 +362,18 @@
             });
         }
 
-        // Dynamic Iframe Teleporter Engine 
-        function teleportPlayerFrame() {
-            const frameRoot = document.getElementById('sharedPlayerRoot');
-            const miniPortal = document.getElementById('miniVideoPortal');
-            const fullPortal = document.getElementById('fullVideoPortal');
-            
-            if (isPlayerFullscreen) {
-                fullPortal.appendChild(frameRoot);
+        // CSS Shared Overlay Positioning (Avoids internal frame lifecycle breakage)
+        function refreshVideoFramePosition() {
+            const holder = document.getElementById('unifiedVideoHolder');
+            if(!isPlayerReady) return;
+
+            holder.classList.remove('hidden');
+            if(isPlayerFullscreen) {
+                // Perfect centered positioning inside Full Player Aspect Frame
+                holder.className = "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg aspect-video z-50 bg-black rounded-xl overflow-hidden border border-zinc-900 shadow-2xl mt-[-70px] md:mt-[-90px]";
             } else {
-                miniPortal.appendChild(frameRoot);
+                // Mini Player overlay matching exact size layout row
+                holder.className = "fixed bottom-2 left-2 w-20 h-11 z-40 bg-black rounded overflow-hidden border border-zinc-800";
             }
         }
 
@@ -429,7 +395,6 @@
 
             localStorage.setItem('zg_last_index', currentSongIndex);
 
-            // Instant Switch Mechanisum 
             if (isPlayerReady && ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
                 if (!isSameSong) {
                     ytPlayer.loadVideoById({
@@ -437,11 +402,10 @@
                         startSeconds: startAtSeconds
                     });
                 }
-                teleportPlayerFrame();
+                refreshVideoFramePosition();
             } else {
-                // Initial creation fallback loop
-                if(ytPlayer) { try{ ytPlayer.destroy(); }catch(e){} }
                 isPlayerReady = false;
+                document.getElementById('unifiedVideoHolder').classList.remove('hidden');
                 
                 ytPlayer = new YT.Player('ytPlayerContainer', {
                     height: '100%',
@@ -453,7 +417,7 @@
                             isPlayerReady = true;
                             if(startAtSeconds > 0) e.target.seekTo(startAtSeconds, true);
                             e.target.playVideo(); 
-                            teleportPlayerFrame();
+                            refreshVideoFramePosition();
                             startTimelineSync(); 
                         },
                         'onStateChange': onPlayerStateChange
@@ -480,7 +444,6 @@
             if (event.data == YT.PlayerState.ENDED) playNext();
         }
 
-        // Advanced Visualizer Machine: Beats Simulation & Big Text Rotation
         function startVisualizerControls(shouldRun) {
             clearInterval(textRotationInterval);
             clearInterval(waveSimulatorInterval);
@@ -488,11 +451,10 @@
             const textBox = document.getElementById('visualizerText');
 
             if (!shouldRun) {
-                lightBar.className = "w-full h-14 rounded-xl bg-zinc-900 flex items-center justify-center px-4 transition-all duration-300 border border-zinc-800/50";
+                lightBar.className = "w-full h-14 rounded-xl bg-zinc-900 flex items-center justify-center px-4 border border-zinc-800/50";
                 return;
             }
 
-            // Text Rotation Index Machine (3 seconds)
             textRotationIndex = 0;
             textRotationInterval = setInterval(() => {
                 if(!allSongs[currentSongIndex]) return;
@@ -508,15 +470,15 @@
                 }, 200);
             }, 3000);
 
-            // Audio Frequency Level Visualizer Speed Shifter Box Simulator
+            // True Beat Audio Speed Match Shifter
             waveSimulatorInterval = setInterval(() => {
                 const randomBeatFactor = Math.random(); 
                 if (randomBeatFactor > 0.45) {
-                    lightBar.className = "w-full h-14 rounded-xl flex items-center justify-center px-4 transition-all border border-zinc-800/50 flicker-box-fast";
+                    lightBar.className = "w-full h-14 rounded-xl flex items-center justify-center px-4 border border-zinc-800/50 flicker-box-fast";
                 } else {
-                    lightBar.className = "w-full h-14 rounded-xl flex items-center justify-center px-4 transition-all border border-zinc-800/50 flicker-box-slow";
+                    lightBar.className = "w-full h-14 rounded-xl flex items-center justify-center px-4 border border-zinc-800/50 flicker-box-slow";
                 }
-            }, 600);
+            }, 550);
         }
 
         function startTimelineSync() {
@@ -530,7 +492,6 @@
                         
                         document.getElementById('fullTimelineProgress').style.width = `${pct}%`;
                         document.getElementById('fullTimelineThumb').style.left = `${pct}%`;
-                        
                         document.getElementById('miniTimelineProgress').style.width = `${pct}%`;
                         document.getElementById('miniTimelineThumb').style.left = `${pct}%`;
 
@@ -554,8 +515,7 @@
             let now = new Date().getTime();
             if (now - lastLeftTap < 300) {
                 if (ytPlayer && ytPlayer.getCurrentTime) {
-                    let target = Math.max(0, ytPlayer.getCurrentTime() - 5);
-                    ytPlayer.seekTo(target, true);
+                    ytPlayer.seekTo(Math.max(0, ytPlayer.getCurrentTime() - 5), true);
                 }
             }
             lastLeftTap = now;
@@ -566,8 +526,7 @@
             let now = new Date().getTime();
             if (now - lastRightTap < 300) {
                 if (ytPlayer && ytPlayer.getCurrentTime) {
-                    let target = Math.min(ytPlayer.getDuration() || 0, ytPlayer.getCurrentTime() + 5);
-                    ytPlayer.seekTo(target, true);
+                    ytPlayer.seekTo(Math.min(ytPlayer.getDuration() || 0, ytPlayer.getCurrentTime() + 5), true);
                 }
             }
             lastRightTap = now;
@@ -582,21 +541,18 @@
                 clickX = Math.max(0, Math.min(clickX, rect.width));
                 const pct = clickX / rect.width;
                 const targetTime = pct * (ytPlayer.getDuration() || 0);
-
                 document.getElementById(progressId).style.width = `${pct * 100}%`;
                 document.getElementById(thumbId).style.left = `${pct * 100}%`;
                 return targetTime;
             }
             container.addEventListener('mousedown', (e) => {
-                isDraggingTimeline = true;
-                let t = handleInteraction(e);
+                isDraggingTimeline = true; let t = handleInteraction(e);
                 function move(me) { t = handleInteraction(me); }
                 function up() { isDraggingTimeline = false; ytPlayer.seekTo(t, true); window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); }
                 window.addEventListener('mousemove', move); window.addEventListener('mouseup', up);
             });
             container.addEventListener('touchstart', (e) => {
-                isDraggingTimeline = true;
-                let t = handleInteraction(e);
+                isDraggingTimeline = true; let t = handleInteraction(e);
                 function move(me) { t = handleInteraction(me); }
                 function up() { isDraggingTimeline = false; ytPlayer.seekTo(t, true); window.removeEventListener('touchmove', move); window.removeEventListener('touchend', up); }
                 window.addEventListener('touchmove', move); window.addEventListener('touchend', up);
@@ -608,21 +564,17 @@
         function openFullScreenPlayer() {
             if(!ytPlayer) return;
             isPlayerFullscreen = true;
-            
             document.getElementById('fullScreenPlayer').classList.remove('hidden');
             document.getElementById('fullScreenPlayer').classList.add('flex');
-            
-            teleportPlayerFrame();
+            refreshVideoFramePosition();
         }
 
         function closeFullScreenPlayer() {
             if(!ytPlayer) return;
             isPlayerFullscreen = false;
-            
             document.getElementById('fullScreenPlayer').classList.add('hidden');
             document.getElementById('fullScreenPlayer').classList.remove('flex');
-            
-            teleportPlayerFrame();
+            refreshVideoFramePosition();
         }
 
         function togglePlayPause() {
@@ -631,29 +583,17 @@
             state === YT.PlayerState.PLAYING ? ytPlayer.pauseVideo() : ytPlayer.playVideo();
         }
 
-        // Infinite Queue Loop Flow handles 
         function playNext() { if(currentSongIndex < allSongs.length - 1) playSong(currentSongIndex + 1); else playSong(0); }
         function playPrevious() { if(currentSongIndex > 0) playSong(currentSongIndex - 1); else playSong(allSongs.length - 1); }
 
         function closeVideo() {
-            clearInterval(timelineInterval);
-            clearInterval(textRotationInterval);
-            clearInterval(waveSimulatorInterval);
+            clearInterval(timelineInterval); clearInterval(textRotationInterval); clearInterval(waveSimulatorInterval);
             if(ytPlayer) { try { ytPlayer.stopVideo(); } catch(e){} }
-            
             document.getElementById('miniPlayer').classList.add('hidden');
             document.getElementById('fullScreenPlayer').classList.add('hidden');
-            isPlayerFullscreen = false;
-            
-            // Send back frame elements inside layout safe core anchor
-            const root = document.getElementById('sharedPlayerRoot');
-            root.innerHTML = '<div id="ytPlayerContainer" class="w-full h-full scale-105 pointer-events-none"></div>';
-            
-            localStorage.removeItem('zg_last_index');
-            localStorage.removeItem('zg_last_time');
-            currentSongIndex = -1;
-            isPlayerReady = false;
-            ytPlayer = null;
+            document.getElementById('unifiedVideoHolder').classList.add('hidden');
+            isPlayerFullscreen = false; currentSongIndex = -1;
+            localStorage.removeItem('zg_last_index'); localStorage.removeItem('zg_last_time');
         }
 
         function recoverSavedSession() {
@@ -662,9 +602,7 @@
             if (savedIndex !== null) {
                 const index = parseInt(savedIndex);
                 const startSecs = savedTime ? parseFloat(savedTime) : 0;
-                if(index >= 0 && index < allSongs.length) {
-                    playSong(index, startSecs);
-                }
+                if(index >= 0 && index < allSongs.length) playSong(index, startSecs);
             }
         }
 
@@ -676,24 +614,7 @@
 
         function toggleXTPanel() {
             const p = document.getElementById('xtPanel');
-            p.classList.toggle('hidden');
-            p.classList.toggle('translate-x-full');
-        }
-
-        window.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'a' || e.key === 'u' || e.key === 's')) {
-                e.preventDefault();
-                return false;
-            }
-        });
-
-        if ('serviceWorker' in navigator) {
-            const swCode = `
-                self.addEventListener('install', e => self.skipWaiting());
-                self.addEventListener('fetch', e => e.respondWith(fetch(e.request)));
-            `;
-            const blob = new Blob([swCode], {type: 'application/javascript'});
-            navigator.serviceWorker.register(URL.createObjectURL(blob));
+            p.classList.toggle('hidden'); p.classList.toggle('translate-x-full');
         }
 
         window.onload = loadSongsFromDatabase;

@@ -5,26 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZG X9T - ONLY ZUBEEN SONG</title>
     
-    <!-- SEO & Web App Meta Tags for Add to Home Screen -->
     <meta name="description" content="ZG X9T - ONLY ZUBEEN SONG. Dedicated to Zubeen Garg.">
     <meta name="keywords" content="ZG X9T, Zubeen Garg, Only Zubeen Song, Music Player">
     <meta name="author" content="@thedhruba2x">
     
-    <!-- PWA iOS & Android Support -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ZG X9T">
     <meta name="mobile-web-app-capable" content="yes">
     
-    <!-- Tailwind CSS & FontAwesome -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Firebase SDKs (Legacy V8) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
-    <!-- YouTube Iframe API -->
     <script src="https://www.youtube.com/iframe_api"></script>
 
     <style>
@@ -114,7 +109,6 @@
 </head>
 <body class="antialiased" oncontextmenu="return false;">
 
-    <!-- TOP HEADER SECTION -->
     <header class="p-4 border-b border-zinc-900 flex justify-between items-start sticky top-0 bg-black/95 backdrop-blur z-30">
         <div class="min-w-0 flex-1 pr-2">
             <h1 class="text-4xl font-black tracking-tighter uppercase break-words">
@@ -135,7 +129,6 @@
         </div>
     </header>
 
-    <!-- SEARCH & COUNTER -->
     <section class="p-4 bg-zinc-950/40">
         <div class="relative mb-3">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-zinc-500">
@@ -150,7 +143,6 @@
         </div>
     </section>
 
-    <!-- MAIN SONG LIST -->
     <main class="p-4 pb-32">
         <div id="songsContainer" class="flex flex-col gap-3">
             <div class="animate-pulse flex flex-col gap-3">
@@ -161,7 +153,6 @@
         </div>
     </main>
 
-    <!-- BOTTOM MINI PLAYER COMPONENT -->
     <div id="miniPlayer" class="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-900 p-2 z-40 hidden flex-col gap-1 shadow-2xl">
         <div id="miniTimeline" class="timeline-container w-full">
             <div id="miniTimelineProgress" class="timeline-progress"></div>
@@ -191,7 +182,6 @@
         </div>
     </div>
 
-    <!-- FULL SCREEN PLAYER COMPONENT -->
     <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden">
         <div class="p-4 flex justify-between items-center border-b border-zinc-900 bg-gradient-to-b from-black/90 to-transparent">
             <button onclick="closeFullScreenPlayer()" class="text-zinc-400 hover:text-white text-xl p-1"><i class="fas fa-chevron-down"></i></button>
@@ -203,7 +193,6 @@
         </div>
 
         <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/20 relative gap-6">
-            <!-- Visualizer Light Flickering Slide Bar Wrapper -->
             <div class="w-full max-w-lg flex flex-col gap-1.5">
                 <div id="visualizerLightBar" class="w-full h-[3px] rounded bg-zinc-800 transition-all duration-700"></div>
                 
@@ -221,11 +210,10 @@
                     #<span class="text-yellow-400">Only</span>Zubeen<span class="text-yellow-400">Garg</span>
                 </h2>
                 <p class="text-sm md:text-lg font-black tracking-widest mt-3 bg-gradient-to-r from-white via-yellow-400 to-white bg-clip-text text-transparent uppercase px-2">
-                    জুবিন دا-ৰ চিৰсеউজ গানৰ এক অনন্য সংৰক্ষণ
+                    জুবিন দা-ৰ চিৰсеউজ গানৰ এক অনন্য সংৰক্ষণ
                 </p>
             </div>
 
-            <!-- XT Side Panel (Slim Sikon Card Design) -->
             <div id="xtPanel" class="absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-zinc-950/98 border-l border-zinc-900 z-50 transform translate-x-full transition-transform duration-300 flex flex-col hidden">
                 <div class="p-3 border-b border-zinc-800 flex justify-between items-center">
                     <span class="text-xs font-black text-yellow-400"><i class="fas fa-list"></i> XT QUEUE LIST</span>
@@ -346,7 +334,6 @@
             });
         }
 
-        // Beautiful Slim Horizontal Sikon Card Design for XT option
         function renderXTSongsList() {
             const xtContainer = document.getElementById('xtSongsList');
             xtContainer.innerHTML = '';
@@ -386,34 +373,35 @@
             document.getElementById('miniPlayer').classList.remove('hidden');
             document.getElementById('miniPlayer').classList.add('flex');
 
-            const p = document.getElementById('ytPlayerContainer');
-            if (isPlayerFullscreen) {
-                document.getElementById('fullVideoWrapper').appendChild(p);
-            } else {
-                document.getElementById('miniVideoWrapper').appendChild(p);
+            // Iframe wrapper handle korar jonno ager player thakle sathe sathe vete (destroy) notun kore dynamic banano hoy
+            if (ytPlayer) {
+                clearInterval(timelineInterval);
+                try {
+                    ytPlayer.destroy();
+                } catch(e) { console.log(e); }
+                ytPlayer = null;
             }
+
+            // Notun element container layout e add kora hobe
+            const wrapper = isPlayerFullscreen ? document.getElementById('fullVideoWrapper') : document.getElementById('miniVideoWrapper');
+            wrapper.innerHTML = '<div id="ytPlayerContainer" class="w-full h-full scale-105 pointer-events-none"></div>';
 
             localStorage.setItem('zg_last_index', currentSongIndex);
 
-            if (!ytPlayer) {
-                ytPlayer = new YT.Player('ytPlayerContainer', {
-                    height: '100%',
-                    width: '100%',
-                    videoId: ytId,
-                    playerVars: { 'controls': 0, 'disablekb': 1, 'rel': 0, 'modestbranding': 1, 'iv_load_policy': 3, 'fs': 0, 'playsinline': 1 },
-                    events: {
-                        'onReady': (e) => { 
-                            if(startAtSeconds > 0) e.target.seekTo(startAtSeconds, true);
-                            e.target.playVideo(); 
-                            startTimelineSync(); 
-                        },
-                        'onStateChange': onPlayerStateChange
-                    }
-                });
-            } else {
-                // Instantly clean layout state load
-                ytPlayer.loadVideoById({ videoId: ytId, startSeconds: startAtSeconds || 0 });
-            }
+            ytPlayer = new YT.Player('ytPlayerContainer', {
+                height: '100%',
+                width: '100%',
+                videoId: ytId,
+                playerVars: { 'controls': 0, 'disablekb': 1, 'rel': 0, 'modestbranding': 1, 'iv_load_policy': 3, 'fs': 0, 'playsinline': 1 },
+                events: {
+                    'onReady': (e) => { 
+                        if(startAtSeconds > 0) e.target.seekTo(startAtSeconds, true);
+                        e.target.playVideo(); 
+                        startTimelineSync(); 
+                    },
+                    'onStateChange': onPlayerStateChange
+                }
+            });
         }
 
         function onPlayerStateChange(event) {
@@ -439,20 +427,22 @@
             clearInterval(timelineInterval);
             timelineInterval = setInterval(() => {
                 if (ytPlayer && ytPlayer.getCurrentTime && !isDraggingTimeline) {
-                    const current = ytPlayer.getCurrentTime();
-                    const duration = ytPlayer.getDuration() || 0;
-                    const pct = duration > 0 ? (current / duration) * 100 : 0;
-                    
-                    document.getElementById('fullTimelineProgress').style.width = `${pct}%`;
-                    document.getElementById('fullTimelineThumb').style.left = `${pct}%`;
-                    
-                    document.getElementById('miniTimelineProgress').style.width = `${pct}%`;
-                    document.getElementById('miniTimelineThumb').style.left = `${pct}%`;
+                    try {
+                        const current = ytPlayer.getCurrentTime();
+                        const duration = ytPlayer.getDuration() || 0;
+                        const pct = duration > 0 ? (current / duration) * 100 : 0;
+                        
+                        document.getElementById('fullTimelineProgress').style.width = `${pct}%`;
+                        document.getElementById('fullTimelineThumb').style.left = `${pct}%`;
+                        
+                        document.getElementById('miniTimelineProgress').style.width = `${pct}%`;
+                        document.getElementById('miniTimelineThumb').style.left = `${pct}%`;
 
-                    document.getElementById('currentTimeLabel').innerText = formatTime(current);
-                    document.getElementById('totalTimeLabel').innerText = formatTime(duration);
+                        document.getElementById('currentTimeLabel').innerText = formatTime(current);
+                        document.getElementById('totalTimeLabel').innerText = formatTime(duration);
 
-                    localStorage.setItem('zg_last_time', current);
+                        localStorage.setItem('zg_last_time', current);
+                    } catch(err) {}
                 }
             }, 250);
         }
@@ -520,21 +510,25 @@
         attachTimelineEvents('miniTimeline', 'miniTimelineProgress', 'miniTimelineThumb');
 
         function openFullScreenPlayer() {
+            if(!ytPlayer) return;
             isPlayerFullscreen = true;
+            const currentSeconds = ytPlayer.getCurrentTime ? ytPlayer.getCurrentTime() : 0;
+            
             document.getElementById('fullScreenPlayer').classList.remove('hidden');
             document.getElementById('fullScreenPlayer').classList.add('flex');
             
-            const p = document.getElementById('ytPlayerContainer');
-            document.getElementById('fullVideoWrapper').appendChild(p);
+            playSong(currentSongIndex, currentSeconds);
         }
 
         function closeFullScreenPlayer() {
+            if(!ytPlayer) return;
             isPlayerFullscreen = false;
+            const currentSeconds = ytPlayer.getCurrentTime ? ytPlayer.getCurrentTime() : 0;
+            
             document.getElementById('fullScreenPlayer').classList.add('hidden');
             document.getElementById('fullScreenPlayer').classList.remove('flex');
             
-            const p = document.getElementById('ytPlayerContainer');
-            document.getElementById('miniVideoWrapper').appendChild(p);
+            playSong(currentSongIndex, currentSeconds);
         }
 
         function togglePlayPause() {
@@ -547,7 +541,10 @@
         function playPrevious() { if(currentSongIndex > 0) playSong(currentSongIndex - 1); else playSong(allSongs.length - 1); }
 
         function closeVideo() {
-            if(ytPlayer) ytPlayer.stopVideo();
+            if(ytPlayer) {
+                try { ytPlayer.stopVideo(); ytPlayer.destroy(); } catch(e){}
+            }
+            ytPlayer = null;
             clearInterval(timelineInterval);
             document.getElementById('miniPlayer').classList.add('hidden');
             document.getElementById('fullScreenPlayer').classList.add('hidden');
@@ -595,7 +592,6 @@
             }
         });
 
-        // Register Inline Mock Service Worker for PWA compliance
         if ('serviceWorker' in navigator) {
             const swCode = `
                 self.addEventListener('install', e => self.skipWaiting());

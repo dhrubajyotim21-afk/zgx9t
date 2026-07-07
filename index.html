@@ -12,7 +12,7 @@
     <meta name="apple-mobile-web-app-title" content="ZG X9T">
     <meta name="mobile-web-app-capable" content="yes">
     
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlpHIFg5VCAtIE9OTFkgWlVCRUVOIFNPTkciLAogICJzaG9ydF9uYW1lIjogIlpHIFg5VCIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAmY2hpcDsgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIKfQ==">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlpHIFg5VCAtIE9OTFkgWlVCRUVOIFNPTkciLAogICJzaG9ydF9uYW1lIjogIlpHIFg5VCIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwK  ImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIKfQ==">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -37,9 +37,14 @@
             color: #ffffff;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             overflow-x: hidden;
-            position: fixed; 
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* Prevent scroll leak when full player is active */
+        body.lock-scroll {
+            overflow: hidden !important;
+            position: fixed !important;
         }
 
         .timeline-container {
@@ -99,7 +104,7 @@
         .seek-left { left: 0; }
         .seek-right { right: 0; }
 
-        /* Smooth Only Flickering Box, NOT Video frame */
+        /* Dynamic Beat Adaptive Sound Visualizer Box */
         @keyframes dynamicFlicker {
             0% { background-color: #ef4444; box-shadow: 0 0 14px #ef4444; }
             25% { background-color: #f97316; box-shadow: 0 0 22px #f97316; }
@@ -159,19 +164,19 @@
         </main>
     </div>
 
-    <div id="unifiedVideoHolder" class="fixed bottom-2 left-2 w-20 h-11 z-40 bg-black rounded overflow-hidden border border-zinc-800 hidden">
-        <div id="ytPlayerContainer" class="w-full h-full scale-105 pointer-events-none"></div>
+    <div id="unifiedVideoHolder" class="fixed z-[60] bg-black rounded overflow-hidden shadow-2xl hidden pointer-events-none">
+        <div id="ytPlayerContainer" class="w-full h-full scale-105"></div>
         <div class="yt-overlay-blocker"></div>
     </div>
 
-    <div id="miniPlayer" class="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-900 p-2 z-30 hidden flex-col gap-1 shadow-2xl select-none">
+    <div id="miniPlayer" class="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-900 p-2 z-40 hidden flex-col gap-1 shadow-2xl select-none">
         <div id="miniTimeline" class="timeline-container w-full">
             <div id="miniTimelineProgress" class="timeline-progress"></div>
             <div id="miniTimelineThumb" class="timeline-thumb"></div>
         </div>
         <div class="flex items-center justify-between gap-2 mt-1">
             <div onclick="openFullScreenPlayer()" class="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
-                <div class="w-20 h-11 shrink-0 bg-transparent rounded"></div>
+                <div id="miniPlayerAnchor" class="w-20 h-11 shrink-0 bg-zinc-900/40 border border-zinc-800 rounded"></div>
                 <div class="min-w-0 flex-1">
                     <h4 id="miniPlayerTitle" class="text-xs font-bold truncate text-zinc-100">Song Title</h4>
                     <p class="text-[9px] text-yellow-400 font-bold uppercase tracking-widest">Tap to view full screen</p>
@@ -187,36 +192,36 @@
     </div>
 
     <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden touch-none select-none">
-        <div class="p-4 flex justify-between items-center border-b border-zinc-900 bg-gradient-to-b from-black/90 to-transparent">
+        <div class="p-4 flex justify-between items-center border-b border-zinc-900 bg-gradient-to-b from-black/90 to-transparent z-10">
             <button onclick="closeFullScreenPlayer()" class="text-zinc-400 hover:text-white text-xl p-1"><i class="fas fa-chevron-down"></i></button>
             <div class="text-center px-4 flex-1 min-w-0">
                 <span class="text-[10px] font-black tracking-widest text-yellow-400 uppercase block">Now Playing</span>
                 <h3 id="fullPlayerTitle" class="text-sm font-bold truncate text-white">Song Title</h3>
             </div>
-            <button onclick="toggleXTPanel()" class="bg-zinc-900 border border-zinc-800 px-3 py-1 rounded text-xs font-black tracking-wider text-yellow-400 shrink-0">XT OPTION</button>
+            <button onclick="toggleXTPanel()" class="bg-zinc-900 border border-zinc-800 px-3 py-1 rounded text-xs font-black tracking-wider text-yellow-400 shrink-0 z-20">XT OPTION</button>
         </div>
 
         <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/20 relative gap-5 overflow-hidden">
-            <div class="w-full max-w-lg flex flex-col gap-3">
+            <div class="w-full max-w-lg flex flex-col gap-3 z-10">
                 <div id="visualizerLightBar" class="w-full h-14 rounded-xl bg-zinc-900 flex items-center justify-center px-4 transition-all duration-300 overflow-hidden shadow-lg border border-zinc-800/50">
                     <span id="visualizerText" class="text-lg md:text-xl font-black text-white tracking-wide uppercase truncate drop-shadow text-center">#JusticeForZubeenGarg</span>
                 </div>
                 
-                <div class="w-full aspect-video bg-black rounded-xl overflow-hidden border border-zinc-900 shadow-2xl relative">
+                <div id="fullPlayerAnchor" class="w-full aspect-video bg-zinc-900/30 rounded-xl border border-zinc-900 shadow-2xl relative overflow-hidden">
                     <div class="seek-zone seek-left" onclick="handleLeftSeek(event)"></div>
                     <div class="seek-zone seek-right" onclick="handleRightSeek(event)"></div>
                 </div>
             </div>
 
-            <div class="text-center px-4 w-full max-w-xl">
+            <div class="text-center px-4 w-full max-w-xl z-10">
                 <h2 class="text-xl md:text-3xl font-extrabold tracking-wide text-white uppercase">
                     #<span class="text-yellow-400">Only</span>Zubeen<span class="text-yellow-400">Garg</span>
                 </h2>
-                <p class="text-xs md:text-sm font-bold tracking-widest mt-2 text-zinc-400 uppercase">জুবিন দা-ৰ চিৰসেউজ গানৰ এক অনন্য সংৰক্ষণ</p>
+                <p class="text-xs md:text-sm font-bold tracking-widest mt-2 text-zinc-400 uppercase">জুবিন দা-ৰ চিৰсеউজ গানৰ এক অনন্য সংৰক্ষণ</p>
             </div>
 
             <div id="xtPanel" class="absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-zinc-950/98 border-l border-zinc-900 z-50 transform translate-x-full transition-transform duration-300 flex flex-col hidden">
-                <div class="p-3 border-b border-zinc-800 flex justify-between items-center">
+                <div class="p-3 border-b border-zinc-800 flex justify-between items-center shrink-0">
                     <span class="text-xs font-black text-yellow-400"><i class="fas fa-list"></i> XT QUEUE LIST</span>
                     <button onclick="toggleXTPanel()" class="text-zinc-400 text-sm p-1"><i class="fas fa-times"></i></button>
                 </div>
@@ -224,7 +229,7 @@
             </div>
         </div>
 
-        <div class="p-6 bg-gradient-to-t from-black via-black/95 to-transparent">
+        <div class="p-6 bg-gradient-to-t from-black via-black/95 to-transparent z-10">
             <div class="flex flex-col gap-2 mb-5">
                 <div id="fullTimeline" class="timeline-container">
                     <div id="fullTimelineProgress" class="timeline-progress"></div>
@@ -237,7 +242,7 @@
             </div>
             <div class="flex items-center justify-center gap-8 mb-2">
                 <button onclick="playPrevious()" class="text-zinc-400 hover:text-white text-xl"><i class="fas fa-backward-step"></i></button>
-                <button onclick="togglePlayPause()" class="w-16 h-16 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center text-black text-2xl shadow-lg"><i id="fullPlayIcon" class="fas fa-play pl-1"></i></button>
+                <button onclick="togglePlayPause()" class="w-16 h-16 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center text-black text-2xl shadow-lg"><i id="fullPlayIcon" class="fas fa-pause"></i></button>
                 <button onclick="playNext()" class="text-zinc-400 hover:text-white text-xl"><i class="fas fa-forward-step"></i></button>
             </div>
         </div>
@@ -362,20 +367,36 @@
             });
         }
 
-        // CSS Shared Overlay Positioning (Avoids internal frame lifecycle breakage)
+        // Viewport bounding box matching for single instance tracking
         function refreshVideoFramePosition() {
             const holder = document.getElementById('unifiedVideoHolder');
             if(!isPlayerReady) return;
 
+            const targetAnchorId = isPlayerFullscreen ? 'fullPlayerAnchor' : 'miniPlayerAnchor';
+            const anchor = document.getElementById(targetAnchorId);
+            
+            if(!anchor) return;
+            const bounds = anchor.getBoundingClientRect();
+
             holder.classList.remove('hidden');
+            holder.style.top = `${bounds.top}px`;
+            holder.style.left = `${bounds.left}px`;
+            holder.style.width = `${bounds.width}px`;
+            holder.style.height = `${bounds.height}px`;
+
+            // Adjust relative layers properly
             if(isPlayerFullscreen) {
-                // Perfect centered positioning inside Full Player Aspect Frame
-                holder.className = "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg aspect-video z-50 bg-black rounded-xl overflow-hidden border border-zinc-900 shadow-2xl mt-[-70px] md:mt-[-90px]";
+                holder.style.zIndex = "51";
+                holder.style.borderRadius = "12px";
             } else {
-                // Mini Player overlay matching exact size layout row
-                holder.className = "fixed bottom-2 left-2 w-20 h-11 z-40 bg-black rounded overflow-hidden border border-zinc-800";
+                holder.style.zIndex = "41";
+                holder.style.borderRadius = "4px";
             }
         }
+
+        // Auto updates positioning structure during window resize/rotation
+        window.addEventListener('resize', refreshVideoFramePosition);
+        window.addEventListener('orientationchange', () => setTimeout(refreshVideoFramePosition, 150));
 
         function playSong(index, startAtSeconds = 0) {
             if (index < 0 || index >= allSongs.length) return;
@@ -470,7 +491,6 @@
                 }, 200);
             }, 3000);
 
-            // True Beat Audio Speed Match Shifter
             waveSimulatorInterval = setInterval(() => {
                 const randomBeatFactor = Math.random(); 
                 if (randomBeatFactor > 0.45) {
@@ -564,6 +584,7 @@
         function openFullScreenPlayer() {
             if(!ytPlayer) return;
             isPlayerFullscreen = true;
+            document.body.classList.add('lock-scroll');
             document.getElementById('fullScreenPlayer').classList.remove('hidden');
             document.getElementById('fullScreenPlayer').classList.add('flex');
             refreshVideoFramePosition();
@@ -572,8 +593,15 @@
         function closeFullScreenPlayer() {
             if(!ytPlayer) return;
             isPlayerFullscreen = false;
+            document.body.classList.remove('lock-scroll');
             document.getElementById('fullScreenPlayer').classList.add('hidden');
             document.getElementById('fullScreenPlayer').classList.remove('flex');
+            
+            // Ensure XT Panel closes smoothly
+            const p = document.getElementById('xtPanel');
+            p.classList.add('hidden');
+            p.classList.add('translate-x-full');
+            
             refreshVideoFramePosition();
         }
 
@@ -589,6 +617,7 @@
         function closeVideo() {
             clearInterval(timelineInterval); clearInterval(textRotationInterval); clearInterval(waveSimulatorInterval);
             if(ytPlayer) { try { ytPlayer.stopVideo(); } catch(e){} }
+            document.body.classList.remove('lock-scroll');
             document.getElementById('miniPlayer').classList.add('hidden');
             document.getElementById('fullScreenPlayer').classList.add('hidden');
             document.getElementById('unifiedVideoHolder').classList.add('hidden');
@@ -614,7 +643,8 @@
 
         function toggleXTPanel() {
             const p = document.getElementById('xtPanel');
-            p.classList.toggle('hidden'); p.classList.toggle('translate-x-full');
+            p.classList.toggle('hidden'); 
+            p.classList.toggle('translate-x-full');
         }
 
         window.onload = loadSongsFromDatabase;

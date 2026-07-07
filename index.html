@@ -114,6 +114,7 @@
             animation: dynamicDiscoGlow var(--disco-speed, 0.2s) infinite alternate ease-in-out !important;
         }
 
+        /* Prevent any scroll or bounce on fullscreen mode */
         .fullscreen-lock {
             overflow: hidden !important;
             touch-action: none !important;
@@ -137,29 +138,23 @@
                 </h1>
                 <p class="text-xs font-black text-zinc-400 tracking-widest uppercase mt-1 break-words">ONLY ZUBEEN DA SONG</p>
                 <p class="text-lg md:text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-white-400 to-yellow-600 mt-5 break-words animate-pulse">#JusticeForZubeenGarg</p>
-                
-                <!-- App By layer with Search input side-by-side -->
-                <div class="mt-5 text-sm font-bold text-zinc-400 flex flex-wrap items-center justify-between gap-3 w-full">
-                    <div class="flex items-center gap-2 shrink-0">
-                        <span>App By</span>
-                        <a href="https://www.facebook.com/share/1BQEf1Ndee/" target="_blank" class="inline-flex items-center gap-1 bg-zinc-900 px-2 py-1 rounded text-xs text-white border border-zinc-800">
-                            <i class="fab fa-facebook text-blue-400"></i> @thedhruba2x
-                        </a>
-                    </div>
-                    
-                    <!-- Search Input Shifted Here (Right Side) -->
-                    <div class="relative flex-1 min-w-[160px] max-w-xs">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-500 text-xs">
-                            <i class="fas fa-search"></i>
-                        </span>
-                        <input type="text" id="searchInput" placeholder="Search song..." class="w-full bg-zinc-900 border border-zinc-800 rounded-lg pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:border-yellow-500 text-white">
-                    </div>
+                <div class="mt-5 text-sm font-bold text-zinc-400 flex flex-wrap items-center gap-2">
+                    <span>App By</span>
+                    <a href="https://www.facebook.com/share/1BQEf1Ndee/" target="_blank" class="inline-flex items-center gap-1 bg-zinc-900 px-2 py-1 rounded text-xs text-white border border-zinc-800">
+                        <i class="fab fa-facebook text-blue-400"></i> @thedhruba2x
+                    </a>
                 </div>
             </div>
-            <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-600 rounded-xl flex items-center justify-center font-black text-xl text-black shadow-lg shrink-0 m-1">ZG</div>
+            <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-600 rounded-xl flex items-center justify-center font-black text-xl text-black shadow-lg shrink-0">ZG</div>
         </header>
 
         <section class="p-4 bg-zinc-950/40">
+            <div class="relative mb-3">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-500">
+                    <i class="fas fa-search"></i>
+                </span>
+                <input type="text" id="searchInput" placeholder="Search song name..." class="w-full bg-zinc-900 border border-zinc-800 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-yellow-500 text-white">
+            </div>
             <div class="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-zinc-400 px-1">
                 <span>All Song Collection</span>
                 <span id="totalSongsCount" class="bg-yellow-400/10 text-yellow-400 px-2 py-0.5 rounded-full border border-yellow-400/20">Loading...</span>
@@ -176,7 +171,7 @@
         </main>
     </div>
 
-    <!-- SHARED INDEPENDENT FIXED PORTAL WRAPPER -->
+    <!-- SHARED INDEPENDENT FIXED PORTAL WRAPPER (Animation removed for ultra speed) -->
     <div id="unifiedVideoHolder" class="fixed bottom-14 left-2 w-20 h-11 z-[42] bg-black rounded overflow-hidden border border-zinc-800 hidden pointer-events-none">
         <div id="ytPlayerContainer" class="w-full h-full scale-105"></div>
         <div class="yt-strict-blocker" onclick="handleCenterVideoTap(event)"></div>
@@ -399,6 +394,7 @@
 
             localStorage.setItem('zg_last_index', currentSongIndex);
 
+            // INSTANT INTERNAL LOADING DIRECT INTO THE FRAME WITHOUT LAG
             const holder = document.getElementById('unifiedVideoHolder');
             holder.classList.remove('hidden');
             refreshVideoFramePosition();
@@ -411,6 +407,7 @@
                     });
                 }
             } else {
+                // Clear old instances if any
                 document.getElementById('ytPlayerContainer').innerHTML = '';
                 isPlayerReady = false;
                 
@@ -462,7 +459,6 @@
             if (event.data == YT.PlayerState.ENDED) playNext();
         }
 
-        // Disco Lights Controller Toggle System Setup
         function toggleDiscoSystem() {
             isDiscoEnabled = !isDiscoEnabled;
             const btn = document.getElementById('discoToggleBtn');
@@ -599,6 +595,7 @@
         attachTimelineEvents('fullTimeline', 'fullTimelineProgress', 'fullTimelineThumb');
         attachTimelineEvents('miniTimeline', 'miniTimelineProgress', 'miniTimelineThumb');
 
+        // INSTANT MODE SWITCHING (Zero animation delay)
         function openFullScreenPlayer() {
             if(!ytPlayer) return;
             isPlayerFullscreen = true;

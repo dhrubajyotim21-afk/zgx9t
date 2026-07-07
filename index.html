@@ -12,7 +12,7 @@
     <meta name="apple-mobile-web-app-title" content="ZG X9T">
     <meta name="mobile-web-app-capable" content="yes">
     
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlpHIFg5VCAtIE9OTFkgWlVCRUVOIFNPTkciLAogICJzaG9ydF9uYW1lIjogIlpHIFg5VCIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwK  ImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIKfQ==">
+    <link class="sw-manifest" rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlpHIFg5VCAtIE9OTFkgWlVCRUVOIFNPTkciLAogICJzaG9ydF9uYW1lIjogIlpHIFg5VCIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwK  ImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIKfQ==">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -23,13 +23,13 @@
     <script src="https://www.youtube.com/iframe_api"></script>
 
     <style>
+        /* Strict Global No-Selection, App Rules */
         * {
             -webkit-user-select: none !important;
             -moz-user-select: none !important;
             -ms-user-select: none !important;
             user-select: none !important;
             -webkit-touch-callout: none !important;
-            touch-action: pan-y;
         }
 
         body {
@@ -41,7 +41,12 @@
             height: 100vh;
         }
 
-        /* Prevent scroll leak when full player is active */
+        /* Essential for native element scrolling lists */
+        .allow-scroll {
+            touch-action: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+        }
+
         body.lock-scroll {
             overflow: hidden !important;
             position: fixed !important;
@@ -104,26 +109,26 @@
         .seek-left { left: 0; }
         .seek-right { right: 0; }
 
-        /* Dynamic Beat Adaptive Sound Visualizer Box */
-        @keyframes dynamicFlicker {
-            0% { background-color: #ef4444; box-shadow: 0 0 14px #ef4444; }
-            25% { background-color: #f97316; box-shadow: 0 0 22px #f97316; }
-            50% { background-color: #eab308; box-shadow: 0 0 32px #eab308; }
-            75% { background-color: #22c55e; box-shadow: 0 0 20px #22c55e; }
-            100% { background-color: #3b82f6; box-shadow: 0 0 26px #3b82f6; }
+        /* Real Intense Audio Disco Flash Glow Filter Engine */
+        @keyframes extremeDiscoFlash {
+            0% { background-color: #ff0000; box-shadow: 0 0 35px #ff0000, inset 0 0 15px rgba(255,0,0,0.6); }
+            14% { background-color: #ff00ff; box-shadow: 0 0 40px #ff00ff, inset 0 0 15px rgba(255,0,255,0.6); }
+            28% { background-color: #0000ff; box-shadow: 0 0 35px #0000ff, inset 0 0 15px rgba(0,0,255,0.6); }
+            42% { background-color: #00ffff; box-shadow: 0 0 45px #00ffff, inset 0 0 15px rgba(0,255,255,0.6); }
+            56% { background-color: #00ff00; box-shadow: 0 0 35px #00ff00, inset 0 0 15px rgba(0,255,0,0.6); }
+            70% { background-color: #ffff00; box-shadow: 0 0 50px #ffff00, inset 0 0 15px rgba(255,255,0,0.6); }
+            84% { background-color: #ff7700; box-shadow: 0 0 40px #ff7700, inset 0 0 15px rgba(255,119,0,0.6); }
+            100% { background-color: #ff0055; box-shadow: 0 0 45px #ff0055, inset 0 0 15px rgba(255,0,85,0.6); }
         }
-        
-        .flicker-box-fast {
-            animation: dynamicFlicker 0.12s infinite alternate ease-in-out !important;
-        }
-        .flicker-box-slow {
-            animation: dynamicFlicker 0.45s infinite alternate ease-in-out !important;
+
+        .disco-box-active {
+            animation: extremeDiscoFlash var(--disco-speed, 0.25s) infinite alternate cubic-bezier(0.1, 0.8, 0.3, 1) !important;
         }
     </style>
 </head>
 <body class="antialiased" oncontextmenu="return false;">
 
-    <div id="appScrollBody" class="w-full h-full overflow-y-auto no-scrollbar pb-36">
+    <div id="appScrollBody" class="w-full h-full overflow-y-auto no-scrollbar pb-36 allow-scroll">
         <header class="p-4 border-b border-zinc-900 flex justify-between items-start sticky top-0 bg-black/95 backdrop-blur z-30">
             <div class="min-w-0 flex-1 pr-2">
                 <h1 class="text-4xl font-black tracking-tighter uppercase break-words">
@@ -191,7 +196,7 @@
         </div>
     </div>
 
-    <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden touch-none select-none">
+    <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden select-none">
         <div class="p-4 flex justify-between items-center border-b border-zinc-900 bg-gradient-to-b from-black/90 to-transparent z-10">
             <button onclick="closeFullScreenPlayer()" class="text-zinc-400 hover:text-white text-xl p-1"><i class="fas fa-chevron-down"></i></button>
             <div class="text-center px-4 flex-1 min-w-0">
@@ -203,8 +208,8 @@
 
         <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/20 relative gap-5 overflow-hidden">
             <div class="w-full max-w-lg flex flex-col gap-3 z-10">
-                <div id="visualizerLightBar" class="w-full h-14 rounded-xl bg-zinc-900 flex items-center justify-center px-4 transition-all duration-300 overflow-hidden shadow-lg border border-zinc-800/50">
-                    <span id="visualizerText" class="text-lg md:text-xl font-black text-white tracking-wide uppercase truncate drop-shadow text-center">#JusticeForZubeenGarg</span>
+                <div id="visualizerLightBar" class="w-full h-14 rounded-xl bg-zinc-900 flex items-center justify-center px-4 transition-all duration-150 overflow-hidden shadow-lg border border-zinc-800/50">
+                    <span id="visualizerText" class="text-lg md:text-xl font-black text-white tracking-wider uppercase truncate drop-shadow-[0_2px_8px_rgba(0,0,0,1)] text-center">Joy Zubeen Da</span>
                 </div>
                 
                 <div id="fullPlayerAnchor" class="w-full aspect-video bg-zinc-900/30 rounded-xl border border-zinc-900 shadow-2xl relative overflow-hidden">
@@ -217,7 +222,7 @@
                 <h2 class="text-xl md:text-3xl font-extrabold tracking-wide text-white uppercase">
                     #<span class="text-yellow-400">Only</span>Zubeen<span class="text-yellow-400">Garg</span>
                 </h2>
-                <p class="text-xs md:text-sm font-bold tracking-widest mt-2 text-zinc-400 uppercase">জুবিন দা-ৰ চিৰсеউজ গানৰ এক অনন্য সংৰক্ষণ</p>
+                <p class="text-xs md:text-sm font-bold tracking-widest mt-2 text-zinc-400 uppercase">জুবিন দা-ৰ চিৰসেউজ গানৰ এক অনন্য সংৰক্ষণ</p>
             </div>
 
             <div id="xtPanel" class="absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-zinc-950/98 border-l border-zinc-900 z-50 transform translate-x-full transition-transform duration-300 flex flex-col hidden">
@@ -225,7 +230,8 @@
                     <span class="text-xs font-black text-yellow-400"><i class="fas fa-list"></i> XT QUEUE LIST</span>
                     <button onclick="toggleXTPanel()" class="text-zinc-400 text-sm p-1"><i class="fas fa-times"></i></button>
                 </div>
-                <div id="xtSongsList" class="flex-1 overflow-y-auto p-2.5 flex flex-col gap-2 no-scrollbar"></div>
+                <div id="xtSongsList" class="flex-1 overflow-y-auto p-2.5 flex flex-col gap-2 no-scrollbar allow-scroll">
+                    </div>
             </div>
         </div>
 
@@ -269,7 +275,7 @@
         let ytPlayer = null;
         let timelineInterval = null;
         let textRotationInterval = null;
-        let waveSimulatorInterval = null;
+        let discoControlInterval = null;
         let isDraggingTimeline = false;
         let isPlayerFullscreen = false;
         let isPlayerReady = false;
@@ -278,8 +284,9 @@
         let lastRightTap = 0;
         let textRotationIndex = 0;
 
+        // Block accidental browser zooms, keeping natural list touches alive
         document.addEventListener('touchstart', (e) => {
-            if (e.touches.length > 1) e.preventDefault();
+            if (e.touches.length > 1 && !e.target.closest('.allow-scroll')) e.preventDefault();
         }, { passive: false });
 
         function getYoutubeId(url) {
@@ -353,13 +360,13 @@
                 const thumbUrl = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
 
                 const card = document.createElement('div');
-                card.className = "bg-zinc-900/80 hover:bg-zinc-800 p-1.5 rounded-lg flex items-center gap-3 cursor-pointer border border-zinc-900 min-w-0 group";
+                card.className = "bg-zinc-900/80 hover:bg-zinc-800 p-1.5 rounded-lg flex items-center gap-3 cursor-pointer border border-zinc-900 min-w-0 group select-none";
                 card.onclick = () => { playSong(index); toggleXTPanel(); };
                 card.innerHTML = `
-                    <div class="w-16 h-10 bg-black rounded overflow-hidden shrink-0 border border-zinc-800">
+                    <div class="w-16 h-10 bg-black rounded overflow-hidden shrink-0 border border-zinc-800 pointer-events-none">
                         <img src="${thumbUrl}" alt="thumbnail" class="w-full h-full object-cover" loading="lazy">
                     </div>
-                    <div class="min-w-0 flex-1">
+                    <div class="min-w-0 flex-1 pointer-events-none">
                         <p class="text-xs font-bold text-zinc-300 group-hover:text-yellow-400 truncate">${song.title}</p>
                     </div>
                 `;
@@ -367,7 +374,6 @@
             });
         }
 
-        // Viewport bounding box matching for single instance tracking
         function refreshVideoFramePosition() {
             const holder = document.getElementById('unifiedVideoHolder');
             if(!isPlayerReady) return;
@@ -384,7 +390,6 @@
             holder.style.width = `${bounds.width}px`;
             holder.style.height = `${bounds.height}px`;
 
-            // Adjust relative layers properly
             if(isPlayerFullscreen) {
                 holder.style.zIndex = "51";
                 holder.style.borderRadius = "12px";
@@ -394,7 +399,6 @@
             }
         }
 
-        // Auto updates positioning structure during window resize/rotation
         window.addEventListener('resize', refreshVideoFramePosition);
         window.addEventListener('orientationchange', () => setTimeout(refreshVideoFramePosition, 150));
 
@@ -455,50 +459,63 @@
                 fIcon.className = "fas fa-pause";
                 mIcon.className = "fas fa-pause";
                 startTimelineSync();
-                startVisualizerControls(true);
+                runDynamicDiscoEngine(true);
             } else {
                 fIcon.className = "fas fa-play pl-1";
                 mIcon.className = "fas fa-play pl-0.5";
                 clearInterval(timelineInterval);
-                startVisualizerControls(false);
+                runDynamicDiscoEngine(false);
             }
             if (event.data == YT.PlayerState.ENDED) playNext();
         }
 
-        function startVisualizerControls(shouldRun) {
+        // DYNAMIC INTENSE DISCO MODIFIER SHIFTER FLASHER ENGINE
+        function runDynamicDiscoEngine(shouldRun) {
             clearInterval(textRotationInterval);
-            clearInterval(waveSimulatorInterval);
+            clearInterval(discoControlInterval);
             const lightBar = document.getElementById('visualizerLightBar');
             const textBox = document.getElementById('visualizerText');
 
             if (!shouldRun) {
                 lightBar.className = "w-full h-14 rounded-xl bg-zinc-900 flex items-center justify-center px-4 border border-zinc-800/50";
+                lightBar.style.removeProperty('--disco-speed');
                 return;
             }
 
+            lightBar.classList.add('disco-box-active');
+
+            // Text Rotation Controller Loop including "Joy Zubeen Da"
             textRotationIndex = 0;
             textRotationInterval = setInterval(() => {
                 if(!allSongs[currentSongIndex]) return;
                 const songTitle = allSongs[currentSongIndex].title;
-                const rotatingPhrases = ["#JusticeForZubeenGarg", songTitle, "Web By Dhruba"];
+                const phrases = ["Joy Zubeen Da", "#JusticeForZubeenGarg", songTitle, "Web By Dhruba"];
                 
-                textRotationIndex = (textRotationIndex + 1) % rotatingPhrases.length;
+                textRotationIndex = (textRotationIndex + 1) % phrases.length;
                 
                 textBox.style.opacity = '0';
                 setTimeout(() => {
-                    textBox.innerText = rotatingPhrases[textRotationIndex];
+                    textBox.innerText = phrases[textRotationIndex];
                     textBox.style.opacity = '1';
-                }, 200);
-            }, 3000);
+                }, 150);
+            }, 2600);
 
-            waveSimulatorInterval = setInterval(() => {
-                const randomBeatFactor = Math.random(); 
-                if (randomBeatFactor > 0.45) {
-                    lightBar.className = "w-full h-14 rounded-xl flex items-center justify-center px-4 border border-zinc-800/50 flicker-box-fast";
+            // Dynamic Adaptive Rhythmic Wave Simulator for speed matching vibes
+            discoControlInterval = setInterval(() => {
+                const randomWave = Math.random();
+                let selectedSpeed = "0.22s"; // Normal speed default
+
+                if (randomWave > 0.75) {
+                    selectedSpeed = "0.06s"; // Ultra Fast high-bass flash beat
+                } else if (randomWave > 0.45) {
+                    selectedSpeed = "0.14s"; // Aggressive dance dynamic mode
+                } else if (randomWave > 0.15) {
+                    selectedSpeed = "0.32s"; // Standard vocal chorus vibe rhythm
                 } else {
-                    lightBar.className = "w-full h-14 rounded-xl flex items-center justify-center px-4 border border-zinc-800/50 flicker-box-slow";
+                    selectedSpeed = "0.65s"; // Calm low speed slow frequency melody drop
                 }
-            }, 550);
+                lightBar.style.setProperty('--disco-speed', selectedSpeed);
+            }, 380);
         }
 
         function startTimelineSync() {
@@ -597,7 +614,6 @@
             document.getElementById('fullScreenPlayer').classList.add('hidden');
             document.getElementById('fullScreenPlayer').classList.remove('flex');
             
-            // Ensure XT Panel closes smoothly
             const p = document.getElementById('xtPanel');
             p.classList.add('hidden');
             p.classList.add('translate-x-full');
@@ -615,7 +631,7 @@
         function playPrevious() { if(currentSongIndex > 0) playSong(currentSongIndex - 1); else playSong(allSongs.length - 1); }
 
         function closeVideo() {
-            clearInterval(timelineInterval); clearInterval(textRotationInterval); clearInterval(waveSimulatorInterval);
+            clearInterval(timelineInterval); clearInterval(textRotationInterval); clearInterval(discoControlInterval);
             if(ytPlayer) { try { ytPlayer.stopVideo(); } catch(e){} }
             document.body.classList.remove('lock-scroll');
             document.getElementById('miniPlayer').classList.add('hidden');

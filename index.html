@@ -120,13 +120,13 @@
             touch-action: none !important;
         }
 
-        /* EQUALIZER WAVE ANIMATION - YELLOW THEME */
+        /* DYNAMIC EQUALIZER WAVE ANIMATION - METICULOUSLY YELLOW THREADS */
         .wave-bar {
             width: 3px;
-            height: 5px;
+            height: 4px;
             background: linear-gradient(to top, #facc15, #eab308);
             border-radius: 2px;
-            transition: height 0.08s ease-in-out;
+            transition: height 0.07s ease-in-out;
         }
 
         /* Smooth Modal Pop-up */
@@ -150,7 +150,7 @@
                     <h1 class="text-4xl font-black tracking-tighter uppercase break-words">
                         <span class="text-yellow-400">ZG</span> <span class="text-white">X9T</span>
                     </h1>
-                    <!-- USER ID & DEVICE PORTAL BUTTON -->
+                    <!-- USER ID PORTAL BUTTON -->
                     <button onclick="toggleDeviceModal()" class="flex items-center justify-center w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-yellow-400 hover:border-yellow-400 transition-all active:scale-95 mt-1">
                         <i class="fas fa-user-astronaut text-sm"></i>
                     </button>
@@ -194,24 +194,18 @@
         </main>
     </div>
 
-    <!-- DEVICE ID & MODEL MODAL POPUP -->
+    <!-- DEVICE ID MODAL POPUP (DEVICE NAME REMOVED AS REQUESTED) -->
     <div id="deviceModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] hidden items-center justify-center p-4 modal-animate opacity-0">
         <div class="bg-zinc-950 border border-zinc-800 w-full max-w-xs rounded-2xl p-5 shadow-2xl flex flex-col items-center text-center relative">
             <button onclick="toggleDeviceModal()" class="absolute top-3 right-3 text-zinc-500 hover:text-white transition-colors"><i class="fas fa-times"></i></button>
-            <div class="w-14 h-14 rounded-full bg-yellow-400/10 border border-yellow-400/30 flex items-center justify-center text-yellow-400 text-2xl mb-3 animate-bounce">
+            <div class="w-14 h-14 rounded-full bg-yellow-400/10 border border-yellow-400/30 flex items-center justify-center text-yellow-400 text-2xl mb-3">
                 <i class="fas fa-id-card"></i>
             </div>
-            <h3 class="text-sm font-black uppercase tracking-widest text-zinc-400">Your App Profile</h3>
+            <h3 class="text-sm font-black uppercase tracking-widest text-zinc-400">Your Unique Key</h3>
             
-            <div class="w-full bg-zinc-900/50 border border-zinc-900 rounded-xl p-3 mt-4 flex flex-col gap-2.5">
-                <div>
-                    <span class="text-[10px] uppercase font-black tracking-wider text-zinc-500 block">Unique Device ID</span>
-                    <span id="displayDeviceId" class="text-yellow-400 font-mono font-bold text-base tracking-wide">Generating...</span>
-                </div>
-                <div class="border-t border-zinc-900 pt-2">
-                    <span class="text-[10px] uppercase font-black tracking-wider text-zinc-500 block">Detected Device</span>
-                    <span id="displayDeviceModel" class="text-white font-bold text-xs truncate max-w-full block">Detecting...</span>
-                </div>
+            <div class="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 mt-4 flex flex-col items-center justify-center">
+                <span class="text-[10px] uppercase font-black tracking-wider text-zinc-500 block mb-1">Device ID</span>
+                <span id="displayDeviceId" class="text-yellow-400 font-mono font-black text-lg tracking-wider">Generating...</span>
             </div>
             <p class="text-[9px] text-zinc-600 font-bold uppercase mt-4 tracking-widest">Logged into Admin Monitor Dashboard</p>
         </div>
@@ -257,7 +251,7 @@
         </div>
 
         <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/20 relative gap-4 overflow-hidden">
-            <!-- DISCO TOGGLE PANEL (MADE SLIMMER/THINNER AS REQUESTED) -->
+            <!-- DISCO TOGGLE PANEL -->
             <div class="z-10 bg-zinc-900/50 backdrop-blur border border-zinc-800/80 px-2.5 py-0.5 rounded-full flex items-center gap-2 text-[10px] font-bold shadow-md">
                 <span class="text-zinc-400 uppercase tracking-wider text-[9px]">Disco Light</span>
                 <button id="discoToggleBtn" onclick="toggleDiscoSystem()" class="bg-yellow-400 text-black px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider transition-all">ON</button>
@@ -273,8 +267,8 @@
                 <div class="w-full aspect-video bg-zinc-900/20 rounded-xl border border-zinc-900 shadow-2xl relative overflow-hidden">
                     <div id="fullPlayerAnchor" class="w-full h-full"></div>
                     
-                    <!-- YELLOW WAVE CONTAINER ATTACHED UNDER VIDEO -->
-                    <div id="waveContainer" class="absolute bottom-0 inset-x-0 h-7 flex items-end justify-center gap-[2px] opacity-90 z-20 pointer-events-none px-2">
+                    <!-- YELLOW WAVE CONTAINER POWERED BY MUSIC TALE -->
+                    <div id="waveContainer" class="absolute bottom-0 inset-x-0 h-8 flex items-end justify-center gap-[2px] opacity-95 z-20 pointer-events-none px-2">
                         <!-- Yellow bars populated dynamically -->
                     </div>
                 </div>
@@ -318,7 +312,7 @@
     </div>
 
     <script>
-        // CONFIG
+        // FIREBASE SETUP
         const firebaseConfig = { 
             apiKey: "AIzaSyDISW7EbMP_eEt4GuR6cijgMyYKxgb7xIg", 
             authDomain: "music-b05e1.firebaseapp.com", 
@@ -345,54 +339,25 @@
         let isDiscoEnabled = true; 
         let textRotationIndex = 0;
         let userDeviceId = '';
-        let userDeviceModel = '';
 
         // GENERATE YELLOW EQUALIZER BARS UNDER TRACK
         const waveContainer = document.getElementById('waveContainer');
-        const totalBars = 36;
+        const totalBars = 38;
         for (let i = 0; i < totalBars; i++) {
             const bar = document.createElement('div');
             bar.className = 'wave-bar';
             waveContainer.appendChild(bar);
         }
 
-        // UNIVERSAL HIGH-SPEED DEVICE DETECTOR & REGISTRATION ENGINE
+        // UNIVERSAL SEQUENTIAL ID GENERATOR (zgx9t-001)
         function initDeviceFingerprint() {
-            // Get or create sequential device ID
             let storedId = localStorage.getItem('zg_device_id');
             
-            // Build explicit device brand string safely across all standard & custom webviews
-            const ua = navigator.userAgent;
-            let model = "Smart Device";
-            
-            if (/iPhone|iPad|iPod/i.test(ua)) {
-                model = "Apple iPhone/iPad";
-            } else if (/Android/i.test(ua)) {
-                const match = ua.match(/Android\s([0-9\.]+);\s([^;\)]+)/);
-                if (match && match[2]) {
-                    model = match[2].split("Build")[0].trim();
-                } else {
-                    model = "Android Device";
-                }
-            } else if (/Windows/i.test(ua)) {
-                model = "Windows PC";
-            } else if (/Macintosh/i.test(ua)) {
-                model = "Apple Mac workstation";
-            }
-
-            // Clean secondary app indicators from string (like FBAN/FBAV, Instagram inside userAgent)
-            if (/FB_IAB|FBAN|FBAV/i.test(ua)) model += " (Facebook App)";
-            else if (/Instagram/i.test(ua)) model += " (Instagram App)";
-
-            userDeviceModel = model;
-            document.getElementById('displayDeviceModel').innerText = model;
-
             if (storedId) {
                 userDeviceId = storedId;
                 document.getElementById('displayDeviceId').innerText = userDeviceId;
-                syncDeviceMetricsWithAdmin(userDeviceId, userDeviceModel);
+                syncDeviceMetricsWithAdmin(userDeviceId);
             } else {
-                // Fetch next dynamic ID from absolute DB atomic index counter to guarantee zgx9t-00X sequencing
                 database.ref('admin/device_counter').transaction((currentCount) => {
                     return (currentCount || 0) + 1;
                 }, (error, committed, snapshot) => {
@@ -400,21 +365,20 @@
                     if (committed) {
                         sequenceNum = snapshot.val();
                     } else {
-                        sequenceNum = Math.floor(Math.random() * 800) + 10; // Fallback safety seed
+                        sequenceNum = Math.floor(Math.random() * 800) + 11;
                     }
                     const formattedId = `zgx9t-${String(sequenceNum).padStart(3, '0')}`;
                     localStorage.setItem('zg_device_id', formattedId);
                     userDeviceId = formattedId;
                     document.getElementById('displayDeviceId').innerText = userDeviceId;
-                    syncDeviceMetricsWithAdmin(userDeviceId, userDeviceModel);
+                    syncDeviceMetricsWithAdmin(userDeviceId);
                 });
             }
         }
 
-        function syncDeviceMetricsWithAdmin(id, modelName) {
+        function syncDeviceMetricsWithAdmin(id) {
             database.ref(`admin/active_devices/${id}`).set({
                 deviceId: id,
-                deviceModel: modelName,
                 lastActive: firebase.database.ServerValue.TIMESTAMP,
                 userAgent: navigator.userAgent
             });
@@ -476,8 +440,6 @@
         function renderSongsList() {
             const container = document.getElementById('songsContainer');
             container.innerHTML = '';
-            
-            // Ultra performant DOM batch fragment build
             const fragment = document.createDocumentFragment();
             filteredSongs.forEach((song) => {
                 const globalIndex = allSongs.indexOf(song);
@@ -623,23 +585,26 @@
             }
         }
 
+        // AMINATED YELLOW WAVE ENGINE (BASED ON TRACK STATE)
         function animateWave(start) {
             clearInterval(waveAnimationInterval);
             const bars = document.querySelectorAll('.wave-bar');
             
             if (!start) {
-                bars.forEach(bar => bar.style.height = '5px');
+                bars.forEach(bar => bar.style.height = '4px');
                 return;
             }
 
+            // High frequency simulation loop that responds immediately to state
             waveAnimationInterval = setInterval(() => {
                 bars.forEach(bar => {
-                    const randomHeight = Math.floor(Math.random() * 21) + 4; // Normalized for responsive fluid height
+                    const randomHeight = Math.floor(Math.random() * 26) + 4; 
                     bar.style.height = `${randomHeight}px`;
                 });
-            }, 80);
+            }, 75);
         }
 
+        // TEXT REPLACEMENT INSIDE DISCO ENGINE ("WEB BY - DHRUBA")
         function runDynamicDiscoEngine(shouldRun) {
             clearInterval(textRotationInterval);
             clearInterval(discoControlInterval);
@@ -658,7 +623,8 @@
             textRotationInterval = setInterval(() => {
                 if(!allSongs[currentSongIndex]) return;
                 const songTitle = allSongs[currentSongIndex].title;
-                const phrases = ["Joy Zubeen Da", "#JusticeForZubeenGarg", songTitle, "ID: " + userDeviceId];
+                // REPLACED DEVICE ID WITH "WEB BY - DHRUBA" SUCCESSFULLY
+                const phrases = ["Joy Zubeen Da", "#JusticeForZubeenGarg", songTitle, "WEB BY - DHRUBA"];
                 
                 textRotationIndex = (textRotationIndex + 1) % phrases.length;
                 

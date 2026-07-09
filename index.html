@@ -16,7 +16,7 @@
     <!-- SECRET SEO KEYWORDS -->
     <meta name="keywords" content="ZGX9T,zgx9t,zg,zgx,ZGX, Dhruba, Zubeen Da, Zubeen garg song , zubeen, zubeen song, assamese song, zubeen garg">
     
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlpHIFg5VCAtIE9OTFkgWlVCRUVOIFNPTkciLAogICJzaG9ydF9uYW1lIjogIlpHIFg5VCIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwK  ImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIKfQ==">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlpHIFg5VCAtIE9OTFkgWlVCRUVOIFNPTkciLAogICJzaG9ydF9uYW1lIjogIlpHIFg5VCIsCiAgInSTYXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwK  ImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIKfQ==">
     
     <!-- Tailwind CSS & FontAwesome -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -118,6 +118,15 @@
             overflow: hidden !important;
             touch-action: none !important;
         }
+
+        /* EQUALIZER WAVE ANIMATION */
+        .wave-bar {
+            width: 4px;
+            height: 5px;
+            background: linear-gradient(to top, #facc15, #ef4444);
+            border-radius: 2px;
+            transition: height 0.1s ease-in-out;
+        }
     </style>
 </head>
 <body class="antialiased" oncontextmenu="return false;">
@@ -138,7 +147,6 @@
                 <p class="text-xs font-black text-zinc-400 tracking-widest uppercase mt-1 break-words">ONLY ZUBEEN DA SONG</p>
                 <p class="text-lg md:text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-white-400 to-yellow-600 mt-5 break-words animate-pulse">#JusticeForZubeenGarg</p>
                 
-                <!-- App By layer with Search input side-by-side -->
                 <div class="mt-5 text-sm font-bold text-zinc-400 flex flex-wrap items-center justify-between gap-3 w-full">
                     <div class="flex items-center gap-2 shrink-0">
                         <span>App By</span>
@@ -147,7 +155,6 @@
                         </a>
                     </div>
                     
-                    <!-- Search Input (Right Side Fixed) -->
                     <div class="relative flex-1 min-w-[160px] max-w-xs">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-500 text-xs">
                             <i class="fas fa-search"></i>
@@ -176,13 +183,13 @@
         </main>
     </div>
 
-    <!-- SHARED INDEPENDENT FIXED PORTAL WRAPPER -->
+    <!-- FIXED PORTAL FOR VIDEO PLAYING -->
     <div id="unifiedVideoHolder" class="fixed bottom-14 left-2 w-20 h-11 z-[42] bg-black rounded overflow-hidden border border-zinc-800 hidden pointer-events-none">
         <div id="ytPlayerContainer" class="w-full h-full scale-105"></div>
-        <div class="yt-strict-blocker" onclick="handleCenterVideoTap(event)"></div>
+        <div class="yt-strict-blocker"></div>
     </div>
 
-    <!-- BOTTOM MINI PLAYER COMPONENT -->
+    <!-- BOTTOM MINI PLAYER -->
     <div id="miniPlayer" class="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-900 p-2 z-40 hidden flex-col gap-1 shadow-2xl select-none">
         <div id="miniTimeline" class="timeline-container w-full">
             <div id="miniTimelineProgress" class="timeline-progress"></div>
@@ -205,7 +212,7 @@
         </div>
     </div>
 
-    <!-- FULL SCREEN PLAYER COMPONENT -->
+    <!-- FULL SCREEN PLAYER -->
     <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden touch-none select-none" style="overscroll-behavior: contain;">
         <div class="p-4 flex justify-between items-center border-b border-zinc-900 bg-gradient-to-b from-black/90 to-transparent z-10">
             <button onclick="closeFullScreenPlayer()" class="text-zinc-400 hover:text-white text-xl p-1"><i class="fas fa-chevron-down"></i></button>
@@ -222,8 +229,13 @@
             </div>
 
             <div class="w-full max-w-lg flex flex-col gap-3 z-10">
-                <div id="visualizerLightBar" class="w-full h-14 rounded-xl bg-zinc-900 flex items-center justify-center px-4 overflow-hidden shadow-lg border border-zinc-800/50 transition-all duration-200">
-                    <span id="visualizerText" class="text-lg md:text-xl font-black text-white tracking-wider uppercase truncate drop-shadow-[0_2px_6px_rgba(0,0,0,1)] text-center">Jai Zubeen Da</span>
+                <!-- DANCING WAVE EQUALIZER BAR -->
+                <div id="visualizerLightBar" class="w-full h-20 rounded-xl bg-zinc-900 flex flex-col items-center justify-center px-4 relative overflow-hidden shadow-lg border border-zinc-800/50 transition-all duration-200">
+                    <span id="visualizerText" class="text-lg md:text-xl font-black text-white tracking-wider uppercase truncate drop-shadow-[0_2px_6px_rgba(0,0,0,1)] text-center z-10">Jai Zubeen Da</span>
+                    <!-- Wave Container -->
+                    <div id="waveContainer" class="absolute bottom-0 inset-x-0 h-8 flex items-end justify-center gap-1 opacity-40">
+                        <!-- Bars will be generated by JavaScript -->
+                    </div>
                 </div>
                 
                 <div id="fullPlayerAnchor" class="w-full aspect-video bg-zinc-900/20 rounded-xl border border-zinc-900 shadow-2xl relative overflow-hidden">
@@ -241,7 +253,7 @@
         <div class="p-6 bg-gradient-to-t from-black via-black/95 to-transparent z-10">
             <div class="flex flex-col gap-2 mb-5">
                 <div class="flex items-center gap-3 w-full">
-                    <button onclick="seekSeconds(-5)" class="text-zinc-400 hover:text-yellow-400 text-sm p-1 shrink-0 active:scale-95 transition-transform" title="Backward 5s">
+                    <button onclick="seekSeconds(-5)" class="text-zinc-400 hover:text-yellow-400 text-sm p-1 shrink-0 active:scale-95 transition-transform">
                         <i class="fas fa-rotate-left"></i> <span class="text-[10px] font-bold font-mono">5s</span>
                     </button>
                     
@@ -250,7 +262,7 @@
                         <div id="fullTimelineThumb" class="timeline-thumb"></div>
                     </div>
                     
-                    <button onclick="seekSeconds(5)" class="text-zinc-400 hover:text-yellow-400 text-sm p-1 shrink-0 active:scale-95 transition-transform" title="Forward 5s">
+                    <button onclick="seekSeconds(5)" class="text-zinc-400 hover:text-yellow-400 text-sm p-1 shrink-0 active:scale-95 transition-transform">
                         <span class="text-[10px] font-bold font-mono">5s</span> <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -288,11 +300,20 @@
         let timelineInterval = null;
         let textRotationInterval = null;
         let discoControlInterval = null;
+        let waveAnimationInterval = null;
         let isDraggingTimeline = false;
         let isPlayerFullscreen = false;
-        let isPlayerReady = false;
         let isDiscoEnabled = true; 
         let textRotationIndex = 0;
+
+        // Create Equalizer Bars HTML
+        const waveContainer = document.getElementById('waveContainer');
+        const totalBars = 30;
+        for (let i = 0; i < totalBars; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'wave-bar';
+            waveContainer.appendChild(bar);
+        }
 
         function getYoutubeId(url) {
             if (!url) return '';
@@ -381,26 +402,6 @@
 
         window.addEventListener('resize', refreshVideoFramePosition);
 
-        // System OS - Media Session API Integration
-        function updateSystemMediaMetadata(title, ytId) {
-            if ('mediaSession' in navigator) {
-                navigator.mediaSession.metadata = new MediaMetadata({
-                    title: title,
-                    artist: 'Zubeen Garg',
-                    album: 'ZG X9T Collection',
-                    artwork: [
-                        { src: `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`, sizes: '480x360', type: 'image/jpeg' }
-                    ]
-                });
-                
-                // Active System Locks Controls
-                navigator.mediaSession.setActionHandler('play', togglePlayPause);
-                navigator.mediaSession.setActionHandler('pause', togglePlayPause);
-                navigator.mediaSession.setActionHandler('previoustrack', playPrevious);
-                navigator.mediaSession.setActionHandler('nexttrack', playNext);
-            }
-        }
-
         function playSong(index, startAtSeconds = 0) {
             if (index < 0 || index >= allSongs.length) return;
             
@@ -418,9 +419,6 @@
             document.getElementById('miniPlayer').classList.add('flex');
 
             localStorage.setItem('zg_last_index', currentSongIndex);
-            
-            // Sync OS Panel Controls
-            updateSystemMediaMetadata(song.title, ytId);
 
             const holder = document.getElementById('unifiedVideoHolder');
             holder.classList.remove('hidden');
@@ -435,7 +433,6 @@
                 }
             } else {
                 document.getElementById('ytPlayerContainer').innerHTML = '';
-                isPlayerReady = false;
                 
                 ytPlayer = new YT.Player('ytPlayerContainer', {
                     height: '100%',
@@ -450,12 +447,10 @@
                         'fs': 0, 
                         'playsinline': 1,
                         'showinfo': 0,
-                        'autohide': 1,
-                        'origin': window.location.origin
+                        'autohide': 1
                     },
                     events: {
                         'onReady': (e) => { 
-                            isPlayerReady = true;
                             if(startAtSeconds > 0) e.target.seekTo(startAtSeconds, true);
                             e.target.playVideo(); 
                             refreshVideoFramePosition();
@@ -474,15 +469,15 @@
             if (event.data == YT.PlayerState.PLAYING) {
                 fIcon.className = "fas fa-pause";
                 mIcon.className = "fas fa-pause";
-                if ('mediaSession' in navigator) navigator.mediaSession.playbackState = "playing";
                 startTimelineSync();
                 runDynamicDiscoEngine(true);
+                animateWave(true);
             } else {
                 fIcon.className = "fas fa-play pl-1";
                 mIcon.className = "fas fa-play pl-0.5";
-                if ('mediaSession' in navigator) navigator.mediaSession.playbackState = "paused";
                 clearInterval(timelineInterval);
                 runDynamicDiscoEngine(false);
+                animateWave(false);
             }
             if (event.data == YT.PlayerState.ENDED) playNext();
         }
@@ -493,12 +488,34 @@
             if(isDiscoEnabled) {
                 btn.innerText = "ON";
                 btn.className = "bg-yellow-400 text-black px-2 py-0.5 rounded text-[10px] font-black";
-                if(ytPlayer && ytPlayer.getPlayerState() === YT.PlayerState.PLAYING) runDynamicDiscoEngine(true);
+                if(ytPlayer && ytPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
+                    runDynamicDiscoEngine(true);
+                    animateWave(true);
+                }
             } else {
                 btn.innerText = "OFF";
                 btn.className = "bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded text-[10px] font-black";
                 runDynamicDiscoEngine(false);
+                animateWave(false);
             }
+        }
+
+        function animateWave(start) {
+            clearInterval(waveAnimationInterval);
+            const bars = document.querySelectorAll('.wave-bar');
+            
+            if (!start) {
+                bars.forEach(bar => bar.style.height = '5px');
+                return;
+            }
+
+            waveAnimationInterval = setInterval(() => {
+                bars.forEach(bar => {
+                    // Generates a dynamic random height for the equalizer look
+                    const randomHeight = Math.floor(Math.random() * 28) + 4;
+                    bar.style.height = `${randomHeight}px`;
+                });
+            }, 100);
         }
 
         function runDynamicDiscoEngine(shouldRun) {
@@ -509,7 +526,7 @@
 
             if (!shouldRun || !isDiscoEnabled) {
                 lightBar.classList.remove('disco-active');
-                lightBar.className = "w-full h-14 rounded-xl bg-zinc-900 flex items-center justify-center px-4 border border-zinc-800/50";
+                lightBar.className = "w-full h-20 rounded-xl bg-zinc-900 flex flex-col items-center justify-center px-4 border border-zinc-800/50";
                 return;
             }
 
@@ -590,10 +607,6 @@
             }
         }
 
-        function handleCenterVideoTap(e) {
-            e.stopPropagation();
-        }
-
         function attachTimelineEvents(containerId, progressId, thumbId) {
             const container = document.getElementById(containerId);
             function handleInteraction(e) {
@@ -651,7 +664,7 @@
         function playPrevious() { if(currentSongIndex > 0) playSong(currentSongIndex - 1); else playSong(allSongs.length - 1); }
 
         function closeVideo() {
-            clearInterval(timelineInterval); clearInterval(textRotationInterval); clearInterval(discoControlInterval);
+            clearInterval(timelineInterval); clearInterval(textRotationInterval); clearInterval(discoControlInterval); clearInterval(waveAnimationInterval);
             if(ytPlayer) { try { ytPlayer.stopVideo(); } catch(e){} }
             document.body.classList.remove('fullscreen-lock');
             document.getElementById('miniPlayer').classList.add('hidden');
@@ -659,7 +672,6 @@
             document.getElementById('unifiedVideoHolder').classList.add('hidden');
             isPlayerFullscreen = false; currentSongIndex = -1;
             localStorage.removeItem('zg_last_index'); localStorage.removeItem('zg_last_time');
-            if ('mediaSession' in navigator) navigator.mediaSession.playbackState = "none";
         }
 
         function recoverSavedSession() {

@@ -13,57 +13,54 @@
     <meta name="apple-mobile-web-app-title" content="ZG X9T">
     <meta name="mobile-web-app-capable" content="yes">
     
-    <!-- SECRET SEO KEYWORDS -->
-    <meta name="keywords" content="ZGX9T,zgx9t,zg,zgx,ZGX, Dhruba, Zubeen Da, Zubeen garg song , zubeen, zubeen song, assamese song, zubeen garg">
+    <meta name="keywords" content="ZGX9T,zgx9t,zg,zgx,ZGX, Dhruba, Zubeen Da, Zubeen garg song, zubeen, zubeen song, assamese song, zubeen garg">
     
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlpHIFg5VCAtIE9OTFkgWlVCRUVOIFNPTkciLAogICJzaG9ydF9uYW1lIjogIlpHIFg5VCIsCiAgInSTYXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwK  ImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIKfQ==">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlpHIFg5VCAtIE9OTFkgWlVCRUVOIFNPTkciLAogICJzaG9ydF9uYW1lIjogIlpHIFg5VCIsCiAgInSTYXJ0X3VybCI6ICIuIiwKICAmZGlzcGxheSI6ICJzdGFuZGFsb25lIiwK  ImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIKfQ==">
     
-    <!-- Tailwind CSS & FontAwesome -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Firebase SDKs -->
+    <!-- Firebase SDKs (v8 optimized for quick analytics loading) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
-    <!-- YouTube Iframe API -->
     <script src="https://www.youtube.com/iframe_api"></script>
 
     <style>
         * {
             -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
             user-select: none !important;
             -webkit-touch-callout: none !important;
         }
-
         body {
             background-color: #000000;
             color: #ffffff;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
             overflow: hidden;
             width: 100vw;
             height: 100vh;
         }
-
         .allow-scroll {
             touch-action: pan-y !important;
             -webkit-overflow-scrolling: touch !important;
             overflow-y: auto !important;
         }
-
+        
+        /* Ultra Sleek Slider - চিকণ আৰু মিহি কৰা হৈছে */
         .timeline-container {
             position: relative;
             width: 100%;
-            height: 5px;
+            height: 2px;
             background: #27272a;
             border-radius: 9999px;
             cursor: pointer;
             display: flex;
             align-items: center;
+            transition: height 0.1s;
         }
-        
+        .timeline-container:hover {
+            height: 4px;
+        }
         .timeline-progress {
             position: absolute;
             left: 0;
@@ -73,11 +70,10 @@
             border-radius: 9999px;
             width: 0%;
         }
-
         .timeline-thumb {
             position: absolute;
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             background: #ffffff;
             border: 2px solid #facc15;
             border-radius: 50%;
@@ -85,45 +81,33 @@
             transform: translateX(-50%);
             pointer-events: none;
         }
-
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         .yt-strict-blocker {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 40;
-            background: transparent;
-            pointer-events: auto;
-            cursor: default;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 40; background: transparent;
         }
 
         @keyframes dynamicDiscoGlow {
-            0% { background-color: #ff0000; box-shadow: 0 0 25px #ff0000; }
-            20% { background-color: #ff00ff; box-shadow: 0 0 30px #ff00ff; }
-            40% { background-color: #0000ff; box-shadow: 0 0 25px #0000ff; }
-            60% { background-color: #00ffff; box-shadow: 0 0 35px #00ffff; }
-            80% { background-color: #00ff00; box-shadow: 0 0 25px #00ff00; }
-            100% { background-color: #ffff00; box-shadow: 0 0 35px #ffff00; }
+            0% { background-color: #ff0000; box-shadow: 0 0 20px #ff0000; }
+            20% { background-color: #ff00ff; box-shadow: 0 0 25px #ff00ff; }
+            40% { background-color: #0000ff; box-shadow: 0 0 20px #0000ff; }
+            60% { background-color: #00ffff; box-shadow: 0 0 30px #00ffff; }
+            80% { background-color: #00ff00; box-shadow: 0 0 20px #00ff00; }
+            100% { background-color: #ffff00; box-shadow: 0 0 30px #ffff00; }
         }
-
         .disco-active {
             animation: dynamicDiscoGlow var(--disco-speed, 0.2s) infinite alternate ease-in-out !important;
         }
-
-        .fullscreen-lock {
-            overflow: hidden !important;
-            touch-action: none !important;
-        }
-
-        /* EQUALIZER WAVE ANIMATION */
+        .fullscreen-lock { overflow: hidden !important; touch-action: none !important; }
+        
+        /* Yellow Wave Bars - তলৰ ৱেভ সম্পূৰ্ণ হালধীয়া কৰা হ’ল */
         .wave-bar {
             width: 4px;
             height: 5px;
-            background: linear-gradient(to top, #facc15, #ef4444);
+            background: linear-gradient(to top, #eab308, #fef08a);
             border-radius: 2px;
             transition: height 0.1s ease-in-out;
         }
@@ -131,31 +115,36 @@
 </head>
 <body class="antialiased" oncontextmenu="return false;">
 
-    <div style="display: none !important; visibility: hidden !important; opacity: 0 !important; width: 0; height: 0; overflow: hidden;">
+    <div style="display: none !important; visibility: hidden !important; opacity: 0 !important;">
         <h2>ZUBEEN GARG SONG - ZGX9T ONLY ZUBEEN SONG Collection</h2>
-        <p>Listen to latest assamese song, zubeen song, and tracks by Zubeen Da. Project curated by Dhruba featuring ZGX music dashboard.</p>
-        <span>Keywords: zgx9t, zg , zgx ZGX, Dhruba, Zubeen Da, ZUBEEN GARG SONG, zubeen, zubeen song, assamese song, zubeen garg</span>
+        <p>Keywords: zgx9t, zg, zgx ZGX, Dhruba, Zubeen Da, ZUBEEN GARG SONG, zubeen, zubeen song</p>
     </div>
 
-    <!-- APP MAIN CONTENT LIST LAYOUT -->
+    <!-- APP MAIN LAYOUT -->
     <div id="appScrollBody" class="w-full h-full pb-36 no-scrollbar allow-scroll">
         <header class="p-4 border-b border-zinc-900 flex justify-between items-start sticky top-0 bg-black/95 backdrop-blur z-30">
             <div class="min-w-0 flex-1 pr-2">
-                <h1 class="text-4xl font-black tracking-tighter uppercase break-words">
-                    <span class="text-yellow-400">ZG</span> <span class="text-white">X9T</span>
-                </h1>
-                <p class="text-xs font-black text-zinc-400 tracking-widest uppercase mt-1 break-words">ONLY ZUBEEN DA SONG</p>
-                <p class="text-lg md:text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-white-400 to-yellow-600 mt-5 break-words animate-pulse">#JusticeForZubeenGarg</p>
+                <div class="flex items-center justify-between">
+                    <h1 class="text-4xl font-black tracking-tighter uppercase">
+                        <span class="text-yellow-400">ZG</span> <span class="text-white">X9T</span>
+                    </h1>
+                    <!-- USER PROFILE ICON BUTTON -->
+                    <button onclick="toggleProfileModal(true)" class="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-yellow-400 active:scale-95 transition-all">
+                        <i class="fas fa-user text-lg"></i>
+                    </button>
+                </div>
+                <p class="text-xs font-black text-zinc-400 tracking-widest uppercase mt-1">ONLY ZUBEEN DA SONG</p>
+                <p class="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-zinc-400 to-yellow-600 mt-4 animate-pulse">#JusticeForZubeenGarg</p>
                 
-                <div class="mt-5 text-sm font-bold text-zinc-400 flex flex-wrap items-center justify-between gap-3 w-full">
-                    <div class="flex items-center gap-2 shrink-0">
+                <div class="mt-4 text-sm font-bold text-zinc-400 flex flex-wrap items-center justify-between gap-3 w-full">
+                    <div class="flex items-center gap-2 text-xs">
                         <span>App By</span>
-                        <a href="https://www.facebook.com/share/1BQEf1Ndee/" target="_blank" class="inline-flex items-center gap-1 bg-zinc-900 px-2 py-1 rounded text-xs text-white border border-zinc-800">
+                        <a href="https://www.facebook.com/share/1BQEf1Ndee/" target="_blank" class="inline-flex items-center gap-1 bg-zinc-900 px-2 py-1 rounded text-white border border-zinc-800">
                             <i class="fab fa-facebook text-blue-400"></i> @thedhruba2x
                         </a>
                     </div>
                     
-                    <div class="relative flex-1 min-w-[160px] max-w-xs">
+                    <div class="relative flex-1 min-w-[150px] max-w-xs">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-500 text-xs">
                             <i class="fas fa-search"></i>
                         </span>
@@ -163,11 +152,10 @@
                     </div>
                 </div>
             </div>
-            <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-600 rounded-xl flex items-center justify-center font-black text-xl text-black shadow-lg shrink-0 m-1">ZG</div>
         </header>
 
         <section class="p-4 bg-zinc-950/40">
-            <div class="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-zinc-400 px-1">
+            <div class="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-zinc-400">
                 <span>All Song Collection</span>
                 <span id="totalSongsCount" class="bg-yellow-400/10 text-yellow-400 px-2 py-0.5 rounded-full border border-yellow-400/20">Loading...</span>
             </div>
@@ -183,78 +171,106 @@
         </main>
     </div>
 
-    <!-- FIXED PORTAL FOR VIDEO PLAYING -->
+    <!-- PROFILE MODAL POPUP (WITH DEVICE ID & NAME) -->
+    <div id="profileModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] hidden items-center justify-center p-4">
+        <div class="bg-zinc-950 border border-zinc-800 p-6 rounded-2xl w-full max-w-sm text-center shadow-2xl relative">
+            <button onclick="toggleProfileModal(false)" class="absolute top-4 right-4 text-zinc-500 hover:text-white">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+            <div class="w-14 h-14 bg-yellow-400/10 text-yellow-400 rounded-full flex items-center justify-center mx-auto mb-3 border border-yellow-400/20 shadow-inner">
+                <i class="fas fa-laptop-mobile text-xl"></i>
+            </div>
+            <h3 class="text-base font-black tracking-wide uppercase text-white">Device Profile</h3>
+            <p class="text-xs text-zinc-400 mt-0.5">Your unique app identities</p>
+            
+            <!-- Device ID -->
+            <div class="mt-4 bg-zinc-900 p-3 rounded-xl border border-zinc-800 flex items-center justify-between gap-2">
+                <div class="text-left">
+                    <span class="block text-[10px] text-zinc-500 uppercase font-bold">Device Token</span>
+                    <span id="displayDeviceId" class="font-mono text-sm font-bold tracking-wider text-yellow-400">zgx9t-000</span>
+                </div>
+                <button onclick="copyDeviceId()" class="text-zinc-400 hover:text-white px-2 py-1 text-xs bg-zinc-800 rounded border border-zinc-700 active:scale-95 transition-all">
+                    <i class="fas fa-copy"></i> Copy
+                </button>
+            </div>
+
+            <!-- Device Name Section -->
+            <div class="mt-2 bg-zinc-900 p-3 rounded-xl border border-zinc-800 text-left">
+                <span class="block text-[10px] text-zinc-500 uppercase font-bold">Detected Device Model</span>
+                <span id="displayDeviceName" class="text-sm font-bold text-zinc-200"><i class="fas fa-spinner animate-spin text-xs"></i> Detecting...</span>
+            </div>
+
+            <p id="copyToast" class="text-[10px] text-green-400 font-bold mt-2 opacity-0 transition-opacity duration-200">ID Copied successfully!</p>
+        </div>
+    </div>
+
+    <!-- FIXED YOUTUBE FRAME PORTAL -->
     <div id="unifiedVideoHolder" class="fixed bottom-14 left-2 w-20 h-11 z-[42] bg-black rounded overflow-hidden border border-zinc-800 hidden pointer-events-none">
         <div id="ytPlayerContainer" class="w-full h-full scale-105"></div>
         <div class="yt-strict-blocker"></div>
     </div>
 
     <!-- BOTTOM MINI PLAYER -->
-    <div id="miniPlayer" class="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-900 p-2 z-40 hidden flex-col gap-1 shadow-2xl select-none">
+    <div id="miniPlayer" class="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-900 p-2 z-40 hidden flex-col gap-1 shadow-2xl">
         <div id="miniTimeline" class="timeline-container w-full">
             <div id="miniTimelineProgress" class="timeline-progress"></div>
             <div id="miniTimelineThumb" class="timeline-thumb"></div>
         </div>
         <div class="flex items-center justify-between gap-2 mt-1">
             <div onclick="openFullScreenPlayer()" class="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
-                <div class="w-20 h-11 shrink-0 bg-zinc-900/10 rounded"></div>
+                <div class="w-16 h-10 shrink-0 bg-zinc-900 rounded"></div>
                 <div class="min-w-0 flex-1">
                     <h4 id="miniPlayerTitle" class="text-xs font-bold truncate text-zinc-100">Song Title</h4>
-                    <p class="text-[9px] text-yellow-400 font-bold uppercase tracking-widest">Tap to view full screen</p>
+                    <p class="text-[9px] text-yellow-400 font-bold uppercase tracking-widest">Tap to expand</p>
                 </div>
             </div>
-            <div class="flex items-center gap-2.5 shrink-0 px-1">
-                <button onclick="playPrevious()" class="text-zinc-400 hover:text-white text-sm p-1"><i class="fas fa-backward-step"></i></button>
-                <button onclick="togglePlayPause()" class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center text-black text-xs shrink-0 font-bold"><i id="miniPlayIcon" class="fas fa-play pl-0.5"></i></button>
-                <button onclick="playNext()" class="text-zinc-400 hover:text-white text-sm p-1"><i class="fas fa-forward-step"></i></button>
-                <button onclick="closeVideo()" class="text-zinc-500 hover:text-red-500 text-sm p-1 ml-0.5"><i class="fas fa-times"></i></button>
+            <div class="flex items-center gap-2 shrink-0 px-1">
+                <button onclick="playPrevious()" class="text-zinc-400 text-xs p-1"><i class="fas fa-backward-step"></i></button>
+                <button onclick="togglePlayPause()" class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center text-black text-xs font-bold"><i id="miniPlayIcon" class="fas fa-play pl-0.5"></i></button>
+                <button onclick="playNext()" class="text-zinc-400 text-xs p-1"><i class="fas fa-forward-step"></i></button>
+                <button onclick="closeVideo()" class="text-zinc-500 text-xs p-1 ml-0.5"><i class="fas fa-times"></i></button>
             </div>
         </div>
     </div>
 
     <!-- FULL SCREEN PLAYER -->
-    <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden touch-none select-none" style="overscroll-behavior: contain;">
-        <div class="p-4 flex justify-between items-center border-b border-zinc-900 bg-gradient-to-b from-black/90 to-transparent z-10">
-            <button onclick="closeFullScreenPlayer()" class="text-zinc-400 hover:text-white text-xl p-1"><i class="fas fa-chevron-down"></i></button>
+    <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden touch-none select-none">
+        <div class="p-4 flex justify-between items-center bg-gradient-to-b from-black/90 to-transparent z-10">
+            <button onclick="closeFullScreenPlayer()" class="text-zinc-400 text-xl p-1"><i class="fas fa-chevron-down"></i></button>
             <div class="text-center px-4 flex-1 min-w-0 mr-6">
                 <span class="text-[10px] font-black tracking-widest text-yellow-400 uppercase block">Now Playing</span>
                 <h3 id="fullPlayerTitle" class="text-sm font-bold truncate text-white">Song Title</h3>
             </div>
         </div>
 
-        <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/20 relative gap-4 overflow-hidden">
+        <div class="flex-1 flex flex-col items-center justify-center p-4 relative gap-4 overflow-hidden">
             <div class="z-10 bg-zinc-900/80 border border-zinc-800 px-3 py-1 rounded-full flex items-center gap-2 text-xs font-bold">
                 <span class="text-zinc-400 uppercase text-[10px]">Disco Effect</span>
-                <button id="discoToggleBtn" onclick="toggleDiscoSystem()" class="bg-yellow-400 text-black px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider">ON</button>
+                <button id="discoToggleBtn" onclick="toggleDiscoSystem()" class="bg-yellow-400 text-black px-2 py-0.5 rounded text-[10px] font-black">ON</button>
             </div>
 
             <div class="w-full max-w-lg flex flex-col gap-3 z-10">
-                <!-- DANCING WAVE EQUALIZER BAR -->
-                <div id="visualizerLightBar" class="w-full h-20 rounded-xl bg-zinc-900 flex flex-col items-center justify-center px-4 relative overflow-hidden shadow-lg border border-zinc-800/50 transition-all duration-200">
-                    <span id="visualizerText" class="text-lg md:text-xl font-black text-white tracking-wider uppercase truncate drop-shadow-[0_2px_6px_rgba(0,0,0,1)] text-center z-10">Jai Zubeen Da</span>
-                    <!-- Wave Container -->
-                    <div id="waveContainer" class="absolute bottom-0 inset-x-0 h-8 flex items-end justify-center gap-1 opacity-40">
-                        <!-- Bars will be generated by JavaScript -->
-                    </div>
+                <div id="visualizerLightBar" class="w-full h-20 rounded-xl bg-zinc-900 flex flex-col items-center justify-center px-4 relative overflow-hidden border border-zinc-800/50">
+                    <span id="visualizerText" class="text-lg font-black text-white tracking-wider uppercase truncate z-10">Jai Zubeen Da</span>
+                    <!-- Yellow Wave container -->
+                    <div id="waveContainer" class="absolute bottom-0 inset-x-0 h-8 flex items-end justify-center gap-1 opacity-60"></div>
                 </div>
-                
-                <div id="fullPlayerAnchor" class="w-full aspect-video bg-zinc-900/20 rounded-xl border border-zinc-900 shadow-2xl relative overflow-hidden">
-                </div>
+                <div id="fullPlayerAnchor" class="w-full aspect-video bg-zinc-900/10 rounded-xl border border-zinc-900 relative"></div>
             </div>
 
             <div class="text-center px-4 w-full max-w-xl z-10">
-                <h2 class="text-xl md:text-3xl font-extrabold tracking-wide text-white uppercase">
+                <h2 class="text-xl font-extrabold tracking-wide text-white uppercase">
                     <span class="text-yellow-400">Only</span>Zubeen<span class="text-yellow-400">Garg</span>
                 </h2>
-                <p class="text-xs md:text-sm font-bold tracking-widest mt-2 text-zinc-400 uppercase"> JAI ZUBEEN DA </p>
+                <p class="text-xs font-bold tracking-widest mt-1.5 text-zinc-400 uppercase">JAI ZUBEEN DA</p>
             </div>
         </div>
 
         <div class="p-6 bg-gradient-to-t from-black via-black/95 to-transparent z-10">
             <div class="flex flex-col gap-2 mb-5">
                 <div class="flex items-center gap-3 w-full">
-                    <button onclick="seekSeconds(-5)" class="text-zinc-400 hover:text-yellow-400 text-sm p-1 shrink-0 active:scale-95 transition-transform">
-                        <i class="fas fa-rotate-left"></i> <span class="text-[10px] font-bold font-mono">5s</span>
+                    <button onclick="seekSeconds(-5)" class="text-zinc-400 text-xs p-1">
+                        <i class="fas fa-rotate-left"></i> <span class="text-[9px] font-mono">5s</span>
                     </button>
                     
                     <div id="fullTimeline" class="timeline-container flex-1">
@@ -262,19 +278,19 @@
                         <div id="fullTimelineThumb" class="timeline-thumb"></div>
                     </div>
                     
-                    <button onclick="seekSeconds(5)" class="text-zinc-400 hover:text-yellow-400 text-sm p-1 shrink-0 active:scale-95 transition-transform">
-                        <span class="text-[10px] font-bold font-mono">5s</span> <i class="fas fa-rotate-right"></i>
+                    <button onclick="seekSeconds(5)" class="text-zinc-400 text-xs p-1">
+                        <span class="text-[9px] font-mono">5s</span> <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
-                <div class="flex justify-between text-[11px] font-mono font-bold text-zinc-400 px-8">
+                <div class="flex justify-between text-[10px] font-mono font-bold text-zinc-400 px-6">
                     <span id="currentTimeLabel">0:00</span>
                     <span id="totalTimeLabel">0:00</span>
                 </div>
             </div>
             <div class="flex items-center justify-center gap-8 mb-2">
-                <button onclick="playPrevious()" class="text-zinc-400 hover:text-white text-xl"><i class="fas fa-backward-step"></i></button>
-                <button onclick="togglePlayPause()" class="w-16 h-16 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center text-black text-2xl shadow-lg"><i id="fullPlayIcon" class="fas fa-pause"></i></button>
-                <button onclick="playNext()" class="text-zinc-400 hover:text-white text-xl"><i class="fas fa-forward-step"></i></button>
+                <button onclick="playPrevious()" class="text-zinc-400 text-lg"><i class="fas fa-backward-step"></i></button>
+                <button onclick="togglePlayPause()" class="w-14 h-14 bg-yellow-400 rounded-full flex items-center justify-center text-black text-xl shadow-lg"><i id="fullPlayIcon" class="fas fa-pause"></i></button>
+                <button onclick="playNext()" class="text-zinc-400 text-lg"><i class="fas fa-forward-step"></i></button>
             </div>
         </div>
     </div>
@@ -293,59 +309,125 @@
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        let allSongs = [];
-        let filteredSongs = [];
-        let currentSongIndex = -1;
-        let ytPlayer = null;
-        let timelineInterval = null;
-        let textRotationInterval = null;
-        let discoControlInterval = null;
-        let waveAnimationInterval = null;
-        let isDraggingTimeline = false;
-        let isPlayerFullscreen = false;
-        let isDiscoEnabled = true; 
-        let textRotationIndex = 0;
+        let allSongs = [], filteredSongs = [], currentSongIndex = -1;
+        let ytPlayer = null, timelineInterval = null, textRotationInterval = null;
+        let discoControlInterval = null, waveAnimationInterval = null;
+        let isDraggingTimeline = false, isPlayerFullscreen = false, isDiscoEnabled = true, textRotationIndex = 0;
 
-        // Create Equalizer Bars HTML
+        // Generate Yellow Wave Elements
         const waveContainer = document.getElementById('waveContainer');
-        const totalBars = 30;
-        for (let i = 0; i < totalBars; i++) {
+        for (let i = 0; i < 24; i++) {
             const bar = document.createElement('div');
             bar.className = 'wave-bar';
             waveContainer.appendChild(bar);
         }
 
+        // --- DEVICE MODEL & ID DETECTION ENGINE ---
+        function getDeviceModelName() {
+            const ua = navigator.userAgent;
+            if (/like Mac OS X/.test(ua)) {
+                if (/iPad/.test(ua)) return "Apple iPad";
+                if (/iPhone/.test(ua)) return "Apple iPhone";
+                return "Macintosh";
+            }
+            if (/Android/.test(ua)) {
+                const match = ua.match(/Android\s([0-9\.]+);\s([^;)]+)/);
+                return match ? match[2] : "Android Mobile";
+            }
+            if (/Windows NT/.test(ua)) return "Windows PC";
+            if (/Linux/.test(ua)) return "Linux System";
+            return "Web Browser Client";
+        }
+
+        function initDeviceID() {
+            let localId = localStorage.getItem('zg_device_id');
+            const dName = getDeviceModelName();
+            document.getElementById('displayDeviceName').innerHTML = `<i class="fas fa-mobile-android text-yellow-400 mr-1"></i> ${dName}`;
+            
+            if (!localId) {
+                database.ref('system/device_counter').transaction((count) => {
+                    return (count || 0) + 1;
+                }, (error, committed, snapshot) => {
+                    if (committed) {
+                        let formatted = String(snapshot.val()).padStart(3, '0');
+                        localId = `zgx9t-${formatted}`;
+                        localStorage.setItem('zg_device_id', localId);
+                        document.getElementById('displayDeviceId').innerText = localId;
+                        
+                        // Sync with Firebase Database for Admin Tracking
+                        database.ref('registered_devices/' + localId).set({
+                            deviceId: localId,
+                            deviceModel: dName,
+                            timestamp: Date.now()
+                        });
+                    } else {
+                        let rand = Math.floor(100 + Math.random() * 900);
+                        localId = `zgx9t-${rand}`;
+                        localStorage.setItem('zg_device_id', localId);
+                        document.getElementById('displayDeviceId').innerText = localId;
+                    }
+                });
+            } else {
+                document.getElementById('displayDeviceId').innerText = localId;
+            }
+        }
+
+        // Fixes Instagram / FB audio block: First user tap globally unlocks HTML5 engine
+        function fixInAppBrowserAudio() {
+            const contextUnlocker = () => {
+                if(ytPlayer && typeof ytPlayer.playVideo === 'function') {
+                    const state = ytPlayer.getPlayerState();
+                    if(state !== YT.PlayerState.PLAYING && currentSongIndex !== -1) {
+                        ytPlayer.playVideo();
+                    }
+                }
+                document.removeEventListener('click', contextUnlocker);
+                document.removeEventListener('touchstart', contextUnlocker);
+            };
+            document.addEventListener('click', contextUnlocker);
+            document.addEventListener('touchstart', contextUnlocker);
+        }
+
+        function toggleProfileModal(show) {
+            const modal = document.getElementById('profileModal');
+            modal.className = show ? "fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4" : "hidden";
+        }
+
+        function copyDeviceId() {
+            navigator.clipboard.writeText(document.getElementById('displayDeviceId').innerText).then(() => {
+                const toast = document.getElementById('copyToast');
+                toast.style.opacity = '1';
+                setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+            });
+        }
+
         function getYoutubeId(url) {
             if (!url) return '';
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
+            const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
             return (match && match[2].length === 11) ? match[2] : '';
         }
 
         function extractSongs(obj) {
-            let songsList = [];
-            function recurse(current) {
-                if (!current || typeof current !== 'object') return;
-                if (current.url || current.videoUrl || current.link || current.songUrl) {
-                    songsList.push({
-                        title: current.title || current.name || current.songName || 'Untitled Song',
-                        url: current.url || current.videoUrl || current.link || current.songUrl
+            let res = [];
+            function recurse(curr) {
+                if (!curr || typeof curr !== 'object') return;
+                if (curr.url || curr.videoUrl || curr.link || curr.songUrl) {
+                    res.push({
+                        title: curr.title || curr.name || curr.songName || 'Untitled Track',
+                        url: curr.url || curr.videoUrl || curr.link || curr.songUrl
                     });
                     return;
                 }
-                Object.keys(current).forEach(key => recurse(current[key]));
+                Object.keys(curr).forEach(k => recurse(curr[k]));
             }
             recurse(obj);
-            return songsList;
+            return res;
         }
 
         function loadSongsFromDatabase() {
-            database.ref('/').on('value', (snapshot) => {
-                const data = snapshot.val();
-                allSongs = extractSongs(data);
-                if(allSongs.length === 0) {
-                    allSongs = [{ title: "Sample Song", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }];
-                }
+            database.ref('/').on('value', (snap) => {
+                allSongs = extractSongs(snap.val());
+                if(allSongs.length === 0) allSongs = [{ title: "Sample", url: "https://youtu.be/dQw4w9WgXcQ" }];
                 filteredSongs = [...allSongs];
                 document.getElementById('totalSongsCount').innerText = `${allSongs.length} Songs`;
                 renderSongsList();
@@ -355,106 +437,62 @@
 
         function renderSongsList() {
             const container = document.getElementById('songsContainer');
-            container.innerHTML = '';
-            filteredSongs.forEach((song) => {
-                const globalIndex = allSongs.indexOf(song);
-                const ytId = getYoutubeId(song.url);
-                const thumbUrl = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
-
-                const card = document.createElement('div');
-                card.className = "bg-zinc-900/60 hover:bg-zinc-800 border border-zinc-900 rounded-lg p-2 flex items-center gap-3 cursor-pointer transition-all active:scale-[0.99] group min-w-0";
-                card.onclick = () => playSong(globalIndex);
-
-                card.innerHTML = `
-                    <div class="w-20 h-12 bg-black rounded overflow-hidden shrink-0 border border-zinc-800 relative">
-                        <img src="${thumbUrl}" alt="thumbnail" class="w-full h-full object-cover" loading="lazy">
-                    </div>
-                    <div class="min-w-0 flex-1">
-                        <h3 class="text-sm font-bold text-zinc-100 group-hover:text-yellow-400 break-words line-clamp-2">${song.title}</h3>
+            container.innerHTML = filteredSongs.map(song => {
+                const idx = allSongs.indexOf(song);
+                const thumb = `https://img.youtube.com/vi/${getYoutubeId(song.url)}/mqdefault.jpg`;
+                return `
+                    <div onclick="playSong(${idx})" class="bg-zinc-900/60 hover:bg-zinc-900 border border-zinc-900 rounded-lg p-2 flex items-center gap-3 cursor-pointer active:scale-[0.99] transition-transform">
+                        <img src="${thumb}" class="w-16 h-10 object-cover rounded border border-zinc-800 shrink-0" loading="lazy">
+                        <h3 class="text-xs font-bold text-zinc-100 truncate flex-1">${song.title}</h3>
                     </div>
                 `;
-                container.appendChild(card);
-            });
+            }).join('');
         }
 
         function refreshVideoFramePosition() {
             const holder = document.getElementById('unifiedVideoHolder');
             holder.classList.remove('hidden');
             if(isPlayerFullscreen) {
-                const anchor = document.getElementById('fullPlayerAnchor');
-                const bounds = anchor.getBoundingClientRect();
-                holder.style.top = `${bounds.top}px`;
-                holder.style.left = `${bounds.left}px`;
-                holder.style.width = `${bounds.width}px`;
-                holder.style.height = `${bounds.height}px`;
-                holder.style.zIndex = "51";
-                holder.style.borderRadius = "12px";
+                const bounds = document.getElementById('fullPlayerAnchor').getBoundingClientRect();
+                Object.assign(holder.style, {
+                    top: `${bounds.top}px`, left: `${bounds.left}px`,
+                    width: `${bounds.width}px`, height: `${bounds.height}px`,
+                    zIndex: "51", borderRadius: "12px"
+                });
             } else {
-                holder.style.bottom = "8px";
-                holder.style.left = "8px";
-                holder.style.top = "auto";
-                holder.style.width = "80px";
-                holder.style.height = "44px";
-                holder.style.zIndex = "41";
-                holder.style.borderRadius = "4px";
+                Object.assign(holder.style, {
+                    bottom: "8px", left: "8px", top: "auto",
+                    width: "80px", height: "44px", zIndex: "41", borderRadius: "4px"
+                });
             }
         }
-
         window.addEventListener('resize', refreshVideoFramePosition);
 
         function playSong(index, startAtSeconds = 0) {
             if (index < 0 || index >= allSongs.length) return;
-            
-            const isSameSong = (currentSongIndex === index);
+            const isSame = (currentSongIndex === index);
             currentSongIndex = index;
-            const song = allSongs[index];
-            const ytId = getYoutubeId(song.url);
+            const yId = getYoutubeId(allSongs[index].url);
 
-            if(!ytId) return alert("Invalid YouTube URL!");
-
-            document.getElementById('fullPlayerTitle').innerText = song.title;
-            document.getElementById('miniPlayerTitle').innerText = song.title;
-            
-            document.getElementById('miniPlayer').classList.remove('hidden');
-            document.getElementById('miniPlayer').classList.add('flex');
+            document.getElementById('fullPlayerTitle').innerText = allSongs[index].title;
+            document.getElementById('miniPlayerTitle').innerText = allSongs[index].title;
+            document.getElementById('miniPlayer').className = "fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-900 p-2 z-40 flex flex-col gap-1 shadow-2xl";
 
             localStorage.setItem('zg_last_index', currentSongIndex);
-
-            const holder = document.getElementById('unifiedVideoHolder');
-            holder.classList.remove('hidden');
             refreshVideoFramePosition();
 
             if (ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
-                if (!isSameSong) {
-                    ytPlayer.loadVideoById({
-                        videoId: ytId,
-                        startSeconds: startAtSeconds
-                    });
-                }
+                if (!isSame) ytPlayer.loadVideoById({ videoId: yId, startSeconds: startAtSeconds });
             } else {
                 document.getElementById('ytPlayerContainer').innerHTML = '';
-                
                 ytPlayer = new YT.Player('ytPlayerContainer', {
-                    height: '100%',
-                    width: '100%',
-                    videoId: ytId,
-                    playerVars: { 
-                        'controls': 0, 
-                        'disablekb': 1, 
-                        'rel': 0, 
-                        'modestbranding': 1, 
-                        'iv_load_policy': 3, 
-                        'fs': 0, 
-                        'playsinline': 1,
-                        'showinfo': 0,
-                        'autohide': 1
-                    },
+                    height: '100%', width: '100%', videoId: yId,
+                    playerVars: { 'controls': 0, 'disablekb': 1, 'rel': 0, 'playsinline': 1, 'autoplay': 1 },
                     events: {
-                        'onReady': (e) => { 
+                        'onReady': (e) => {
                             if(startAtSeconds > 0) e.target.seekTo(startAtSeconds, true);
-                            e.target.playVideo(); 
-                            refreshVideoFramePosition();
-                            startTimelineSync(); 
+                            e.target.playVideo();
+                            startTimelineSync();
                         },
                         'onStateChange': onPlayerStateChange
                     }
@@ -462,235 +500,152 @@
             }
         }
 
-        function onPlayerStateChange(event) {
-            const fIcon = document.getElementById('fullPlayIcon');
-            const mIcon = document.getElementById('miniPlayIcon');
-
-            if (event.data == YT.PlayerState.PLAYING) {
-                fIcon.className = "fas fa-pause";
-                mIcon.className = "fas fa-pause";
-                startTimelineSync();
-                runDynamicDiscoEngine(true);
-                animateWave(true);
+        function onPlayerStateChange(ev) {
+            const f = document.getElementById('fullPlayIcon'), m = document.getElementById('miniPlayIcon');
+            if (ev.data == YT.PlayerState.PLAYING) {
+                f.className = "fas fa-pause"; m.className = "fas fa-pause";
+                startTimelineSync(); runDynamicDiscoEngine(true); animateWave(true);
             } else {
-                fIcon.className = "fas fa-play pl-1";
-                mIcon.className = "fas fa-play pl-0.5";
-                clearInterval(timelineInterval);
-                runDynamicDiscoEngine(false);
-                animateWave(false);
+                f.className = "fas fa-play pl-1"; m.className = "fas fa-play pl-0.5";
+                clearInterval(timelineInterval); runDynamicDiscoEngine(false); animateWave(false);
             }
-            if (event.data == YT.PlayerState.ENDED) playNext();
+            if (ev.data == YT.PlayerState.ENDED) playNext();
         }
 
         function toggleDiscoSystem() {
             isDiscoEnabled = !isDiscoEnabled;
             const btn = document.getElementById('discoToggleBtn');
-            if(isDiscoEnabled) {
-                btn.innerText = "ON";
-                btn.className = "bg-yellow-400 text-black px-2 py-0.5 rounded text-[10px] font-black";
-                if(ytPlayer && ytPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
-                    runDynamicDiscoEngine(true);
-                    animateWave(true);
-                }
-            } else {
-                btn.innerText = "OFF";
-                btn.className = "bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded text-[10px] font-black";
-                runDynamicDiscoEngine(false);
-                animateWave(false);
-            }
+            btn.innerText = isDiscoEnabled ? "ON" : "OFF";
+            btn.className = isDiscoEnabled ? "bg-yellow-400 text-black px-2 py-0.5 rounded text-[10px] font-black" : "bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded text-[10px] font-black";
+            const playing = ytPlayer && ytPlayer.getPlayerState() === YT.PlayerState.PLAYING;
+            runDynamicDiscoEngine(playing); animateWave(playing);
         }
 
         function animateWave(start) {
             clearInterval(waveAnimationInterval);
             const bars = document.querySelectorAll('.wave-bar');
-            
-            if (!start) {
-                bars.forEach(bar => bar.style.height = '5px');
-                return;
+            if (!start || !isDiscoEnabled) {
+                bars.forEach(b => b.style.height = '4px'); return;
             }
-
             waveAnimationInterval = setInterval(() => {
-                bars.forEach(bar => {
-                    // Generates a dynamic random height for the equalizer look
-                    const randomHeight = Math.floor(Math.random() * 28) + 4;
-                    bar.style.height = `${randomHeight}px`;
-                });
-            }, 100);
+                bars.forEach(b => { b.style.height = `${Math.floor(Math.random() * 26) + 4}px`; });
+            }, 80);
         }
 
-        function runDynamicDiscoEngine(shouldRun) {
-            clearInterval(textRotationInterval);
-            clearInterval(discoControlInterval);
-            const lightBar = document.getElementById('visualizerLightBar');
-            const textBox = document.getElementById('visualizerText');
-
-            if (!shouldRun || !isDiscoEnabled) {
-                lightBar.classList.remove('disco-active');
-                lightBar.className = "w-full h-20 rounded-xl bg-zinc-900 flex flex-col items-center justify-center px-4 border border-zinc-800/50";
-                return;
+        function runDynamicDiscoEngine(run) {
+            clearInterval(textRotationInterval); clearInterval(discoControlInterval);
+            const bar = document.getElementById('visualizerLightBar'), txt = document.getElementById('visualizerText');
+            if (!run || !isDiscoEnabled) {
+                bar.classList.remove('disco-active'); return;
             }
-
-            lightBar.classList.add('disco-active');
-
-            textRotationIndex = 0;
+            bar.classList.add('disco-active');
             textRotationInterval = setInterval(() => {
-                if(!allSongs[currentSongIndex]) return;
-                const songTitle = allSongs[currentSongIndex].title;
-                const phrases = ["Joy Zubeen Da", "#JusticeForZubeenGarg", songTitle, "Web By Dhruba"];
-                
+                const phrases = ["Joy Zubeen Da", "#JusticeForZubeenGarg", allSongs[currentSongIndex]?.title, "ZGX9T App"];
                 textRotationIndex = (textRotationIndex + 1) % phrases.length;
-                
-                textBox.style.opacity = '0';
-                setTimeout(() => {
-                    textBox.innerText = phrases[textRotationIndex];
-                    textBox.style.opacity = '1';
-                }, 150);
-            }, 2600);
+                txt.style.opacity = '0';
+                setTimeout(() => { txt.innerText = phrases[textRotationIndex]; txt.style.opacity = '1'; }, 150);
+            }, 2500);
 
             discoControlInterval = setInterval(() => {
-                const waveFactor = Math.random();
-                let velocity = "0.22s";
-
-                if (waveFactor > 0.80) velocity = "0.05s";
-                else if (waveFactor > 0.50) velocity = "0.12s";
-                else if (waveFactor > 0.20) velocity = "0.35s";
-                else velocity = "0.75s";
-
-                lightBar.style.setProperty('--disco-speed', velocity);
-            }, 400);
+                let v = Math.random() > 0.6 ? "0.06s" : (Math.random() > 0.3 ? "0.15s" : "0.4s");
+                bar.style.setProperty('--disco-speed', v);
+            }, 300);
         }
 
         function startTimelineSync() {
             clearInterval(timelineInterval);
             timelineInterval = setInterval(() => {
-                if (ytPlayer && ytPlayer.getCurrentTime && !isDraggingTimeline) {
-                    try {
-                        const current = ytPlayer.getCurrentTime();
-                        const duration = ytPlayer.getDuration() || 0;
-                        const pct = duration > 0 ? (current / duration) * 100 : 0;
-                        
-                        document.getElementById('fullTimelineProgress').style.width = `${pct}%`;
-                        document.getElementById('fullTimelineThumb').style.left = `${pct}%`;
-                        document.getElementById('miniTimelineProgress').style.width = `${pct}%`;
-                        document.getElementById('miniTimelineThumb').style.left = `${pct}%`;
-
-                        document.getElementById('currentTimeLabel').innerText = formatTime(current);
-                        document.getElementById('totalTimeLabel').innerText = formatTime(duration);
-
-                        localStorage.setItem('zg_last_time', current);
-                    } catch(err) {}
+                if (ytPlayer?.getCurrentTime && !isDraggingTimeline) {
+                    const curr = ytPlayer.getCurrentTime(), dur = ytPlayer.getDuration() || 0;
+                    const pct = dur > 0 ? (curr / dur) * 100 : 0;
+                    document.getElementById('fullTimelineProgress').style.width = `${pct}%`;
+                    document.getElementById('fullTimelineThumb').style.left = `${pct}%`;
+                    document.getElementById('miniTimelineProgress').style.width = `${pct}%`;
+                    document.getElementById('miniTimelineThumb').style.left = `${pct}%`;
+                    document.getElementById('currentTimeLabel').innerText = formatTime(curr);
+                    document.getElementById('totalTimeLabel').innerText = formatTime(dur);
+                    localStorage.setItem('zg_last_time', curr);
                 }
             }, 250);
         }
 
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        function formatTime(s) {
+            return `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
         }
 
-        function seekSeconds(seconds) {
-            if (ytPlayer && typeof ytPlayer.getCurrentTime === 'function' && typeof ytPlayer.getDuration === 'function') {
-                const currentTime = ytPlayer.getCurrentTime();
-                const duration = ytPlayer.getDuration() || 0;
-                let targetTime = currentTime + seconds;
-                
-                if (targetTime < 0) targetTime = 0;
-                if (targetTime > duration) targetTime = duration;
-                
-                ytPlayer.seekTo(targetTime, true);
-                
-                const pct = duration > 0 ? (targetTime / duration) * 100 : 0;
-                document.getElementById('fullTimelineProgress').style.width = `${pct}%`;
-                document.getElementById('fullTimelineThumb').style.left = `${pct}%`;
-                document.getElementById('currentTimeLabel').innerText = formatTime(targetTime);
+        function seekSeconds(s) {
+            if (ytPlayer?.getCurrentTime) {
+                let target = ytPlayer.getCurrentTime() + s;
+                ytPlayer.seekTo(Math.max(0, Math.min(target, ytPlayer.getDuration() || 0)), true);
             }
         }
 
-        function attachTimelineEvents(containerId, progressId, thumbId) {
-            const container = document.getElementById(containerId);
-            function handleInteraction(e) {
-                if (!ytPlayer || !ytPlayer.getDuration) return;
-                const rect = container.getBoundingClientRect();
-                let clickX = (e.clientX || e.touches[0].clientX) - rect.left;
-                clickX = Math.max(0, Math.min(clickX, rect.width));
-                const pct = clickX / rect.width;
-                const targetTime = pct * (ytPlayer.getDuration() || 0);
-                document.getElementById(progressId).style.width = `${pct * 100}%`;
-                document.getElementById(thumbId).style.left = `${pct * 100}%`;
-                return targetTime;
+        function attachTimelineEvents(contId, progId, thId) {
+            const el = document.getElementById(contId);
+            function handle(e) {
+                const r = el.getBoundingClientRect();
+                let x = Math.max(0, Math.min((e.clientX || e.touches[0].clientX) - r.left, r.width));
+                const pct = x / r.width;
+                document.getElementById(progId).style.width = `${pct * 100}%`;
+                document.getElementById(thId).style.left = `${pct * 100}%`;
+                return pct * (ytPlayer.getDuration() || 0);
             }
-            container.addEventListener('mousedown', (e) => {
-                isDraggingTimeline = true; let t = handleInteraction(e);
-                function move(me) { t = handleInteraction(me); }
-                function up() { isDraggingTimeline = false; ytPlayer.seekTo(t, true); window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); }
-                window.addEventListener('mousemove', move); window.addEventListener('mouseup', up);
-            });
-            container.addEventListener('touchstart', (e) => {
-                isDraggingTimeline = true; let t = handleInteraction(e);
-                function move(me) { t = handleInteraction(me); }
-                function up() { isDraggingTimeline = false; ytPlayer.seekTo(t, true); window.removeEventListener('touchmove', move); window.removeEventListener('touchend', up); }
-                window.addEventListener('touchmove', move); window.addEventListener('touchend', up);
-            });
+            const listen = (startEv, moveEv, endEv) => {
+                el.addEventListener(startEv, (e) => {
+                    isDraggingTimeline = true; let t = handle(e);
+                    const mv = (me) => { t = handle(me); };
+                    const up = () => { isDraggingTimeline = false; ytPlayer.seekTo(t, true); window.removeEventListener(moveEv, mv); window.removeEventListener(endEv, up); };
+                    window.addEventListener(moveEv, mv); window.addEventListener(endEv, up);
+                });
+            };
+            listen('mousedown', 'mousemove', 'mouseup'); listen('touchstart', 'touchmove', 'touchend');
         }
         attachTimelineEvents('fullTimeline', 'fullTimelineProgress', 'fullTimelineThumb');
         attachTimelineEvents('miniTimeline', 'miniTimelineProgress', 'miniTimelineThumb');
 
         function openFullScreenPlayer() {
-            if(!ytPlayer) return;
-            isPlayerFullscreen = true;
-            document.body.classList.add('fullscreen-lock');
-            document.getElementById('fullScreenPlayer').classList.remove('hidden');
-            document.getElementById('fullScreenPlayer').classList.add('flex');
+            isPlayerFullscreen = true; document.body.classList.add('fullscreen-lock');
+            document.getElementById('fullScreenPlayer').className = "fixed inset-0 bg-black z-50 flex flex-col justify-between overflow-hidden touch-none select-none";
             refreshVideoFramePosition();
         }
 
         function closeFullScreenPlayer() {
-            if(!ytPlayer) return;
-            isPlayerFullscreen = false;
-            document.body.classList.remove('fullscreen-lock');
-            document.getElementById('fullScreenPlayer').classList.add('hidden');
-            document.getElementById('fullScreenPlayer').classList.remove('flex');
+            isPlayerFullscreen = false; document.body.classList.remove('fullscreen-lock');
+            document.getElementById('fullScreenPlayer').className = "hidden";
             refreshVideoFramePosition();
         }
 
-        function togglePlayPause() {
-            if(!ytPlayer || typeof ytPlayer.getPlayerState !== 'function') return;
-            const state = ytPlayer.getPlayerState();
-            state === YT.PlayerState.PLAYING ? ytPlayer.pauseVideo() : ytPlayer.playVideo();
-        }
-
-        function playNext() { if(currentSongIndex < allSongs.length - 1) playSong(currentSongIndex + 1); else playSong(0); }
-        function playPrevious() { if(currentSongIndex > 0) playSong(currentSongIndex - 1); else playSong(allSongs.length - 1); }
+        function togglePlayPause() { ytPlayer?.getPlayerState() === YT.PlayerState.PLAYING ? ytPlayer.pauseVideo() : ytPlayer.playVideo(); }
+        function playNext() { playSong((currentSongIndex < allSongs.length - 1) ? currentSongIndex + 1 : 0); }
+        function playPrevious() { playSong((currentSongIndex > 0) ? currentSongIndex - 1 : allSongs.length - 1); }
 
         function closeVideo() {
             clearInterval(timelineInterval); clearInterval(textRotationInterval); clearInterval(discoControlInterval); clearInterval(waveAnimationInterval);
-            if(ytPlayer) { try { ytPlayer.stopVideo(); } catch(e){} }
+            try { ytPlayer?.stopVideo(); } catch(e){}
             document.body.classList.remove('fullscreen-lock');
-            document.getElementById('miniPlayer').classList.add('hidden');
-            document.getElementById('fullScreenPlayer').classList.add('hidden');
-            document.getElementById('unifiedVideoHolder').classList.add('hidden');
+            document.getElementById('miniPlayer').className = "hidden";
+            document.getElementById('fullScreenPlayer').className = "hidden";
+            document.getElementById('unifiedVideoHolder').className = "hidden";
             isPlayerFullscreen = false; currentSongIndex = -1;
             localStorage.removeItem('zg_last_index'); localStorage.removeItem('zg_last_time');
         }
 
         function recoverSavedSession() {
-            const savedIndex = localStorage.getItem('zg_last_index');
-            const savedTime = localStorage.getItem('zg_last_time');
-            if (savedIndex !== null) {
-                const index = parseInt(savedIndex);
-                const startSecs = savedTime ? parseFloat(savedTime) : 0;
-                if(index >= 0 && index < allSongs.length) playSong(index, startSecs);
-            }
+            const idx = localStorage.getItem('zg_last_index'), tm = localStorage.getItem('zg_last_time');
+            if (idx !== null) playSong(parseInt(idx), tm ? parseFloat(tm) : 0);
         }
 
         document.getElementById('searchInput').addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase().trim();
-            filteredSongs = query === '' ? [...allSongs] : allSongs.filter(s => s.title.toLowerCase().includes(query));
+            const q = e.target.value.toLowerCase().trim();
+            filteredSongs = q === '' ? [...allSongs] : allSongs.filter(s => s.title.toLowerCase().includes(q));
             renderSongsList();
         });
 
-        window.onload = loadSongsFromDatabase;
+        window.onload = function() {
+            initDeviceID();
+            loadSongsFromDatabase();
+            fixInAppBrowserAudio();
+        };
     </script>
 </body>
 </html>

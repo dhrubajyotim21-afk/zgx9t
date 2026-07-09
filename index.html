@@ -15,7 +15,7 @@
     
     <meta name="keywords" content="ZGX9T,zgx9t,zg,zgx,ZGX, Dhruba, Zubeen Da, Zubeen garg song, zubeen, zubeen song, assamese song, zubeen garg">
     
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlpHIFg5VCAtIE9OTFkgWlVCRUVOIFNPTkciLAogICJzaG9ydF9uYW1lIjogIlpHIFg5VCIsCiAgInSTYXJ0X3VybCI6ICIuIiwKICAmZGlzcGxheSI6ICJzdGFuZGFsb25lIiwK  ImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIKfQ==">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlpHIFg5VCAtIE9OTFkgWlVCRUVOIFNPTkciLAogICJzaG9ydF9uYW1lIjogIlpHIFg5VCIsCiAgInSTYXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwK  ImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIKfQ==">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -46,7 +46,7 @@
             overflow-y: auto !important;
         }
         
-        /* Ultra Sleek Slider - আগৰ দৰে ৰখা হৈছে */
+        /* Ultra Sleek Slider */
         .timeline-container {
             position: relative;
             width: 100%;
@@ -90,11 +90,11 @@
             z-index: 40; background: transparent;
         }
 
-        /* Smooth Fluid Disco Glow - এতিয়া ব্যাকগ্ৰাউণ্ড গ্লো হ’ব কিন্তু ধপধপনি অবিহনে মিহিকৈ */
+        /* Smooth Fluid Disco Glow (No lagging loop) */
         @keyframes dynamicDiscoGlow {
             0% { background-color: #ff0000; box-shadow: 0 0 20px rgba(255,0,0,0.6); }
             20% { background-color: #ff00ff; box-shadow: 0 0 25px rgba(255,0,255,0.6); }
-            40% { background-color: #0000ff; box-shadow: 0 0 20px rgba(0,0,28,0.6); }
+            40% { background-color: #0000ff; box-shadow: 0 0 20px rgba(0,0,255,0.6); }
             60% { background-color: #00ffff; box-shadow: 0 0 30px rgba(0,255,255,0.6); }
             80% { background-color: #00ff00; box-shadow: 0 0 20px rgba(0,255,0,0.6); }
             100% { background-color: #ffff00; box-shadow: 0 0 30px rgba(255,255,0,0.6); }
@@ -104,12 +104,12 @@
         }
         .fullscreen-lock { overflow: hidden !important; touch-action: none !important; }
         
-        /* Yellow Wave Bars - আগৰ দৰে মোটা আৰু হালধীয়া কৰা হ’ল */
+        /* Yellow Wave Bars */
         .wave-bar {
-            width: 4px;
-            height: 5px;
+            width: 3px;
+            height: 4px;
             background: linear-gradient(to top, #eab308, #fef08a);
-            border-radius: 2px;
+            border-radius: 1px;
             transition: height 0.1s ease-in-out;
         }
     </style>
@@ -209,7 +209,7 @@
         <div class="yt-strict-blocker"></div>
     </div>
 
-    <!-- BOTTOM MINI PLAYER - আগৰ ডাঙৰ সাইজটো ৰখা হৈছে -->
+    <!-- BOTTOM MINI PLAYER -->
     <div id="miniPlayer" class="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-900 p-2 z-40 hidden flex-col gap-1 shadow-2xl">
         <div id="miniTimeline" class="timeline-container w-full">
             <div id="miniTimelineProgress" class="timeline-progress"></div>
@@ -220,7 +220,7 @@
                 <div class="w-16 h-10 shrink-0 bg-zinc-900 rounded"></div>
                 <div class="min-w-0 flex-1">
                     <h4 id="miniPlayerTitle" class="text-xs font-bold truncate text-zinc-100">Song Title</h4>
-                    <p class="text-[9px] text-yellow-400 font-bold uppercase tracking-widest">Tap to expand</p>
+                    <p class="text-[9px] text-yellow-400 font-bold uppercase tracking-widest">Tap to view full screen</p>
                 </div>
             </div>
             <div class="flex items-center gap-2 shrink-0 px-1">
@@ -249,11 +249,11 @@
             </div>
 
             <div class="w-full max-w-lg flex flex-col gap-3 z-10">
-                <!-- Visualizer Light Bar - আগৰ দৰে ডাঙৰ কৰা হৈছে আৰু Wave তলত থাকিব -->
-                <div id="visualizerLightBar" class="w-full h-20 rounded-xl bg-zinc-900 flex flex-col items-center justify-center px-4 relative overflow-hidden border border-zinc-800/50">
-                    <span id="visualizerText" class="text-lg font-black text-white tracking-wider uppercase truncate z-10">Jai Zubeen Da</span>
-                    <!-- Yellow Wave container - আগৰ দৰে তলত ফুল হালধীয়া ৱেভ -->
-                    <div id="waveContainer" class="absolute bottom-0 inset-x-0 h-8 flex items-end justify-center gap-1 opacity-60"></div>
+                <!-- Visualizer Light Bar (Optimized Thin Sleek Look) -->
+                <div id="visualizerLightBar" class="w-full h-14 rounded-xl bg-zinc-900 flex flex-col items-center justify-center px-4 relative overflow-hidden border border-zinc-800/50">
+                    <span id="visualizerText" class="text-base font-black text-white tracking-wider uppercase truncate z-10">Jai Zubeen Da</span>
+                    <!-- Yellow Wave container underneath video/text -->
+                    <div id="waveContainer" class="absolute bottom-0 inset-x-0 h-6 flex items-end justify-center gap-1 opacity-50"></div>
                 </div>
                 <div id="fullPlayerAnchor" class="w-full aspect-video bg-zinc-900/10 rounded-xl border border-zinc-900 relative"></div>
             </div>
@@ -316,12 +316,13 @@
 
         // Generate Yellow Wave Elements
         const waveContainer = document.getElementById('waveContainer');
-        for (let i = 0; i < 24; i++) {
+        for (let i = 0; i < 35; i++) {
             const bar = document.createElement('div');
             bar.className = 'wave-bar';
             waveContainer.appendChild(bar);
         }
 
+        // Fast Device Detection
         function getDeviceModelName() {
             const ua = navigator.userAgent;
             if (/like Mac OS X/.test(ua)) {
@@ -338,6 +339,7 @@
             return "Web Browser Client";
         }
 
+        // Initialize unique Device ID safely synced with Firebase Realtime Database
         function initDeviceID() {
             let localId = localStorage.getItem('zg_device_id');
             const dName = getDeviceModelName();
@@ -353,6 +355,7 @@
                         localStorage.setItem('zg_device_id', localId);
                         document.getElementById('displayDeviceId').innerText = localId;
                         
+                        // Push to Admin Console logs inside DB
                         database.ref('registered_devices/' + localId).set({
                             deviceId: localId,
                             deviceModel: dName,
@@ -370,6 +373,7 @@
             }
         }
 
+        // Critical Force Play fix for Facebook/Instagram In-App Browsers
         function fixInAppBrowserAudio() {
             const contextUnlocker = () => {
                 if(ytPlayer && typeof ytPlayer.playVideo === 'function') {
@@ -438,9 +442,9 @@
                 const idx = allSongs.indexOf(song);
                 const thumb = `https://img.youtube.com/vi/${getYoutubeId(song.url)}/mqdefault.jpg`;
                 return `
-                    <div onclick="playSong(${idx})" class="bg-zinc-900/60 hover:bg-zinc-900 border border-zinc-900 rounded-lg p-2 flex items-center gap-3 cursor-pointer active:scale-[0.99] transition-transform">
-                        <img src="${thumb}" class="w-16 h-10 object-cover rounded border border-zinc-800 shrink-0" loading="lazy">
-                        <h3 class="text-xs font-bold text-zinc-100 truncate flex-1">${song.title}</h3>
+                    <div onclick="playSong(${idx})" class="bg-zinc-900/60 hover:bg-zinc-800 border border-zinc-900 rounded-lg p-2 flex items-center gap-3 cursor-pointer active:scale-[0.99] transition-transform">
+                        <img src="${thumb}" class="w-20 h-12 object-cover rounded border border-zinc-800 shrink-0" loading="lazy">
+                        <h3 class="text-sm font-bold text-zinc-100 truncate flex-1">${song.title}</h3>
                     </div>
                 `;
             }).join('');
@@ -525,7 +529,7 @@
                 bars.forEach(b => b.style.height = '4px'); return;
             }
             waveAnimationInterval = setInterval(() => {
-                bars.forEach(b => { b.style.height = `${Math.floor(Math.random() * 26) + 4}px`; });
+                bars.forEach(b => { b.style.height = `${Math.floor(Math.random() * 22) + 4}px`; });
             }, 80);
         }
 
@@ -544,10 +548,10 @@
             }, 2500);
 
             discoControlInterval = setInterval(() => {
-                let speeds = ["0.6s", "1s", "1.4s"];
+                let speeds = ["0.5s", "1s", "1.5s"];
                 let randomSpeed = speeds[Math.floor(Math.random() * speeds.length)];
                 bar.style.setProperty('--disco-speed', randomSpeed);
-            }, 1000); // লাহেকৈ বেকগ্ৰাউণ্ড ৰং সলনি হ’ব চকুৰ বাবে আৰামদায়ককৈ
+            }, 800); // Decelerated for an extremely high-end elegant feel
         }
 
         function startTimelineSync() {

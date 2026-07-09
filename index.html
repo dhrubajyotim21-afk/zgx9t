@@ -46,7 +46,7 @@
             overflow-y: auto !important;
         }
         
-        /* Ultra Sleek Slider - চিকণ আৰু মিহি কৰা হৈছে */
+        /* Ultra Sleek Slider - আগৰ দৰে ৰখা হৈছে */
         .timeline-container {
             position: relative;
             width: 100%;
@@ -90,20 +90,21 @@
             z-index: 40; background: transparent;
         }
 
+        /* Smooth Fluid Disco Glow - এতিয়া ব্যাকগ্ৰাউণ্ড গ্লো হ’ব কিন্তু ধপধপনি অবিহনে মিহিকৈ */
         @keyframes dynamicDiscoGlow {
-            0% { background-color: #ff0000; box-shadow: 0 0 20px #ff0000; }
-            20% { background-color: #ff00ff; box-shadow: 0 0 25px #ff00ff; }
-            40% { background-color: #0000ff; box-shadow: 0 0 20px #0000ff; }
-            60% { background-color: #00ffff; box-shadow: 0 0 30px #00ffff; }
-            80% { background-color: #00ff00; box-shadow: 0 0 20px #00ff00; }
-            100% { background-color: #ffff00; box-shadow: 0 0 30px #ffff00; }
+            0% { background-color: #ff0000; box-shadow: 0 0 20px rgba(255,0,0,0.6); }
+            20% { background-color: #ff00ff; box-shadow: 0 0 25px rgba(255,0,255,0.6); }
+            40% { background-color: #0000ff; box-shadow: 0 0 20px rgba(0,0,28,0.6); }
+            60% { background-color: #00ffff; box-shadow: 0 0 30px rgba(0,255,255,0.6); }
+            80% { background-color: #00ff00; box-shadow: 0 0 20px rgba(0,255,0,0.6); }
+            100% { background-color: #ffff00; box-shadow: 0 0 30px rgba(255,255,0,0.6); }
         }
         .disco-active {
-            animation: dynamicDiscoGlow var(--disco-speed, 0.2s) infinite alternate ease-in-out !important;
+            animation: dynamicDiscoGlow var(--disco-speed, 1.5s) infinite alternate ease-in-out !important;
         }
         .fullscreen-lock { overflow: hidden !important; touch-action: none !important; }
         
-        /* Yellow Wave Bars - তলৰ ৱেভ সম্পূৰ্ণ হালধীয়া কৰা হ’ল */
+        /* Yellow Wave Bars - আগৰ দৰে মোটা আৰু হালধীয়া কৰা হ’ল */
         .wave-bar {
             width: 4px;
             height: 5px;
@@ -171,7 +172,7 @@
         </main>
     </div>
 
-    <!-- PROFILE MODAL POPUP (WITH DEVICE ID & NAME) -->
+    <!-- PROFILE MODAL POPUP -->
     <div id="profileModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] hidden items-center justify-center p-4">
         <div class="bg-zinc-950 border border-zinc-800 p-6 rounded-2xl w-full max-w-sm text-center shadow-2xl relative">
             <button onclick="toggleProfileModal(false)" class="absolute top-4 right-4 text-zinc-500 hover:text-white">
@@ -183,7 +184,6 @@
             <h3 class="text-base font-black tracking-wide uppercase text-white">Device Profile</h3>
             <p class="text-xs text-zinc-400 mt-0.5">Your unique app identities</p>
             
-            <!-- Device ID -->
             <div class="mt-4 bg-zinc-900 p-3 rounded-xl border border-zinc-800 flex items-center justify-between gap-2">
                 <div class="text-left">
                     <span class="block text-[10px] text-zinc-500 uppercase font-bold">Device Token</span>
@@ -194,7 +194,6 @@
                 </button>
             </div>
 
-            <!-- Device Name Section -->
             <div class="mt-2 bg-zinc-900 p-3 rounded-xl border border-zinc-800 text-left">
                 <span class="block text-[10px] text-zinc-500 uppercase font-bold">Detected Device Model</span>
                 <span id="displayDeviceName" class="text-sm font-bold text-zinc-200"><i class="fas fa-spinner animate-spin text-xs"></i> Detecting...</span>
@@ -210,7 +209,7 @@
         <div class="yt-strict-blocker"></div>
     </div>
 
-    <!-- BOTTOM MINI PLAYER -->
+    <!-- BOTTOM MINI PLAYER - আগৰ ডাঙৰ সাইজটো ৰখা হৈছে -->
     <div id="miniPlayer" class="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-900 p-2 z-40 hidden flex-col gap-1 shadow-2xl">
         <div id="miniTimeline" class="timeline-container w-full">
             <div id="miniTimelineProgress" class="timeline-progress"></div>
@@ -250,9 +249,10 @@
             </div>
 
             <div class="w-full max-w-lg flex flex-col gap-3 z-10">
+                <!-- Visualizer Light Bar - আগৰ দৰে ডাঙৰ কৰা হৈছে আৰু Wave তলত থাকিব -->
                 <div id="visualizerLightBar" class="w-full h-20 rounded-xl bg-zinc-900 flex flex-col items-center justify-center px-4 relative overflow-hidden border border-zinc-800/50">
                     <span id="visualizerText" class="text-lg font-black text-white tracking-wider uppercase truncate z-10">Jai Zubeen Da</span>
-                    <!-- Yellow Wave container -->
+                    <!-- Yellow Wave container - আগৰ দৰে তলত ফুল হালধীয়া ৱেভ -->
                     <div id="waveContainer" class="absolute bottom-0 inset-x-0 h-8 flex items-end justify-center gap-1 opacity-60"></div>
                 </div>
                 <div id="fullPlayerAnchor" class="w-full aspect-video bg-zinc-900/10 rounded-xl border border-zinc-900 relative"></div>
@@ -322,7 +322,6 @@
             waveContainer.appendChild(bar);
         }
 
-        // --- DEVICE MODEL & ID DETECTION ENGINE ---
         function getDeviceModelName() {
             const ua = navigator.userAgent;
             if (/like Mac OS X/.test(ua)) {
@@ -354,7 +353,6 @@
                         localStorage.setItem('zg_device_id', localId);
                         document.getElementById('displayDeviceId').innerText = localId;
                         
-                        // Sync with Firebase Database for Admin Tracking
                         database.ref('registered_devices/' + localId).set({
                             deviceId: localId,
                             deviceModel: dName,
@@ -372,7 +370,6 @@
             }
         }
 
-        // Fixes Instagram / FB audio block: First user tap globally unlocks HTML5 engine
         function fixInAppBrowserAudio() {
             const contextUnlocker = () => {
                 if(ytPlayer && typeof ytPlayer.playVideo === 'function') {
@@ -547,9 +544,10 @@
             }, 2500);
 
             discoControlInterval = setInterval(() => {
-                let v = Math.random() > 0.6 ? "0.06s" : (Math.random() > 0.3 ? "0.15s" : "0.4s");
-                bar.style.setProperty('--disco-speed', v);
-            }, 300);
+                let speeds = ["0.6s", "1s", "1.4s"];
+                let randomSpeed = speeds[Math.floor(Math.random() * speeds.length)];
+                bar.style.setProperty('--disco-speed', randomSpeed);
+            }, 1000); // লাহেকৈ বেকগ্ৰাউণ্ড ৰং সলনি হ’ব চকুৰ বাবে আৰামদায়ককৈ
         }
 
         function startTimelineSync() {

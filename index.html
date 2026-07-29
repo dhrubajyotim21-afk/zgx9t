@@ -7,7 +7,7 @@
     
     <!-- PWA Setup -->
     <meta name="description" content="ZG X9T - ONLY ZUBEEN DA SONG. Dedicated to Zubeen Garg.">
-    <meta name="author" content="@thedhruba2x">
+    <meta name="author" content="Dhruba">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ZG X9T">
@@ -39,7 +39,7 @@
         }
 
         body {
-            background-color: #000000;
+            background-color: #050505;
             color: #ffffff;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             overflow: hidden;
@@ -53,11 +53,32 @@
             overflow-y: auto !important;
         }
 
+        /* PREMIUM GLASSMORPHISM */
+        .glass-panel {
+            background: rgba(18, 18, 22, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: rgba(24, 24, 28, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            background: rgba(35, 35, 42, 0.8);
+            border-color: rgba(250, 204, 21, 0.3);
+            transform: translateY(-1px);
+        }
+
         .timeline-container {
             position: relative;
             width: 100%;
-            height: 5px;
-            background: #27272a;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 9999px;
             cursor: pointer;
             display: flex;
@@ -69,9 +90,10 @@
             left: 0;
             top: 0;
             height: 100%;
-            background: linear-gradient(90deg, #facc15, #ffffff);
+            background: linear-gradient(90deg, #f59e0b, #facc15);
             border-radius: 9999px;
             width: 0%;
+            box-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
         }
 
         .timeline-thumb {
@@ -84,6 +106,7 @@
             left: 0%;
             transform: translateX(-50%);
             pointer-events: none;
+            box-shadow: 0 0 8px rgba(250, 204, 21, 0.8);
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -100,19 +123,19 @@
             pointer-events: auto;
         }
 
-        /* SLEEK DISCO GLOW (THINNER PANEL EFFECT) */
+        /* SLEEK DISCO GLOW */
         @keyframes dynamicDiscoGlow {
-            0% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
-            20% { border-color: #ff00ff; box-shadow: 0 0 18px #ff00ff; }
-            40% { border-color: #0000ff; box-shadow: 0 0 15px #0000ff; }
-            60% { border-color: #00ffff; box-shadow: 0 0 20px #00ffff; }
-            80% { border-color: #00ff00; box-shadow: 0 0 15px #00ff00; }
-            100% { border-color: #ffff00; box-shadow: 0 0 20px #ffff00; }
+            0% { border-color: #ff0000; box-shadow: 0 0 20px rgba(255,0,0,0.4); }
+            20% { border-color: #ff00ff; box-shadow: 0 0 20px rgba(255,0,255,0.4); }
+            40% { border-color: #0000ff; box-shadow: 0 0 20px rgba(0,0,255,0.4); }
+            60% { border-color: #00ffff; box-shadow: 0 0 20px rgba(0,255,255,0.4); }
+            80% { border-color: #00ff00; box-shadow: 0 0 20px rgba(0,255,0,0.4); }
+            100% { border-color: #ffff00; box-shadow: 0 0 20px rgba(255,255,0,0.4); }
         }
 
         .disco-active {
             animation: dynamicDiscoGlow var(--disco-speed, 0.2s) infinite alternate ease-in-out !important;
-            background-color: rgba(10, 10, 10, 0.95) !important;
+            background-color: rgba(10, 10, 12, 0.95) !important;
         }
 
         .fullscreen-lock {
@@ -120,22 +143,28 @@
             touch-action: none !important;
         }
 
-        /* DYNAMIC EQUALIZER WAVE ANIMATION - METICULOUSLY YELLOW THREADS */
+        /* DYNAMIC EQUALIZER WAVE ANIMATION */
         .wave-bar {
             width: 3px;
             height: 4px;
-            background: linear-gradient(to top, #facc15, #eab308);
+            background: linear-gradient(to top, #eab308, #fef08a);
             border-radius: 2px;
             transition: height 0.07s ease-in-out;
+            box-shadow: 0 0 6px rgba(234, 179, 8, 0.4);
         }
 
-        /* Smooth Modal Pop-up */
         .modal-animate {
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #fff 0%, #facc15 50%, #ca8a04 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
     </style>
 </head>
-<body class="antialiased" oncontextmenu="return false;">
+<body class="antialiased selection:bg-yellow-500/30">
 
     <div style="display: none !important; visibility: hidden !important; opacity: 0 !important; width: 0; height: 0; overflow: hidden;">
         <h2>ZUBEEN GARG SONG - ZGX9T ONLY ZUBEEN SONG Collection</h2>
@@ -144,148 +173,157 @@
 
     <!-- APP MAIN CONTENT LIST LAYOUT -->
     <div id="appScrollBody" class="w-full h-full pb-36 no-scrollbar allow-scroll">
-        <header class="p-4 border-b border-zinc-900 flex justify-between items-start sticky top-0 bg-black/95 backdrop-blur z-30">
-            <div class="min-w-0 flex-1 pr-2">
-                <div class="flex items-center gap-3">
-                    <h1 class="text-4xl font-black tracking-tighter uppercase break-words">
-                        <span class="text-yellow-400">ZG</span> <span class="text-white">X9T</span>
-                    </h1>
-                    <!-- USER ID PORTAL BUTTON -->
-                    <button onclick="toggleDeviceModal()" class="flex items-center justify-center w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-yellow-400 hover:border-yellow-400 transition-all active:scale-95 mt-1">
-                        <i class="fas fa-user-astronaut text-sm"></i>
-                    </button>
+        <header class="p-4 glass-panel sticky top-0 z-30 border-b border-white/10 shadow-2xl">
+            <div class="min-w-0 flex-1">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 via-amber-500 to-amber-700 rounded-xl flex items-center justify-center font-black text-lg text-black shadow-lg shadow-yellow-500/10 border border-yellow-300/30">ZG</div>
+                        <div>
+                            <h1 class="text-2xl font-black tracking-tight uppercase break-words gold-gradient-text">
+                                ZG X9T
+                            </h1>
+                            <p class="text-[10px] font-bold text-zinc-400 tracking-widest uppercase">ONLY ZUBEEN DA SONG</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <!-- USER ID PORTAL BUTTON -->
+                        <button onclick="toggleDeviceModal()" class="w-9 h-9 rounded-xl bg-zinc-900/80 border border-zinc-800 text-zinc-300 hover:text-yellow-400 hover:border-yellow-400/50 transition-all active:scale-95 flex items-center justify-center">
+                            <i class="fas fa-user-astronaut text-sm"></i>
+                        </button>
+                    </div>
                 </div>
-                <p class="text-xs font-black text-zinc-400 tracking-widest uppercase mt-1 break-words">ONLY ZUBEEN DA SONG</p>
-                <p class="text-lg md:text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-white to-yellow-600 mt-4 break-words animate-pulse">#JusticeForZubeenGarg</p>
-                
-                <div class="mt-4 text-sm font-bold text-zinc-400 flex flex-wrap items-center justify-between gap-3 w-full">
-                    <div class="flex items-center gap-2 shrink-0">
-                        <span>App By</span>
-                        <a href="https://www.facebook.com/share/1BQEf1Ndee/" target="_blank" class="inline-flex items-center gap-1 bg-zinc-900 px-2 py-1 rounded text-xs text-white border border-zinc-800">
-                            <i class="fab fa-facebook text-blue-400"></i> @thedhruba2x
-                        </a>
-                    </div>
+
+                <div class="mt-3 flex items-center justify-between gap-2">
+                    <p class="text-xs font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-white to-amber-400 animate-pulse">#JusticeForZubeenGarg</p>
                     
-                    <div class="relative flex-1 min-w-[140px] max-w-xs">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-500 text-xs">
-                            <i class="fas fa-search"></i>
-                        </span>
-                        <input type="text" id="searchInput" placeholder="Search song..." class="w-full bg-zinc-900 border border-zinc-800 rounded-lg pl-8 pr-3 py-1 text-xs focus:outline-none focus:border-yellow-500 text-white">
-                    </div>
+                    <!-- LINK HAS BEEN REMOVED & REPLACED WITH TEXT -->
+                    <span class="inline-flex items-center gap-1.5 bg-zinc-900/90 px-2.5 py-1 rounded-full text-[11px] font-bold text-zinc-300 border border-zinc-800">
+                        <span class="text-zinc-500 text-[10px] uppercase tracking-wider">App By</span> 
+                        <span class="text-yellow-400">Dhruba</span>
+                    </span>
+                </div>
+                
+                <div class="mt-3 relative w-full">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-zinc-500 text-xs">
+                        <i class="fas fa-search"></i>
+                    </span>
+                    <input type="text" id="searchInput" placeholder="Search track or song..." class="w-full bg-zinc-900/80 border border-zinc-800/80 rounded-xl pl-9 pr-4 py-2 text-xs focus:outline-none focus:border-yellow-500/50 focus:ring-1 focus:ring-yellow-500/20 text-white placeholder-zinc-500 transition-all">
                 </div>
             </div>
-            <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-600 rounded-xl flex items-center justify-center font-black text-xl text-black shadow-lg shrink-0 m-1">ZG</div>
         </header>
 
-        <section class="p-4 bg-zinc-950/40">
-            <div class="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-zinc-400 px-1">
-                <span>All Song Collection</span>
-                <span id="totalSongsCount" class="bg-yellow-400/10 text-yellow-400 px-2 py-0.5 rounded-full border border-yellow-400/20">Loading...</span>
+        <section class="px-4 py-3 bg-zinc-950/40">
+            <div class="flex justify-between items-center text-[11px] font-bold uppercase tracking-wider text-zinc-400">
+                <span>Song Collection</span>
+                <span id="totalSongsCount" class="bg-yellow-400/10 text-yellow-400 px-2.5 py-0.5 rounded-full border border-yellow-400/20 font-mono">Loading...</span>
             </div>
         </section>
 
         <main class="p-4">
-            <div id="songsContainer" class="flex flex-col gap-3">
-                <div class="animate-pulse flex flex-col gap-3">
-                    <div class="h-16 bg-zinc-900 rounded-lg"></div>
-                    <div class="h-16 bg-zinc-900 rounded-lg"></div>
+            <div id="songsContainer" class="flex flex-col gap-2.5">
+                <div class="animate-pulse flex flex-col gap-2.5">
+                    <div class="h-16 bg-zinc-900/50 rounded-xl border border-zinc-800/50"></div>
+                    <div class="h-16 bg-zinc-900/50 rounded-xl border border-zinc-800/50"></div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- DEVICE ID MODAL POPUP (DEVICE NAME REMOVED AS REQUESTED) -->
-    <div id="deviceModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] hidden items-center justify-center p-4 modal-animate opacity-0">
-        <div class="bg-zinc-950 border border-zinc-800 w-full max-w-xs rounded-2xl p-5 shadow-2xl flex flex-col items-center text-center relative">
-            <button onclick="toggleDeviceModal()" class="absolute top-3 right-3 text-zinc-500 hover:text-white transition-colors"><i class="fas fa-times"></i></button>
-            <div class="w-14 h-14 rounded-full bg-yellow-400/10 border border-yellow-400/30 flex items-center justify-center text-yellow-400 text-2xl mb-3">
-                <i class="fas fa-id-card"></i>
+    <!-- DEVICE ID MODAL POPUP -->
+    <div id="deviceModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[60] hidden items-center justify-center p-4 modal-animate opacity-0">
+        <div class="glass-panel w-full max-w-xs rounded-2xl p-6 shadow-2xl flex flex-col items-center text-center relative border border-white/10">
+            <button onclick="toggleDeviceModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white transition-colors"><i class="fas fa-times"></i></button>
+            <div class="w-12 h-12 rounded-2xl bg-yellow-400/10 border border-yellow-400/30 flex items-center justify-center text-yellow-400 text-xl mb-3 shadow-lg shadow-yellow-500/5">
+                <i class="fas fa-fingerprint"></i>
             </div>
-            <h3 class="text-sm font-black uppercase tracking-widest text-zinc-400">Your Unique Key</h3>
+            <h3 class="text-xs font-black uppercase tracking-widest text-zinc-400">Your Device Key</h3>
             
-            <div class="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 mt-4 flex flex-col items-center justify-center">
-                <span class="text-[10px] uppercase font-black tracking-wider text-zinc-500 block mb-1">Device ID</span>
-                <span id="displayDeviceId" class="text-yellow-400 font-mono font-black text-lg tracking-wider">Generating...</span>
+            <div class="w-full bg-black/40 border border-zinc-800 rounded-xl p-3.5 mt-4 flex flex-col items-center justify-center">
+                <span class="text-[9px] uppercase font-black tracking-wider text-zinc-500 block mb-1">Device ID</span>
+                <span id="displayDeviceId" class="text-yellow-400 font-mono font-black text-base tracking-wider">Generating...</span>
             </div>
-            <p class="text-[9px] text-zinc-600 font-bold uppercase mt-4 tracking-widest">Logged into Admin Monitor Dashboard</p>
+            <p class="text-[9px] text-zinc-500 font-bold uppercase mt-4 tracking-widest">Logged into Admin Monitor</p>
         </div>
     </div>
 
     <!-- FIXED PORTAL FOR VIDEO PLAYING -->
-    <div id="unifiedVideoHolder" class="fixed bottom-14 left-2 w-20 h-11 z-[42] bg-black rounded overflow-hidden border border-zinc-800 hidden pointer-events-none">
+    <div id="unifiedVideoHolder" class="fixed bottom-14 left-2 w-20 h-11 z-[42] bg-black rounded-lg overflow-hidden border border-zinc-800 hidden pointer-events-none shadow-2xl">
         <div id="ytPlayerContainer" class="w-full h-full scale-105"></div>
         <div class="yt-strict-blocker"></div>
     </div>
 
     <!-- BOTTOM MINI PLAYER -->
-    <div id="miniPlayer" class="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-900 p-2 z-40 hidden flex-col gap-1 shadow-2xl select-none">
+    <div id="miniPlayer" class="fixed bottom-0 left-0 right-0 glass-panel border-t border-white/10 p-2.5 z-40 hidden flex-col gap-1.5 shadow-2xl select-none">
         <div id="miniTimeline" class="timeline-container w-full">
             <div id="miniTimelineProgress" class="timeline-progress"></div>
             <div id="miniTimelineThumb" class="timeline-thumb"></div>
         </div>
-        <div class="flex items-center justify-between gap-2 mt-1">
+        <div class="flex items-center justify-between gap-3 mt-1">
             <div onclick="openFullScreenPlayer()" class="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
-                <div class="w-20 h-11 shrink-0 bg-zinc-900/10 rounded"></div>
+                <div class="w-12 h-10 shrink-0 bg-zinc-900/40 rounded-lg border border-zinc-800/80 flex items-center justify-center text-yellow-400 text-xs">
+                    <i class="fas fa-music"></i>
+                </div>
                 <div class="min-w-0 flex-1">
                     <h4 id="miniPlayerTitle" class="text-xs font-bold truncate text-zinc-100">Song Title</h4>
-                    <p class="text-[9px] text-yellow-400 font-bold uppercase tracking-widest">Tap to view full screen</p>
+                    <p class="text-[9px] text-yellow-400/80 font-bold uppercase tracking-widest">Tap to expand</p>
                 </div>
             </div>
-            <div class="flex items-center gap-2.5 shrink-0 px-1">
-                <button onclick="playPrevious()" class="text-zinc-400 hover:text-white text-sm p-1"><i class="fas fa-backward-step"></i></button>
-                <button onclick="togglePlayPause()" class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center text-black text-xs shrink-0 font-bold"><i id="miniPlayIcon" class="fas fa-play pl-0.5"></i></button>
-                <button onclick="playNext()" class="text-zinc-400 hover:text-white text-sm p-1"><i class="fas fa-forward-step"></i></button>
-                <button onclick="closeVideo()" class="text-zinc-500 hover:text-red-500 text-sm p-1 ml-0.5"><i class="fas fa-times"></i></button>
+            <div class="flex items-center gap-2 shrink-0 px-1">
+                <button onclick="playPrevious()" class="text-zinc-400 hover:text-white text-sm p-1.5"><i class="fas fa-backward-step"></i></button>
+                <button onclick="togglePlayPause()" class="w-9 h-9 bg-gradient-to-tr from-yellow-500 to-amber-300 rounded-full flex items-center justify-center text-black text-xs shrink-0 font-black shadow-lg shadow-yellow-500/20 active:scale-95 transition-transform"><i id="miniPlayIcon" class="fas fa-play pl-0.5"></i></button>
+                <button onclick="playNext()" class="text-zinc-400 hover:text-white text-sm p-1.5"><i class="fas fa-forward-step"></i></button>
+                <button onclick="closeVideo()" class="text-zinc-500 hover:text-red-400 text-sm p-1.5 ml-1"><i class="fas fa-times"></i></button>
             </div>
         </div>
     </div>
 
     <!-- FULL SCREEN PLAYER -->
-    <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden touch-none select-none" style="overscroll-behavior: contain;">
-        <div class="p-4 flex justify-between items-center border-b border-zinc-900 bg-gradient-to-b from-black/90 to-transparent z-10">
-            <button onclick="closeFullScreenPlayer()" class="text-zinc-400 hover:text-white text-xl p-1"><i class="fas fa-chevron-down"></i></button>
-            <div class="text-center px-4 flex-1 min-w-0 mr-6">
-                <span class="text-[10px] font-black tracking-widest text-yellow-400 uppercase block">Now Playing</span>
-                <h3 id="fullPlayerTitle" class="text-sm font-bold truncate text-white">Song Title</h3>
+    <div id="fullScreenPlayer" class="fixed inset-0 bg-zinc-950 z-50 hidden flex-col justify-between overflow-hidden touch-none select-none" style="overscroll-behavior: contain;">
+        <div class="p-4 flex justify-between items-center border-b border-white/5 bg-gradient-to-b from-black/90 to-transparent z-10">
+            <button onclick="closeFullScreenPlayer()" class="w-9 h-9 rounded-full bg-zinc-900/80 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center"><i class="fas fa-chevron-down text-sm"></i></button>
+            <div class="text-center px-4 flex-1 min-w-0">
+                <span class="text-[9px] font-black tracking-widest text-yellow-400 uppercase block">Now Playing</span>
+                <h3 id="fullPlayerTitle" class="text-xs font-bold truncate text-zinc-200">Song Title</h3>
             </div>
+            <div class="w-9"></div>
         </div>
 
-        <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/20 relative gap-4 overflow-hidden">
+        <div class="flex-1 flex flex-col items-center justify-center p-4 relative gap-5 overflow-hidden">
             <!-- DISCO TOGGLE PANEL -->
-            <div class="z-10 bg-zinc-900/50 backdrop-blur border border-zinc-800/80 px-2.5 py-0.5 rounded-full flex items-center gap-2 text-[10px] font-bold shadow-md">
+            <div class="z-10 bg-zinc-900/80 backdrop-blur border border-zinc-800/80 px-3 py-1 rounded-full flex items-center gap-2.5 text-[10px] font-bold shadow-lg">
                 <span class="text-zinc-400 uppercase tracking-wider text-[9px]">Disco Light</span>
-                <button id="discoToggleBtn" onclick="toggleDiscoSystem()" class="bg-yellow-400 text-black px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider transition-all">ON</button>
+                <button id="discoToggleBtn" onclick="toggleDiscoSystem()" class="bg-yellow-400 text-black px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-wider transition-all shadow">ON</button>
             </div>
 
-            <div class="w-full max-w-lg flex flex-col gap-3 z-10">
+            <div class="w-full max-w-sm flex flex-col gap-3 z-10">
                 <!-- SLEEK DISCO & TRACK TITLE BOX -->
-                <div id="visualizerLightBar" class="w-full h-11 rounded-lg bg-zinc-900/90 border border-zinc-800/80 flex flex-col items-center justify-center px-4 relative overflow-hidden transition-all duration-300">
-                    <span id="visualizerText" class="text-sm font-black text-white tracking-wider uppercase truncate text-center z-10 transition-opacity duration-150">Jai Zubeen Da</span>
+                <div id="visualizerLightBar" class="w-full h-11 rounded-xl bg-zinc-900/90 border border-zinc-800/80 flex flex-col items-center justify-center px-4 relative overflow-hidden transition-all duration-300 shadow-xl">
+                    <span id="visualizerText" class="text-xs font-black text-white tracking-wider uppercase truncate text-center z-10 transition-opacity duration-150">Jai Zubeen Da</span>
                 </div>
                 
-                <!-- VIDEO CONTAINER AND THE YELLOW EQUALIZER WAVE AT THE BOTTOM -->
-                <div class="w-full aspect-video bg-zinc-900/20 rounded-xl border border-zinc-900 shadow-2xl relative overflow-hidden">
+                <!-- VIDEO CONTAINER AND EQUALIZER WAVE -->
+                <div class="w-full aspect-video bg-zinc-900/40 rounded-2xl border border-white/10 shadow-2xl relative overflow-hidden">
                     <div id="fullPlayerAnchor" class="w-full h-full"></div>
                     
-                    <!-- YELLOW WAVE CONTAINER POWERED BY MUSIC TALE -->
-                    <div id="waveContainer" class="absolute bottom-0 inset-x-0 h-8 flex items-end justify-center gap-[2px] opacity-95 z-20 pointer-events-none px-2">
+                    <div id="waveContainer" class="absolute bottom-0 inset-x-0 h-8 flex items-end justify-center gap-[2px] opacity-90 z-20 pointer-events-none px-2">
                         <!-- Yellow bars populated dynamically -->
                     </div>
                 </div>
             </div>
 
             <div class="text-center px-4 w-full max-w-xl z-10">
-                <h2 class="text-xl md:text-2xl font-extrabold tracking-wide text-white uppercase">
-                    <span class="text-yellow-400">Only</span>Zubeen<span class="text-yellow-400">Garg</span>
+                <h2 class="text-lg md:text-xl font-black tracking-wider text-white uppercase">
+                    <span class="text-yellow-400">Only</span> Zubeen <span class="text-yellow-400">Garg</span>
                 </h2>
-                <p class="text-[10px] font-bold tracking-widest mt-1 text-zinc-400 uppercase"> JAI ZUBEEN DA </p>
+                <p class="text-[9px] font-black tracking-widest mt-1 text-zinc-500 uppercase">JAI ZUBEEN DA</p>
             </div>
         </div>
 
         <div class="p-6 bg-gradient-to-t from-black via-black/95 to-transparent z-10">
-            <div class="flex flex-col gap-2 mb-5">
+            <div class="flex flex-col gap-2 mb-6">
                 <div class="flex items-center gap-3 w-full">
-                    <button onclick="seekSeconds(-5)" class="text-zinc-400 hover:text-yellow-400 text-sm p-1 shrink-0 active:scale-95 transition-transform">
+                    <button onclick="seekSeconds(-5)" class="text-zinc-400 hover:text-yellow-400 text-xs p-1 shrink-0 active:scale-95 transition-transform">
                         <i class="fas fa-rotate-left"></i> <span class="text-[10px] font-bold font-mono">5s</span>
                     </button>
                     
@@ -294,19 +332,19 @@
                         <div id="fullTimelineThumb" class="timeline-thumb"></div>
                     </div>
                     
-                    <button onclick="seekSeconds(5)" class="text-zinc-400 hover:text-yellow-400 text-sm p-1 shrink-0 active:scale-95 transition-transform">
+                    <button onclick="seekSeconds(5)" class="text-zinc-400 hover:text-yellow-400 text-xs p-1 shrink-0 active:scale-95 transition-transform">
                         <span class="text-[10px] font-bold font-mono">5s</span> <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
-                <div class="flex justify-between text-[11px] font-mono font-bold text-zinc-400 px-8">
+                <div class="flex justify-between text-[10px] font-mono font-bold text-zinc-500 px-7">
                     <span id="currentTimeLabel">0:00</span>
                     <span id="totalTimeLabel">0:00</span>
                 </div>
             </div>
-            <div class="flex items-center justify-center gap-8 mb-2">
-                <button onclick="playPrevious()" class="text-zinc-400 hover:text-white text-xl"><i class="fas fa-backward-step"></i></button>
-                <button onclick="togglePlayPause()" class="w-16 h-16 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center text-black text-2xl shadow-lg"><i id="fullPlayIcon" class="fas fa-pause"></i></button>
-                <button onclick="playNext()" class="text-zinc-400 hover:text-white text-xl"><i class="fas fa-forward-step"></i></button>
+            <div class="flex items-center justify-center gap-8 mb-4">
+                <button onclick="playPrevious()" class="text-zinc-400 hover:text-white text-lg active:scale-95 transition-transform"><i class="fas fa-backward-step"></i></button>
+                <button onclick="togglePlayPause()" class="w-16 h-16 bg-gradient-to-tr from-yellow-500 to-amber-300 rounded-full flex items-center justify-center text-black text-xl shadow-xl shadow-yellow-500/20 active:scale-95 transition-transform"><i id="fullPlayIcon" class="fas fa-pause"></i></button>
+                <button onclick="playNext()" class="text-zinc-400 hover:text-white text-lg active:scale-95 transition-transform"><i class="fas fa-forward-step"></i></button>
             </div>
         </div>
     </div>
@@ -431,7 +469,7 @@
                     allSongs = [{ title: "Sample Song", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }];
                 }
                 filteredSongs = [...allSongs];
-                document.getElementById('totalSongsCount').innerText = `${allSongs.length} Songs`;
+                document.getElementById('totalSongsCount').innerText = `${allSongs.length} Tracks`;
                 renderSongsList();
                 recoverSavedSession();
             });
@@ -447,15 +485,18 @@
                 const thumbUrl = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
 
                 const card = document.createElement('div');
-                card.className = "bg-zinc-900/60 hover:bg-zinc-800 border border-zinc-900 rounded-lg p-2 flex items-center gap-3 cursor-pointer transition-all active:scale-[0.99] group min-w-0";
+                card.className = "glass-card rounded-xl p-2.5 flex items-center gap-3 cursor-pointer group min-w-0";
                 card.onclick = () => playSong(globalIndex);
 
                 card.innerHTML = `
-                    <div class="w-20 h-12 bg-black rounded overflow-hidden shrink-0 border border-zinc-800 relative">
-                        <img src="${thumbUrl}" alt="thumbnail" class="w-full h-full object-cover" loading="lazy">
+                    <div class="w-16 h-12 bg-black/60 rounded-lg overflow-hidden shrink-0 border border-white/10 relative">
+                        <img src="${thumbUrl}" alt="thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
                     </div>
                     <div class="min-w-0 flex-1">
-                        <h3 class="text-sm font-bold text-zinc-100 group-hover:text-yellow-400 break-words line-clamp-2">${song.title}</h3>
+                        <h3 class="text-xs font-bold text-zinc-200 group-hover:text-yellow-400 transition-colors break-words line-clamp-2">${song.title}</h3>
+                    </div>
+                    <div class="text-zinc-600 group-hover:text-yellow-400/80 transition-colors pr-2 text-xs">
+                        <i class="fas fa-play"></i>
                     </div>
                 `;
                 fragment.appendChild(card);
@@ -474,15 +515,15 @@
                 holder.style.width = `${bounds.width}px`;
                 holder.style.height = `${bounds.height}px`;
                 holder.style.zIndex = "51";
-                holder.style.borderRadius = "12px";
+                holder.style.borderRadius = "16px";
             } else {
-                holder.style.bottom = "8px";
-                holder.style.left = "8px";
+                holder.style.bottom = "12px";
+                holder.style.left = "12px";
                 holder.style.top = "auto";
                 holder.style.width = "80px";
                 holder.style.height = "44px";
                 holder.style.zIndex = "41";
-                holder.style.borderRadius = "4px";
+                holder.style.borderRadius = "8px";
             }
         }
 
@@ -558,7 +599,7 @@
                 runDynamicDiscoEngine(true);
                 animateWave(true);
             } else {
-                fIcon.className = "fas fa-play pl-1";
+                fIcon.className = "fas fa-play pl-0.5";
                 mIcon.className = "fas fa-play pl-0.5";
                 clearInterval(timelineInterval);
                 runDynamicDiscoEngine(false);
@@ -572,20 +613,19 @@
             const btn = document.getElementById('discoToggleBtn');
             if(isDiscoEnabled) {
                 btn.innerText = "ON";
-                btn.className = "bg-yellow-400 text-black px-1.5 py-0.5 rounded text-[8px] font-black";
+                btn.className = "bg-yellow-400 text-black px-2 py-0.5 rounded-full text-[8px] font-black";
                 if(ytPlayer && ytPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
                     runDynamicDiscoEngine(true);
                     animateWave(true);
                 }
             } else {
                 btn.innerText = "OFF";
-                btn.className = "bg-zinc-800 text-zinc-400 px-1.5 py-0.5 rounded text-[8px] font-black";
+                btn.className = "bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded-full text-[8px] font-black";
                 runDynamicDiscoEngine(false);
                 animateWave(false);
             }
         }
 
-        // AMINATED YELLOW WAVE ENGINE (BASED ON TRACK STATE)
         function animateWave(start) {
             clearInterval(waveAnimationInterval);
             const bars = document.querySelectorAll('.wave-bar');
@@ -595,7 +635,6 @@
                 return;
             }
 
-            // High frequency simulation loop that responds immediately to state
             waveAnimationInterval = setInterval(() => {
                 bars.forEach(bar => {
                     const randomHeight = Math.floor(Math.random() * 26) + 4; 
@@ -604,7 +643,6 @@
             }, 75);
         }
 
-        // TEXT REPLACEMENT INSIDE DISCO ENGINE ("WEB BY - DHRUBA")
         function runDynamicDiscoEngine(shouldRun) {
             clearInterval(textRotationInterval);
             clearInterval(discoControlInterval);
@@ -613,7 +651,7 @@
 
             if (!shouldRun || !isDiscoEnabled) {
                 lightBar.classList.remove('disco-active');
-                lightBar.className = "w-full h-11 rounded-lg bg-zinc-900/90 border border-zinc-800/80 flex flex-col items-center justify-center px-4";
+                lightBar.className = "w-full h-11 rounded-xl bg-zinc-900/90 border border-zinc-800/80 flex flex-col items-center justify-center px-4";
                 return;
             }
 
@@ -623,7 +661,6 @@
             textRotationInterval = setInterval(() => {
                 if(!allSongs[currentSongIndex]) return;
                 const songTitle = allSongs[currentSongIndex].title;
-                // REPLACED DEVICE ID WITH "WEB BY - DHRUBA" SUCCESSFULLY
                 const phrases = ["Joy Zubeen Da", "#JusticeForZubeenGarg", songTitle, "WEB BY - DHRUBA"];
                 
                 textRotationIndex = (textRotationIndex + 1) % phrases.length;

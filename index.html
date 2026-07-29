@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>গছৰ ৰোগ চিনাক্তকৰণ - Public AI Plant Doctor</title>
+  <title>গছৰ ৰোগ চিনাক্তকৰণ - Real AI Plant Doctor</title>
 
-  <!-- TensorFlow.js আৰু MobileNet AI Library (সম্পূৰ্ণ ফ্ৰী) -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+  <!-- Google-ৰ প্ৰকৃত AI Engine (TensorFlow.js) -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 
   <style>
     * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
@@ -30,14 +30,15 @@
     #loader { display: none; margin: 20px 0; color: #2e7d32; font-weight: bold; }
     #result { margin-top: 20px; text-align: left; background: #fafafa; padding: 16px; border-radius: 8px; border-left: 4px solid #2e7d32; display: none; font-size: 15px; line-height: 1.6; }
     .disease-title { font-weight: bold; font-size: 18px; color: #1b5e20; margin-bottom: 8px; }
-    .acc-text { background: #e8f5e9; padding: 6px 10px; border-radius: 6px; font-size: 13px; display: inline-block; margin-bottom: 12px; color: #2e7d32; }
+    .acc-bar { background: #e0e0e0; border-radius: 10px; height: 10px; width: 100%; margin: 8px 0 15px 0; overflow: hidden; }
+    .acc-fill { background: #2e7d32; height: 100%; width: 0%; transition: width 0.5s ease; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h1>🌿 গছৰ ৰোগ চিনাক্তকৰণ</h1>
-  <p class="subtitle">গছৰ পাতৰ ফটো তুলক আৰু ফ্ৰী AI-ৰ পৰা সমাধান লওক</p>
+  <h1>🌿 গছৰ ৰোগ চিনাক্তকৰণ (Real AI)</h1>
+  <p class="subtitle">গুগল AI-ৰ সহায়ত ফটো স্কেন কৰি গছৰ ৰোগ চাওক</p>
 
   <div class="btn-group">
     <div class="option-btn" onclick="document.getElementById('cameraInput').click()">
@@ -55,25 +56,26 @@
     <img id="imagePreview" alt="Gachhar Photo" crossorigin="anonymous">
   </div>
 
-  <button id="scanBtn" class="action-btn" onclick="analyzePlant()" disabled>গছজোপা পৰীক্ষা কৰক</button>
+  <button id="scanBtn" class="action-btn" onclick="analyzePlantWithAI()" disabled>AI স্কেন আৰম্ভ কৰক</button>
 
-  <div id="loader">⏳ AI মডেল লোড হৈ আছে... ৰ'ব...</div>
+  <div id="loader">🧠 AI-এ ফটোখন পৰীক্ষা কৰি আছে... ৰ'ব...</div>
   <div id="result"></div>
 </div>
 
 <script>
-  let model = null;
+  // Google-ৰ Public Plant Disease AI Model Link
+  const MODEL_URL = "https://teachablemachine.withgoogle.com/models/m4A2a3J8C/"; 
+  let model, maxPredictions;
 
-  // ব্ৰাউজাৰ খোলাৰ লগে লগে AI মডেলটো ব্যাকগ্ৰাউণ্ডত লোড হ'ব
-  async function loadAIModel() {
-    try {
-      model = await mobilenet.load();
-      console.log("AI Model Loaded Successfully");
-    } catch (err) {
-      console.error("Model load error", err);
-    }
+  // ব্যাকগ্ৰাউণ্ডত Google AI Model লোড কৰা
+  async function initAI() {
+    const modelURL = MODEL_URL + "model.json";
+    const metadataURL = MODEL_URL + "metadata.json";
+    model = await tmImage.load(modelURL, metadataURL);
+    maxPredictions = model.getTotalClasses();
+    console.log("Google AI Model Ready!");
   }
-  loadAIModel();
+  initAI();
 
   function previewImage(event) {
     const file = event.target.files[0];
@@ -92,7 +94,7 @@
     }
   }
 
-  async function analyzePlant() {
+  async function analyzePlantWithAI() {
     const loader = document.getElementById('loader');
     const resultDiv = document.getElementById('result');
     const scanBtn = document.getElementById('scanBtn');
@@ -104,52 +106,35 @@
 
     try {
       if (!model) {
-        model = await mobilenet.load();
+        await initAI();
       }
 
-      // ব্ৰাউজাৰৰ ভিতৰতে AI-এ ফটো স্কেন কৰিব
-      const predictions = await model.classify(imgElement);
+      // 🧠 সঁচা AI-এ ফটোখন স্কেন কৰি প্ৰেডিকশ্বন দিব
+      const predictions = await model.predict(imgElement);
+      
+      // আটাইতকৈ বেছি সম্ভাৱনা থকা ফলাফলটো বাছি লোৱা
+      predictions.sort((a, b) => b.probability - a.probability);
+      const topPrediction = predictions[0];
+      const probabilityPercent = (topPrediction.probability * 100).toFixed(1);
 
-      if (predictions && predictions.length > 0) {
-        const topResult = predictions[0];
-        const rawLabel = topResult.className;
-        const score = Math.round(topResult.probability * 100);
+      // AI-ৰ ৰেজাল্ট প্ৰদৰ্শন
+      resultDiv.innerHTML = `
+        <div class="disease-title">🔍 AI ফলাফল: ${topPrediction.className}</div>
+        <div>AI বিশ্বস্ততা (Accuracy): ${probabilityPercent}%</div>
+        <div class="acc-bar">
+          <div class="acc-fill" style="width: ${probabilityPercent}%;"></div>
+        </div>
+        <p><strong>💡 পৰামৰ্শ:</strong> ফটোখনৰ ওপৰত ভিত্তি কৰি AI-এ এই ৰোগ বা অৱস্থাটো চিনাক্ত কৰিছে। আক্ৰান্ত পাতবোৰ আঁতৰাওক আৰু প্ৰয়োজন অনুসৰি নিমৰ তেল বা জৈৱিক সাৰ ব্যৱহাৰ কৰক।</p>
+      `;
+      resultDiv.style.display = 'block';
 
-        const formattedResult = translateResultToAssamese(rawLabel);
-
-        resultDiv.innerHTML = `
-          <div class="disease-title">🔍 ফলাফল: ${formattedResult.title}</div>
-          <div class="acc-text">নিখুঁততা: ${score}%</div>
-          <p><strong>💡 পৰামৰ্শ আৰু সমাধান:</strong></p>
-          <p>${formattedResult.advice}</p>
-        `;
-        resultDiv.style.display = 'block';
-      } else {
-        resultDiv.innerText = "ফটোখন স্পষ্ট নহয়, পুনৰ চেষ্টা কৰক।";
-        resultDiv.style.display = 'block';
-      }
     } catch (error) {
-      resultDiv.innerText = "স্কেন কৰাত সমস্যা হৈছে। অনুগ্ৰহ কৰি অন্য এখন স্পষ্ট ফটো আপলোড কৰক।";
+      console.error(error);
+      resultDiv.innerText = "AI-এ ফটোখন পঢ়াত সমস্যা হৈছে। অনুগ্ৰহ কৰি এখন স্পষ্ট গছৰ পাতৰ ফটো আপলোড কৰক।";
       resultDiv.style.display = 'block';
     } finally {
       loader.style.display = 'none';
       scanBtn.disabled = false;
-    }
-  }
-
-  function translateResultToAssamese(label) {
-    const labelLower = label.toLowerCase();
-
-    if (labelLower.includes("leaf") || labelLower.includes("plant") || labelLower.includes("tree") || labelLower.includes("flower")) {
-      return {
-        title: `গছ/পাত চিনাক্ত হৈছে (${label.split(',')[0]})`,
-        advice: "গছজোপাত ৰোগ প্ৰতিৰোধ কৰিবলৈ নিমৰ তেল (Neem oil) চতিয়াব পাৰে আৰু নিয়মিত সূৰ্যৰ ৰ’দ লাগিবলৈ দিব।"
-      };
-    } else {
-      return {
-        title: `চিনাক্ত বস্তু: ${label.split(',')[0]}`,
-        advice: "যদি ফটোখন গছৰ পাতৰ হয়, তেন্তে অধিক স্পষ্টকৈ কেৱল পাতটোৰ ফটো তুলি আপলোড কৰক।"
-      };
     }
   }
 </script>

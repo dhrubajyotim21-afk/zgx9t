@@ -106,22 +106,10 @@ jobs:
           }
           EOF
 
-          # root build.gradle with proper repositories
+          # root build.gradle
           cat << 'EOF' > android-app/build.gradle
-          buildscript {
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-              dependencies {
-                  classpath 'com.android.tools.build:gradle:8.1.1'
-              }
-          }
-          allprojects {
-              repositories {
-                  google()
-                  mavenCentral()
-              }
+          plugins {
+              id 'com.android.application' version '8.2.0' apply false
           }
           EOF
 
@@ -138,7 +126,8 @@ jobs:
       - name: Build App Bundle (.aab)
         run: |
           cd android-app
-          gradle wrapper --gradle-version 8.0
+          # Force stable gradle version wrapper
+          gradle wrapper --gradle-version 8.5
           ./gradlew bundleRelease --no-daemon
 
       - name: Upload AAB Artifact

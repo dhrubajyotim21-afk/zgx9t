@@ -146,16 +146,16 @@
         <header class="p-4 border-b border-zinc-900 flex justify-between items-start sticky top-0 bg-black/95 backdrop-blur z-30">
             <div class="min-w-0 flex-1 pr-2">
                 <div class="flex items-center gap-3">
-                    <h1 class="text-4xl font-black tracking-tighter uppercase break-words">
+                    <h1 class="text-3xl md:text-4xl font-black tracking-tighter uppercase truncate">
                         <span class="text-yellow-400">ZG</span> <span class="text-white">X9T</span>
                     </h1>
                     <!-- USER ID PORTAL BUTTON -->
-                    <button onclick="toggleDeviceModal()" class="flex items-center justify-center w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-yellow-400 hover:border-yellow-400 transition-all active:scale-95 mt-1">
+                    <button onclick="toggleDeviceModal()" class="flex items-center justify-center w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-yellow-400 hover:border-yellow-400 transition-all active:scale-95 shrink-0 mt-1">
                         <i class="fas fa-user-astronaut text-sm"></i>
                     </button>
                 </div>
-                <p class="text-xs font-black text-zinc-400 tracking-widest uppercase mt-1 break-words">ONLY ZUBEEN DA SONG</p>
-                <p class="text-lg md:text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-white to-yellow-600 mt-1 break-words animate-pulse">#JusticeForZubeenGarg</p>
+                <p class="text-[11px] font-black text-zinc-400 tracking-widest uppercase mt-1 truncate">ONLY ZUBEEN DA SONG</p>
+                <p class="text-base md:text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-white to-yellow-600 mt-1 truncate animate-pulse">#JusticeForZubeenGarg</p>
                 
                 <div class="mt-4 text-sm font-bold text-zinc-400 flex flex-wrap items-center justify-between gap-3 w-full">
                     <div class="flex items-center gap-2 shrink-0">
@@ -176,7 +176,7 @@
         <section class="p-4 bg-zinc-950/40">
             <div class="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-zinc-400 px-1">
                 <span>All Song Collection</span>
-                <span id="totalSongsCount" class="bg-yellow-400/10 text-yellow-400 px-2 py-0.5 rounded-full border border-yellow-400/20">Loading...</span>
+                <span id="totalSongsCount" class="bg-yellow-400/10 text-yellow-400 px-2 py-0.5 rounded-full border border-yellow-400/25">Loading...</span>
             </div>
         </section>
 
@@ -306,9 +306,10 @@
     </div>
 
     <script>
-        // YouTube API Ready Fallback Function
+        // YouTube API Instance Ready Check
+        let isApiReady = false;
         function onYouTubeIframeAPIReady() {
-            // API loaded successfully
+            isApiReady = true;
         }
 
         // FIREBASE SETUP
@@ -342,34 +343,32 @@
         // GENERATE YELLOW EQUALIZER BARS UNDER TRACK
         const waveContainer = document.getElementById('waveContainer');
         const totalBars = 38;
+        const fragmentBars = document.createDocumentFragment();
         for (let i = 0; i < totalBars; i++) {
             const bar = document.createElement('div');
             bar.className = 'wave-bar';
-            waveContainer.appendChild(bar);
+            fragmentBars.appendChild(bar);
         }
+        waveContainer.appendChild(fragmentBars);
 
-        // UNIVERSAL SEQUENTIAL ID GENERATOR (zgx9t-001)
+        // UNIVERSAL SEQUENTIAL ID GENERATOR
         function initDeviceFingerprint() {
             let storedId = localStorage.getItem('zg_device_id');
-            
             if (storedId) {
                 userDeviceId = storedId;
-                document.getElementById('displayDeviceId').innerText = userDeviceId;
+                const devElem = document.getElementById('displayDeviceId');
+                if(devElem) devElem.innerText = userDeviceId;
                 syncDeviceMetricsWithAdmin(userDeviceId);
             } else {
                 database.ref('admin/device_counter').transaction((currentCount) => {
                     return (currentCount || 0) + 1;
                 }, (error, committed, snapshot) => {
-                    let sequenceNum = 1;
-                    if (committed) {
-                        sequenceNum = snapshot.val();
-                    } else {
-                        sequenceNum = Math.floor(Math.random() * 800) + 11;
-                    }
+                    let sequenceNum = committed && snapshot.val() ? snapshot.val() : (Math.floor(Math.random() * 800) + 11);
                     const formattedId = `zgx9t-${String(sequenceNum).padStart(3, '0')}`;
                     localStorage.setItem('zg_device_id', formattedId);
                     userDeviceId = formattedId;
-                    document.getElementById('displayDeviceId').innerText = userDeviceId;
+                    const devElem = document.getElementById('displayDeviceId');
+                    if(devElem) devElem.innerText = userDeviceId;
                     syncDeviceMetricsWithAdmin(userDeviceId);
                 });
             }
@@ -430,7 +429,8 @@
                     allSongs = [{ title: "Sample Song", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }];
                 }
                 filteredSongs = [...allSongs];
-                document.getElementById('totalSongsCount').innerText = `${allSongs.length} Songs`;
+                const countElem = document.getElementById('totalSongsCount');
+                if(countElem) countElem.innerText = `${allSongs.length} Songs`;
                 renderSongsList();
                 recoverSavedSession();
             });
@@ -438,6 +438,7 @@
 
         function renderSongsList() {
             const container = document.getElementById('songsContainer');
+            if(!container) return;
             container.innerHTML = '';
             const fragment = document.createDocumentFragment();
             filteredSongs.forEach((song) => {
@@ -464,16 +465,19 @@
 
         function refreshVideoFramePosition() {
             const holder = document.getElementById('unifiedVideoHolder');
+            if(!holder) return;
             holder.classList.remove('hidden');
             if(isPlayerFullscreen) {
                 const anchor = document.getElementById('fullPlayerAnchor');
-                const bounds = anchor.getBoundingClientRect();
-                holder.style.top = `${bounds.top}px`;
-                holder.style.left = `${bounds.left}px`;
-                holder.style.width = `${bounds.width}px`;
-                holder.style.height = `${bounds.height}px`;
-                holder.style.zIndex = "51";
-                holder.style.borderRadius = "12px";
+                if(anchor) {
+                    const bounds = anchor.getBoundingClientRect();
+                    holder.style.top = `${bounds.top}px`;
+                    holder.style.left = `${bounds.left}px`;
+                    holder.style.width = `${bounds.width}px`;
+                    holder.style.height = `${bounds.height}px`;
+                    holder.style.zIndex = "51";
+                    holder.style.borderRadius = "12px";
+                }
             } else {
                 holder.style.bottom = "8px";
                 holder.style.left = "8px";
@@ -497,16 +501,21 @@
 
             if(!ytId) return;
 
-            document.getElementById('fullPlayerTitle').innerText = song.title;
-            document.getElementById('miniPlayerTitle').innerText = song.title;
+            const fTitle = document.getElementById('fullPlayerTitle');
+            const mTitle = document.getElementById('miniPlayerTitle');
+            if(fTitle) fTitle.innerText = song.title;
+            if(mTitle) mTitle.innerText = song.title;
             
-            document.getElementById('miniPlayer').classList.remove('hidden');
-            document.getElementById('miniPlayer').classList.add('flex');
+            const miniPly = document.getElementById('miniPlayer');
+            if(miniPly) {
+                miniPly.classList.remove('hidden');
+                miniPly.classList.add('flex');
+            }
 
             localStorage.setItem('zg_last_index', currentSongIndex);
 
             const holder = document.getElementById('unifiedVideoHolder');
-            holder.classList.remove('hidden');
+            if(holder) holder.classList.remove('hidden');
             refreshVideoFramePosition();
 
             if (ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
@@ -515,9 +524,13 @@
                         videoId: ytId,
                         startSeconds: startAtSeconds
                     });
+                } else {
+                    ytPlayer.playVideo();
                 }
             } else {
-                document.getElementById('ytPlayerContainer').innerHTML = '';
+                const containerElem = document.getElementById('ytPlayerContainer');
+                if(containerElem) containerElem.innerHTML = '';
+                
                 ytPlayer = new YT.Player('ytPlayerContainer', {
                     height: '100%',
                     width: '100%',
@@ -551,14 +564,14 @@
             const mIcon = document.getElementById('miniPlayIcon');
 
             if (event.data == YT.PlayerState.PLAYING) {
-                fIcon.className = "fas fa-pause";
-                mIcon.className = "fas fa-pause";
+                if(fIcon) fIcon.className = "fas fa-pause";
+                if(mIcon) mIcon.className = "fas fa-pause";
                 startTimelineSync();
                 runDynamicDiscoEngine(true);
                 animateWave(true);
             } else {
-                fIcon.className = "fas fa-play pl-1";
-                mIcon.className = "fas fa-play pl-0.5";
+                if(fIcon) fIcon.className = "fas fa-play pl-1";
+                if(mIcon) mIcon.className = "fas fa-play pl-0.5";
                 clearInterval(timelineInterval);
                 runDynamicDiscoEngine(false);
                 animateWave(false);
@@ -569,10 +582,11 @@
         function toggleDiscoSystem() {
             isDiscoEnabled = !isDiscoEnabled;
             const btn = document.getElementById('discoToggleBtn');
+            if(!btn) return;
             if(isDiscoEnabled) {
                 btn.innerText = "ON";
                 btn.className = "bg-yellow-400 text-black px-1.5 py-0.5 rounded text-[8px] font-black";
-                if(ytPlayer && ytPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
+                if(ytPlayer && typeof ytPlayer.getPlayerState === 'function' && ytPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
                     runDynamicDiscoEngine(true);
                     animateWave(true);
                 }
@@ -598,7 +612,7 @@
                     const randomHeight = Math.floor(Math.random() * 26) + 4; 
                     bar.style.height = `${randomHeight}px`;
                 });
-            }, 75);
+            }, 100);
         }
 
         function runDynamicDiscoEngine(shouldRun) {
@@ -606,6 +620,7 @@
             clearInterval(discoControlInterval);
             const lightBar = document.getElementById('visualizerLightBar');
             const textBox = document.getElementById('visualizerText');
+            if(!lightBar || !textBox) return;
 
             if (!shouldRun || !isDiscoEnabled) {
                 lightBar.classList.remove('disco-active');
@@ -628,7 +643,7 @@
                     textBox.innerText = phrases[textRotationIndex];
                     textBox.style.opacity = '1';
                 }, 100);
-            }, 2400);
+            }, 3000);
 
             discoControlInterval = setInterval(() => {
                 const waveFactor = Math.random();
@@ -637,30 +652,37 @@
                 else if (waveFactor > 0.50) velocity = "0.1s";
                 else if (waveFactor > 0.20) velocity = "0.28s";
                 lightBar.style.setProperty('--disco-speed', velocity);
-            }, 300);
+            }, 400);
         }
 
         function startTimelineSync() {
             clearInterval(timelineInterval);
             timelineInterval = setInterval(() => {
-                if (ytPlayer && ytPlayer.getCurrentTime && !isDraggingTimeline) {
+                if (ytPlayer && typeof ytPlayer.getCurrentTime === 'function' && !isDraggingTimeline) {
                     try {
                         const current = ytPlayer.getCurrentTime();
                         const duration = ytPlayer.getDuration() || 0;
                         const pct = duration > 0 ? (current / duration) * 100 : 0;
                         
-                        document.getElementById('fullTimelineProgress').style.width = `${pct}%`;
-                        document.getElementById('fullTimelineThumb').style.left = `${pct}%`;
-                        document.getElementById('miniTimelineProgress').style.width = `${pct}%`;
-                        document.getElementById('miniTimelineThumb').style.left = `${pct}%`;
+                        const fProg = document.getElementById('fullTimelineProgress');
+                        const fThumb = document.getElementById('fullTimelineThumb');
+                        const mProg = document.getElementById('miniTimelineProgress');
+                        const mThumb = document.getElementById('miniTimelineThumb');
+                        
+                        if(fProg) fProg.style.width = `${pct}%`;
+                        if(fThumb) fThumb.style.left = `${pct}%`;
+                        if(mProg) mProg.style.width = `${pct}%`;
+                        if(mThumb) mThumb.style.left = `${pct}%`;
 
-                        document.getElementById('currentTimeLabel').innerText = formatTime(current);
-                        document.getElementById('totalTimeLabel').innerText = formatTime(duration);
+                        const curLab = document.getElementById('currentTimeLabel');
+                        const totLab = document.getElementById('totalTimeLabel');
+                        if(curLab) curLab.innerText = formatTime(current);
+                        if(totLab) totLab.innerText = formatTime(duration);
 
                         localStorage.setItem('zg_last_time', current);
                     } catch(err) {}
                 }
-            }, 250);
+            }, 400);
         }
 
         function formatTime(seconds) {
@@ -681,35 +703,42 @@
                 ytPlayer.seekTo(targetTime, true);
                 
                 const pct = duration > 0 ? (targetTime / duration) * 100 : 0;
-                document.getElementById('fullTimelineProgress').style.width = `${pct}%`;
-                document.getElementById('fullTimelineThumb').style.left = `${pct}%`;
-                document.getElementById('currentTimeLabel').innerText = formatTime(targetTime);
+                const fProg = document.getElementById('fullTimelineProgress');
+                const fThumb = document.getElementById('fullTimelineThumb');
+                const curLab = document.getElementById('currentTimeLabel');
+
+                if(fProg) fProg.style.width = `${pct}%`;
+                if(fThumb) fThumb.style.left = `${pct}%`;
+                if(curLab) curLab.innerText = formatTime(targetTime);
             }
         }
 
         function attachTimelineEvents(containerId, progressId, thumbId) {
             const container = document.getElementById(containerId);
+            if(!container) return;
             function handleInteraction(e) {
-                if (!ytPlayer || !ytPlayer.getDuration) return;
+                if (!ytPlayer || typeof ytPlayer.getDuration !== 'function') return 0;
                 const rect = container.getBoundingClientRect();
-                let clickX = (e.clientX || e.touches[0].clientX) - rect.left;
+                let clickX = (e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0)) - rect.left;
                 clickX = Math.max(0, Math.min(clickX, rect.width));
                 const pct = clickX / rect.width;
                 const targetTime = pct * (ytPlayer.getDuration() || 0);
-                document.getElementById(progressId).style.width = `${pct * 100}%`;
-                document.getElementById(thumbId).style.left = `${pct * 100}%`;
+                const progElem = document.getElementById(progressId);
+                const thumbElem = document.getElementById(thumbId);
+                if(progElem) progElem.style.width = `${pct * 100}%`;
+                if(thumbElem) thumbElem.style.left = `${pct * 100}%`;
                 return targetTime;
             }
             container.addEventListener('mousedown', (e) => {
                 isDraggingTimeline = true; let t = handleInteraction(e);
                 function move(me) { t = handleInteraction(me); }
-                function up() { isDraggingTimeline = false; ytPlayer.seekTo(t, true); window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); }
+                function up() { isDraggingTimeline = false; if(ytPlayer && ytPlayer.seekTo) ytPlayer.seekTo(t, true); window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); }
                 window.addEventListener('mousemove', move); window.addEventListener('mouseup', up);
             });
             container.addEventListener('touchstart', (e) => {
                 isDraggingTimeline = true; let t = handleInteraction(e);
                 function move(me) { t = handleInteraction(me); }
-                function up() { isDraggingTimeline = false; ytPlayer.seekTo(t, true); window.removeEventListener('touchmove', move); window.removeEventListener('touchend', up); }
+                function up() { isDraggingTimeline = false; if(ytPlayer && ytPlayer.seekTo) ytPlayer.seekTo(t, true); window.removeEventListener('touchmove', move); window.removeEventListener('touchend', up); }
                 window.addEventListener('touchmove', move); window.addEventListener('touchend', up);
             });
         }
@@ -720,8 +749,11 @@
             if(!ytPlayer) return;
             isPlayerFullscreen = true;
             document.body.classList.add('fullscreen-lock');
-            document.getElementById('fullScreenPlayer').classList.remove('hidden');
-            document.getElementById('fullScreenPlayer').classList.add('flex');
+            const fullScr = document.getElementById('fullScreenPlayer');
+            if(fullScr) {
+                fullScr.classList.remove('hidden');
+                fullScr.classList.add('flex');
+            }
             refreshVideoFramePosition();
         }
 
@@ -729,8 +761,11 @@
             if(!ytPlayer) return;
             isPlayerFullscreen = false;
             document.body.classList.remove('fullscreen-lock');
-            document.getElementById('fullScreenPlayer').classList.add('hidden');
-            document.getElementById('fullScreenPlayer').classList.remove('flex');
+            const fullScr = document.getElementById('fullScreenPlayer');
+            if(fullScr) {
+                fullScr.classList.add('hidden');
+                fullScr.classList.remove('flex');
+            }
             refreshVideoFramePosition();
         }
 
@@ -744,14 +779,33 @@
         function playPrevious() { if(currentSongIndex > 0) playSong(currentSongIndex - 1); else playSong(allSongs.length - 1); }
 
         function closeVideo() {
-            clearInterval(timelineInterval); clearInterval(textRotationInterval); clearInterval(discoControlInterval); clearInterval(waveAnimationInterval);
-            if(ytPlayer) { try { ytPlayer.stopVideo(); } catch(e){} }
+            clearInterval(timelineInterval); 
+            clearInterval(textRotationInterval); 
+            clearInterval(discoControlInterval); 
+            clearInterval(waveAnimationInterval);
+            
+            if(ytPlayer) { 
+                try { 
+                    ytPlayer.stopVideo();
+                    ytPlayer.destroy();
+                } catch(e){} 
+                ytPlayer = null;
+            }
+            
             document.body.classList.remove('fullscreen-lock');
-            document.getElementById('miniPlayer').classList.add('hidden');
-            document.getElementById('fullScreenPlayer').classList.add('hidden');
-            document.getElementById('unifiedVideoHolder').classList.add('hidden');
-            isPlayerFullscreen = false; currentSongIndex = -1;
-            localStorage.removeItem('zg_last_index'); localStorage.removeItem('zg_last_time');
+            
+            const miniPly = document.getElementById('miniPlayer');
+            const fullScr = document.getElementById('fullScreenPlayer');
+            const vidHolder = document.getElementById('unifiedVideoHolder');
+            
+            if(miniPly) { miniPly.classList.add('hidden'); miniPly.classList.remove('flex'); }
+            if(fullScr) { fullScr.classList.add('hidden'); fullScr.classList.remove('flex'); }
+            if(vidHolder) { vidHolder.classList.add('hidden'); }
+            
+            isPlayerFullscreen = false; 
+            currentSongIndex = -1;
+            localStorage.removeItem('zg_last_index'); 
+            localStorage.removeItem('zg_last_time');
         }
 
         function recoverSavedSession() {
@@ -760,15 +814,21 @@
             if (savedIndex !== null) {
                 const index = parseInt(savedIndex);
                 const startSecs = savedTime ? parseFloat(savedTime) : 0;
-                if(index >= 0 && index < allSongs.length) playSong(index, startSecs);
+                if(index >= 0 && index < allSongs.length) {
+                    // Safe timeout to let page render before auto-initializing last played
+                    setTimeout(() => playSong(index, startSecs), 500);
+                }
             }
         }
 
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase().trim();
-            filteredSongs = query === '' ? [...allSongs] : allSongs.filter(s => s.title.toLowerCase().includes(query));
-            renderSongsList();
-        });
+        const searchInputElem = document.getElementById('searchInput');
+        if(searchInputElem) {
+            searchInputElem.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                filteredSongs = query === '' ? [...allSongs] : allSongs.filter(s => s.title.toLowerCase().includes(query));
+                renderSongsList();
+            });
+        }
 
         window.addEventListener('load', () => {
             initDeviceFingerprint();

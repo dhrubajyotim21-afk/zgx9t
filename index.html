@@ -32,6 +32,7 @@
             box-sizing: border-box;
         }
 
+        /* Disable Text Selection & Copying */
         html, body {
             background-color: #000000;
             color: #ffffff;
@@ -40,8 +41,11 @@
             min-height: 100vh;
             margin: 0;
             padding: 0;
-            /* Allowed pull-to-refresh & normal layout */
             overflow-x: hidden;
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none;    /* Firefox */
+            -ms-user-select: none;     /* IE 10+ */
+            user-select: none;         /* Standard */
         }
 
         .timeline-container {
@@ -93,7 +97,7 @@
             pointer-events: auto;
         }
 
-        /* Strictly Square Border Light Flickering (No Curved Corners) */
+        /* Fully Square Dynamic Disco Border */
         @keyframes dynamicDiscoBorder {
             0% { border-color: #ff0000; }
             20% { border-color: #ff00ff; }
@@ -107,7 +111,7 @@
             animation: dynamicDiscoBorder var(--disco-speed, 0.15s) infinite alternate ease-in-out !important;
             background-color: #09090b !important;
             box-shadow: none !important;
-            border-radius: 0px !important; /* Fully Square Box */
+            border-radius: 0px !important;
         }
 
         .fullscreen-lock {
@@ -115,7 +119,7 @@
             touch-action: none !important;
         }
 
-        /* Fullscreen Main Wave Bars - Strictly 100% Pure White */
+        /* Pure White Wave Bars */
         .wave-bar {
             width: 4px;
             height: 4px;
@@ -269,7 +273,7 @@
             </div>
 
             <div class="w-full max-w-lg flex flex-col gap-3 z-10">
-                <!-- Square Shaped Disco Light Box -->
+                <!-- Completely Square Disco Box -->
                 <div id="visualizerLightBar" class="w-full h-12 rounded-none bg-zinc-900 border-2 border-zinc-800 flex flex-col items-center justify-center px-4 relative overflow-hidden transition-all duration-200">
                     <span id="visualizerText" class="text-sm font-black text-white tracking-wider uppercase truncate text-center z-10 transition-opacity duration-150">Jai Zubeen Da</span>
                 </div>
@@ -289,7 +293,7 @@
 
         <div class="p-6 bg-gradient-to-t from-black via-black/95 to-transparent z-10 flex flex-col gap-3">
             
-            <!-- PURE WHITE WAVE VISUALIZER -->
+            <!-- WHITE WAVE VISUALIZER -->
             <div id="waveWrapper" class="w-full h-8 flex items-end justify-center gap-[3px] opacity-0 transition-opacity duration-300 pointer-events-none px-2 mb-1">
                 <div id="waveContainer" class="w-full h-full flex items-end justify-center gap-[3px]"></div>
             </div>
@@ -325,7 +329,6 @@
     <script>
         let isApiReady = false;
         
-        // Corrected YouTube API Load Registration
         window.onYouTubeIframeAPIReady = function() {
             isApiReady = true;
         };
@@ -357,7 +360,7 @@
         let textRotationIndex = 0;
         let userDeviceId = '';
 
-        // Generate Full Pure White Wave Bars
+        // Generate Pure White Waves
         const waveContainer = document.getElementById('waveContainer');
         const totalBars = 36;
         const fragmentBars = document.createDocumentFragment();
@@ -459,7 +462,7 @@
             });
         }
 
-        /* Render Songs List with Small Animated Playing Indicator */
+        /* Smart Tap/Click Logic Render Function */
         function renderSongsList() {
             const container = document.getElementById('songsContainer');
             if(!container) return;
@@ -474,9 +477,16 @@
 
                 const card = document.createElement('div');
                 card.className = `bg-zinc-900/60 hover:bg-zinc-800 border ${isPlaying ? 'border-yellow-400 bg-zinc-900' : 'border-zinc-900'} rounded-xl p-2.5 flex flex-col gap-2 cursor-pointer transition-all active:scale-[0.98] group min-w-0 relative overflow-hidden`;
-                card.onclick = () => playSong(globalIndex);
+                
+                // Clicking Logic: If currently playing, open fullscreen. If new, just play background/mini player.
+                card.onclick = () => {
+                    if (currentSongIndex === globalIndex) {
+                        openFullScreenPlayer();
+                    } else {
+                        playSong(globalIndex);
+                    }
+                };
 
-                // Small Wave Overlay when playing
                 const playingWaveHTML = isPlaying ? `
                     <div class="absolute top-2 right-2 z-20 flex items-end gap-[2px] bg-black/80 px-2 py-1 rounded-md border border-yellow-400/50">
                         <div class="card-wave-bar" style="animation-delay: 0.1s"></div>
@@ -499,7 +509,7 @@
             container.appendChild(fragment);
         }
 
-        /* Dynamic iFrame Holder Positioning */
+        /* Dynamic iFrame Positioning */
         function refreshVideoFramePosition() {
             const holder = document.getElementById('unifiedVideoHolder');
             if(!holder) return;
@@ -534,18 +544,16 @@
         window.addEventListener('resize', refreshVideoFramePosition);
         window.addEventListener('scroll', refreshVideoFramePosition, true);
 
-        /* Fast Instant Play System with Error Safe Retries */
         function playSong(index, startAtSeconds = 0) {
             if (index < 0 || index >= allSongs.length) return;
             
-            // Safe Retry if YouTube API isn't ready
             if (typeof YT === 'undefined' || !YT.Player) {
                 setTimeout(() => playSong(index, startAtSeconds), 300);
                 return;
             }
 
             currentSongIndex = index;
-            renderSongsList(); // Refresh list to show active wave on playing song
+            renderSongsList(); // UI Update
             
             const song = allSongs[index];
             const ytId = getYoutubeId(song.url) || 'dQw4w9WgXcQ';
@@ -664,7 +672,6 @@
             }, 80);
         }
 
-        /* Strict Border-Only Disco Flickering for Square Box */
         function runDynamicDiscoEngine(shouldRun) {
             clearInterval(textRotationInterval);
             clearInterval(discoControlInterval);
@@ -771,7 +778,6 @@
             }
         }
 
-        /* Timeline Drag Handler */
         function attachTimelineEvents(containerId, progressId, thumbId) {
             const container = document.getElementById(containerId);
             if(!container) return;
@@ -884,7 +890,7 @@
             
             isPlayerFullscreen = false; 
             currentSongIndex = -1;
-            renderSongsList(); // Remove active wave from songs list
+            renderSongsList();
         }
 
         const searchInputElem = document.getElementById('searchInput');
@@ -899,6 +905,30 @@
         window.addEventListener('load', () => {
             initDeviceFingerprint();
             loadSongsFromDatabase();
+        });
+
+        /* --- SECURITY SCRIPT: Disable Copy, Cut, Paste, Shortcuts & Screen Capture Clear --- */
+        document.addEventListener('copy', (e) => e.preventDefault());
+        document.addEventListener('cut', (e) => e.preventDefault());
+        document.addEventListener('paste', (e) => e.preventDefault());
+        document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+        document.addEventListener('keydown', (e) => {
+            if (
+                e.ctrlKey && (e.key === 'c' || e.key === 'u' || e.key === 's' || e.key === 'a' || e.key === 'p') ||
+                e.key === 'PrintScreen'
+            ) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'PrintScreen') {
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText('');
+                }
+            }
         });
     </script>
 </body>

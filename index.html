@@ -41,11 +41,11 @@
             background-color: #000000;
             color: #ffffff;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            overflow: hidden;
             width: 100vw;
             height: 100vh;
             margin: 0;
             padding: 0;
+            overflow: hidden; /* Restricts overall page scroll */
         }
 
         .timeline-container {
@@ -79,7 +79,6 @@
             left: 0%;
             transform: translateX(-50%);
             pointer-events: none;
-            box-shadow: 0 0 8px rgba(250, 204, 21, 0.8);
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -96,32 +95,32 @@
             pointer-events: auto;
         }
 
-        @keyframes dynamicDiscoGlow {
-            0% { border-color: #ff0000; box-shadow: 0 0 25px #ff0000, inset 0 0 15px #ff0000; }
-            20% { border-color: #ff00ff; box-shadow: 0 0 35px #ff00ff, inset 0 0 20px #ff00ff; }
-            40% { border-color: #0000ff; box-shadow: 0 0 25px #0000ff, inset 0 0 15px #0000ff; }
-            60% { border-color: #00ffff; box-shadow: 0 0 40px #00ffff, inset 0 0 25px #00ffff; }
-            80% { border-color: #00ff00; box-shadow: 0 0 25px #00ff00, inset 0 0 15px #00ff00; }
-            100% { border-color: #ffff00; box-shadow: 0 0 40px #ffff00, inset 0 0 25px #ffff00; }
+        /* Pure Light Cycle without Box Shadows / Outer Glow */
+        @keyframes dynamicDiscoLight {
+            0% { border-color: #ff0000; background-color: rgba(255, 0, 0, 0.2); }
+            20% { border-color: #ff00ff; background-color: rgba(255, 0, 255, 0.2); }
+            40% { border-color: #0000ff; background-color: rgba(0, 0, 255, 0.2); }
+            60% { border-color: #00ffff; background-color: rgba(0, 255, 255, 0.2); }
+            80% { border-color: #00ff00; background-color: rgba(0, 255, 0, 0.2); }
+            100% { border-color: #ffff00; background-color: rgba(255, 255, 0, 0.2); }
         }
 
         .disco-active {
-            animation: dynamicDiscoGlow var(--disco-speed, 0.15s) infinite alternate ease-in-out !important;
-            background-color: rgba(15, 15, 15, 0.95) !important;
+            animation: dynamicDiscoLight var(--disco-speed, 0.15s) infinite alternate ease-in-out !important;
         }
 
         .fullscreen-lock {
             overflow: hidden !important;
-            touch-action: none !important;
+            touch-action: none !important; /* Prevents Pull-To-Refresh on Fullscreen */
         }
 
+        /* Updated Wave Visualizer Bar Colors: White to Yellow */
         .wave-bar {
             width: 4px;
             height: 4px;
-            background: linear-gradient(to top, #ff0055, #facc15, #00ffff);
+            background: linear-gradient(to top, #ffffff, #facc15);
             border-radius: 2px;
             transition: height 0.08s ease-in-out;
-            box-shadow: 0 0 5px rgba(250, 204, 21, 0.5);
         }
 
         .modal-animate {
@@ -139,7 +138,7 @@
     <!-- MAIN APP WRAPPER -->
     <div class="flex flex-col h-full w-full relative overflow-hidden bg-black">
         
-        <!-- HEADER SECTION: PERMANENTLY FIXED AT TOP -->
+        <!-- HEADER SECTION: FIXED PERMANENTLY -->
         <header class="p-4 border-b border-zinc-900 bg-black z-30 shadow-2xl shrink-0">
             <div class="min-w-0 flex-1">
                 <div class="flex items-center justify-between gap-3">
@@ -158,7 +157,6 @@
                 <p class="text-base md:text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-white to-yellow-600 mt-1 truncate animate-pulse">#JusticeForZubeenGarg</p>
                 
                 <div class="mt-3 text-sm font-bold text-zinc-300 flex items-center justify-between gap-3 w-full">
-                    <!-- Facebook Redirect Link -->
                     <a href="https://facebook.com/dhruba.fyp" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 shrink-0 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 px-2.5 py-1 rounded-lg text-yellow-400 hover:text-yellow-300 text-xs font-black transition-all">
                         <i class="fab fa-facebook text-blue-500"></i>
                         <span>App By © DhrubaX</span>
@@ -174,15 +172,15 @@
             </div>
         </header>
 
-        <section class="p-3 bg-zinc-950/60 border-b border-zinc-900 shrink-0">
+        <section class="p-3 bg-zinc-950/60 border-b border-zinc-900 shrink-0 z-20">
             <div class="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-zinc-400 px-1">
                 <span>Zubeen Song Collection</span>
                 <span id="totalSongsCount" class="bg-yellow-400/10 text-yellow-400 px-2 py-0.5 rounded-full border border-yellow-400/25">Loading...</span>
             </div>
         </section>
 
-        <!-- MAIN SCROLLABLE CONTENT: DOUBLE COLUMN GRID -->
-        <main class="flex-1 overflow-y-auto no-scrollbar p-4 pb-28">
+        <!-- MAIN SCROLLABLE AREA: EXCLUSIVELY FOR SONG CARDS LIST -->
+        <main class="flex-1 overflow-y-auto no-scrollbar p-4 pb-32">
             <div id="songsContainer" class="grid grid-cols-2 gap-3">
                 <div class="animate-pulse bg-zinc-900 rounded-xl h-28 col-span-2"></div>
             </div>
@@ -206,8 +204,8 @@
         </div>
     </div>
 
-    <!-- FIXED PORTAL FOR VIDEO PLAYING -->
-    <div id="unifiedVideoHolder" class="fixed bottom-16 left-2 w-20 h-11 z-[42] bg-black rounded overflow-hidden border border-zinc-800 hidden pointer-events-none">
+    <!-- ACCURATELY ALIGNED VIDEO HOLDER -->
+    <div id="unifiedVideoHolder" class="fixed z-[42] bg-black rounded overflow-hidden border border-zinc-800 hidden pointer-events-none">
         <div id="ytPlayerContainer" class="w-full h-full scale-105"></div>
         <div class="yt-strict-blocker"></div>
     </div>
@@ -219,12 +217,15 @@
             <div id="miniTimelineThumb" class="timeline-thumb"></div>
         </div>
         <div class="flex items-center justify-between gap-2 mt-0.5">
+            <!-- Reserved exact space for mini frame inside player -->
+            <div id="miniFrameSlot" class="w-16 h-10 bg-black/50 border border-zinc-800 rounded shrink-0 relative overflow-hidden"></div>
+            
             <div onclick="openFullScreenPlayer()" class="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
                 <div class="min-w-0 flex-1 pl-1">
                     <h4 id="miniPlayerTitle" class="text-xs font-bold truncate text-zinc-100">Song Title</h4>
                     <div class="flex items-center gap-2 mt-0.5">
                         <span id="miniTimeLabel" class="text-[10px] font-mono font-bold text-yellow-400">0:00 / 0:00</span>
-                        <span class="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">• Tap to expand</span>
+                        <span class="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">• Expand</span>
                     </div>
                 </div>
             </div>
@@ -238,7 +239,7 @@
     </div>
 
     <!-- FULL SCREEN PLAYER -->
-    <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden touch-none select-none" style="overscroll-behavior: contain;">
+    <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden select-none">
         <div class="p-4 flex justify-between items-center border-b border-zinc-900 bg-gradient-to-b from-black/90 to-transparent z-10">
             <button onclick="closeFullScreenPlayer()" class="text-zinc-400 hover:text-white text-xl p-1"><i class="fas fa-chevron-down"></i></button>
             <div class="text-center px-4 flex-1 min-w-0 mr-6">
@@ -249,7 +250,7 @@
 
         <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/20 relative gap-4 overflow-hidden">
             <div class="z-10 bg-zinc-900/50 backdrop-blur border border-zinc-800/80 px-3 py-1 rounded-full flex items-center gap-2 text-[10px] font-bold shadow-md">
-                <span class="text-zinc-400 uppercase tracking-wider text-[9px]">Disco Glow</span>
+                <span class="text-zinc-400 uppercase tracking-wider text-[9px]">Disco Light</span>
                 <button id="discoToggleBtn" onclick="toggleDiscoSystem()" class="bg-yellow-400 text-black px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider transition-all">ON</button>
             </div>
 
@@ -273,7 +274,7 @@
 
         <div class="p-6 bg-gradient-to-t from-black via-black/95 to-transparent z-10 flex flex-col gap-3">
             
-            <!-- REALTIME AUDIO MATCHING WAVE VISUALIZER ABOVE TIMELINE -->
+            <!-- REALTIME AUDIO MATCHING WHITE-YELLOW WAVE VISUALIZER -->
             <div id="waveWrapper" class="w-full h-8 flex items-end justify-center gap-[3px] opacity-0 transition-opacity duration-300 pointer-events-none px-2 mb-1">
                 <div id="waveContainer" class="w-full h-full flex items-end justify-center gap-[3px]"></div>
             </div>
@@ -460,9 +461,11 @@
             container.appendChild(fragment);
         }
 
+        /* Perfect iFrame Portal Positioning Logic */
         function refreshVideoFramePosition() {
             const holder = document.getElementById('unifiedVideoHolder');
             if(!holder) return;
+
             if(isPlayerFullscreen) {
                 const anchor = document.getElementById('fullPlayerAnchor');
                 if(anchor) {
@@ -471,17 +474,22 @@
                     holder.style.left = `${bounds.left}px`;
                     holder.style.width = `${bounds.width}px`;
                     holder.style.height = `${bounds.height}px`;
+                    holder.style.bottom = "auto";
                     holder.style.zIndex = "51";
                     holder.style.borderRadius = "12px";
                 }
             } else {
-                holder.style.bottom = "16px";
-                holder.style.left = "8px";
-                holder.style.top = "auto";
-                holder.style.width = "80px";
-                holder.style.height = "44px";
-                holder.style.zIndex = "41";
-                holder.style.borderRadius = "4px";
+                const slot = document.getElementById('miniFrameSlot');
+                if(slot) {
+                    const bounds = slot.getBoundingClientRect();
+                    holder.style.top = `${bounds.top}px`;
+                    holder.style.left = `${bounds.left}px`;
+                    holder.style.width = `${bounds.width}px`;
+                    holder.style.height = `${bounds.height}px`;
+                    holder.style.bottom = "auto";
+                    holder.style.zIndex = "41";
+                    holder.style.borderRadius = "4px";
+                }
             }
         }
 
@@ -510,7 +518,8 @@
 
             const holder = document.getElementById('unifiedVideoHolder');
             if(holder) holder.classList.remove('hidden');
-            refreshVideoFramePosition();
+            
+            setTimeout(refreshVideoFramePosition, 50);
 
             if (ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
                 if (!isSameSong) {
@@ -642,7 +651,7 @@
                 }, 100);
             }, 2500);
 
-            // Dynamic Song Tempo Flickering Simulation
+            // Audio-reactive light cycle speed adjustments
             discoControlInterval = setInterval(() => {
                 const speedFactor = Math.random();
                 let speed = "0.15s";
@@ -742,7 +751,7 @@
                 isDraggingTimeline = true; let t = handleInteraction(e);
                 function move(me) { t = handleInteraction(me); }
                 function up() { isDraggingTimeline = false; if(ytPlayer && ytPlayer.seekTo) ytPlayer.seekTo(t, true); window.removeEventListener('touchmove', move); window.removeEventListener('touchend', up); }
-                window.addEventListener('touchmove', move); window.addEventListener('touchend', up);
+                window.addEventListener('touchmove', move); window.removeEventListener('touchend', up);
             });
         }
         attachTimelineEvents('fullTimeline', 'fullTimelineProgress', 'fullTimelineThumb');

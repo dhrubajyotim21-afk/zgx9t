@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>ZGX - ONLY ZUBEEN SONG</title>
     
     <!-- PWA Setup -->
@@ -29,11 +29,6 @@
 
     <style>
         * {
-            -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
-            user-select: none !important;
-            -webkit-touch-callout: none !important;
             box-sizing: border-box;
         }
 
@@ -41,11 +36,12 @@
             background-color: #000000;
             color: #ffffff;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            min-height: 100vh;
             margin: 0;
             padding: 0;
-            overflow: hidden;
+            /* Allowed pull-to-refresh & normal layout */
+            overflow-x: hidden;
         }
 
         .timeline-container {
@@ -97,7 +93,7 @@
             pointer-events: auto;
         }
 
-        /* Border Light Flickering (No Inner Light / Glow) */
+        /* Strictly Square Border Light Flickering (No Curved Corners) */
         @keyframes dynamicDiscoBorder {
             0% { border-color: #ff0000; }
             20% { border-color: #ff00ff; }
@@ -111,6 +107,7 @@
             animation: dynamicDiscoBorder var(--disco-speed, 0.15s) infinite alternate ease-in-out !important;
             background-color: #09090b !important;
             box-shadow: none !important;
+            border-radius: 0px !important; /* Fully Square Box */
         }
 
         .fullscreen-lock {
@@ -118,20 +115,27 @@
             touch-action: none !important;
         }
 
-        /* Alternating White and Yellow Wave Bars */
+        /* Fullscreen Main Wave Bars - Strictly 100% Pure White */
         .wave-bar {
             width: 4px;
             height: 4px;
             border-radius: 2px;
             transition: height 0.08s ease-in-out;
-        }
-
-        .wave-bar-white {
             background-color: #ffffff !important;
         }
 
-        .wave-bar-yellow {
-            background-color: #facc15 !important;
+        /* Mini Card Small Playing Wave Animation */
+        .card-wave-bar {
+            width: 3px;
+            height: 3px;
+            background-color: #facc15;
+            border-radius: 1px;
+            animation: cardMiniWave 0.5s infinite alternate ease-in-out;
+        }
+
+        @keyframes cardMiniWave {
+            0% { height: 3px; }
+            100% { height: 14px; }
         }
 
         .modal-animate {
@@ -139,7 +143,7 @@
         }
     </style>
 </head>
-<body class="antialiased flex flex-col h-screen w-screen overflow-hidden" oncontextmenu="return false;">
+<body class="antialiased flex flex-col h-screen w-screen overflow-x-hidden" oncontextmenu="return false;">
 
     <div style="display: none !important; visibility: hidden !important; opacity: 0 !important; width: 0; height: 0; overflow: hidden;">
         <h2>ZUBEEN GARG SONG - ZGX ONLY ZUBEEN SONG Collection</h2>
@@ -149,7 +153,7 @@
     <!-- MAIN APP WRAPPER -->
     <div class="flex flex-col h-full w-full relative overflow-hidden bg-black">
         
-        <!-- HEADER SECTION: LARGER & ENHANCED -->
+        <!-- HEADER SECTION -->
         <header class="p-4 border-b border-zinc-900 bg-black z-30 shadow-2xl shrink-0">
             <div class="min-w-0 flex-1">
                 <div class="flex items-center justify-between gap-3">
@@ -265,7 +269,8 @@
             </div>
 
             <div class="w-full max-w-lg flex flex-col gap-3 z-10">
-                <div id="visualizerLightBar" class="w-full h-12 rounded-xl bg-zinc-900 border-2 border-zinc-800 flex flex-col items-center justify-center px-4 relative overflow-hidden transition-all duration-200">
+                <!-- Square Shaped Disco Light Box -->
+                <div id="visualizerLightBar" class="w-full h-12 rounded-none bg-zinc-900 border-2 border-zinc-800 flex flex-col items-center justify-center px-4 relative overflow-hidden transition-all duration-200">
                     <span id="visualizerText" class="text-sm font-black text-white tracking-wider uppercase truncate text-center z-10 transition-opacity duration-150">Jai Zubeen Da</span>
                 </div>
                 
@@ -284,7 +289,7 @@
 
         <div class="p-6 bg-gradient-to-t from-black via-black/95 to-transparent z-10 flex flex-col gap-3">
             
-            <!-- ALTERNATING WHITE-YELLOW WAVE VISUALIZER -->
+            <!-- PURE WHITE WAVE VISUALIZER -->
             <div id="waveWrapper" class="w-full h-8 flex items-end justify-center gap-[3px] opacity-0 transition-opacity duration-300 pointer-events-none px-2 mb-1">
                 <div id="waveContainer" class="w-full h-full flex items-end justify-center gap-[3px]"></div>
             </div>
@@ -319,9 +324,11 @@
 
     <script>
         let isApiReady = false;
-        function onYouTubeIframeAPIReady() {
+        
+        // Corrected YouTube API Load Registration
+        window.onYouTubeIframeAPIReady = function() {
             isApiReady = true;
-        }
+        };
 
         const firebaseConfig = { 
             apiKey: "AIzaSyDISW7EbMP_eEt4GuR6cijgMyYKxgb7xIg", 
@@ -350,14 +357,13 @@
         let textRotationIndex = 0;
         let userDeviceId = '';
 
-        // Generate Alternating Audio Wave Bars (One White, One Yellow)
+        // Generate Full Pure White Wave Bars
         const waveContainer = document.getElementById('waveContainer');
         const totalBars = 36;
         const fragmentBars = document.createDocumentFragment();
         for (let i = 0; i < totalBars; i++) {
             const bar = document.createElement('div');
-            const colorClass = (i % 2 === 0) ? 'wave-bar-white' : 'wave-bar-yellow';
-            bar.className = `wave-bar ${colorClass}`;
+            bar.className = 'wave-bar';
             fragmentBars.appendChild(bar);
         }
         waveContainer.appendChild(fragmentBars);
@@ -373,7 +379,7 @@
                 database.ref('admin/device_counter').transaction((currentCount) => {
                     return (currentCount || 0) + 1;
                 }, (error, committed, snapshot) => {
-                    let sequenceNum = committed && snapshot.val() ? snapshot.val() : (Math.floor(Math.random() * 800) + 11);
+                    let sequenceNum = (committed && snapshot && snapshot.val()) ? snapshot.val() : (Math.floor(Math.random() * 800) + 11);
                     const formattedId = `zgx-${String(sequenceNum).padStart(3, '0')}`;
                     localStorage.setItem('zg_device_id', formattedId);
                     userDeviceId = formattedId;
@@ -453,26 +459,39 @@
             });
         }
 
+        /* Render Songs List with Small Animated Playing Indicator */
         function renderSongsList() {
             const container = document.getElementById('songsContainer');
             if(!container) return;
             container.innerHTML = '';
             const fragment = document.createDocumentFragment();
+            
             filteredSongs.forEach((song) => {
                 const globalIndex = allSongs.indexOf(song);
                 const ytId = getYoutubeId(song.url);
                 const thumbUrl = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
+                const isPlaying = (currentSongIndex === globalIndex);
 
                 const card = document.createElement('div');
-                card.className = "bg-zinc-900/60 hover:bg-zinc-800 border border-zinc-900 rounded-xl p-2.5 flex flex-col gap-2 cursor-pointer transition-all active:scale-[0.98] group min-w-0";
+                card.className = `bg-zinc-900/60 hover:bg-zinc-800 border ${isPlaying ? 'border-yellow-400 bg-zinc-900' : 'border-zinc-900'} rounded-xl p-2.5 flex flex-col gap-2 cursor-pointer transition-all active:scale-[0.98] group min-w-0 relative overflow-hidden`;
                 card.onclick = () => playSong(globalIndex);
 
+                // Small Wave Overlay when playing
+                const playingWaveHTML = isPlaying ? `
+                    <div class="absolute top-2 right-2 z-20 flex items-end gap-[2px] bg-black/80 px-2 py-1 rounded-md border border-yellow-400/50">
+                        <div class="card-wave-bar" style="animation-delay: 0.1s"></div>
+                        <div class="card-wave-bar" style="animation-delay: 0.3s"></div>
+                        <div class="card-wave-bar" style="animation-delay: 0.2s"></div>
+                    </div>
+                ` : '';
+
                 card.innerHTML = `
+                    ${playingWaveHTML}
                     <div class="w-full aspect-video bg-black rounded-lg overflow-hidden shrink-0 border border-zinc-800 relative">
                         <img src="${thumbUrl}" alt="thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" onerror="this.src='https://via.placeholder.com/320x180/18181b/facc15?text=ZGX+Song'">
                     </div>
                     <div class="min-w-0 flex-1 flex flex-col justify-between">
-                        <h3 class="text-xs font-bold text-zinc-100 group-hover:text-yellow-400 break-words line-clamp-2">${song.title}</h3>
+                        <h3 class="text-xs font-bold ${isPlaying ? 'text-yellow-400' : 'text-zinc-100'} group-hover:text-yellow-400 break-words line-clamp-2">${song.title}</h3>
                     </div>
                 `;
                 fragment.appendChild(card);
@@ -513,13 +532,21 @@
         }
 
         window.addEventListener('resize', refreshVideoFramePosition);
+        window.addEventListener('scroll', refreshVideoFramePosition, true);
 
-        /* Fast Instant Play System */
+        /* Fast Instant Play System with Error Safe Retries */
         function playSong(index, startAtSeconds = 0) {
             if (index < 0 || index >= allSongs.length) return;
             
-            const isSameSong = (currentSongIndex === index);
+            // Safe Retry if YouTube API isn't ready
+            if (typeof YT === 'undefined' || !YT.Player) {
+                setTimeout(() => playSong(index, startAtSeconds), 300);
+                return;
+            }
+
             currentSongIndex = index;
+            renderSongsList(); // Refresh list to show active wave on playing song
+            
             const song = allSongs[index];
             const ytId = getYoutubeId(song.url) || 'dQw4w9WgXcQ';
 
@@ -617,6 +644,7 @@
 
         function animateWave(start) {
             clearInterval(waveAnimationInterval);
+            waveAnimationInterval = null;
             const waveWrapper = document.getElementById('waveWrapper');
             const bars = document.querySelectorAll('.wave-bar');
             
@@ -636,17 +664,20 @@
             }, 80);
         }
 
-        /* Strict Border-Only Disco Flickering */
+        /* Strict Border-Only Disco Flickering for Square Box */
         function runDynamicDiscoEngine(shouldRun) {
             clearInterval(textRotationInterval);
             clearInterval(discoControlInterval);
+            textRotationInterval = null;
+            discoControlInterval = null;
+
             const lightBar = document.getElementById('visualizerLightBar');
             const textBox = document.getElementById('visualizerText');
             if(!lightBar || !textBox) return;
 
             if (!shouldRun || !isDiscoEnabled) {
                 lightBar.classList.remove('disco-border-active');
-                lightBar.className = "w-full h-12 rounded-xl bg-zinc-900 border-2 border-zinc-800 flex flex-col items-center justify-center px-4";
+                lightBar.className = "w-full h-12 rounded-none bg-zinc-900 border-2 border-zinc-800 flex flex-col items-center justify-center px-4";
                 return;
             }
 
@@ -740,7 +771,7 @@
             }
         }
 
-        /* Seamless Global Timeline Drag Handler */
+        /* Timeline Drag Handler */
         function attachTimelineEvents(containerId, progressId, thumbId) {
             const container = document.getElementById(containerId);
             if(!container) return;
@@ -853,6 +884,7 @@
             
             isPlayerFullscreen = false; 
             currentSongIndex = -1;
+            renderSongsList(); // Remove active wave from songs list
         }
 
         const searchInputElem = document.getElementById('searchInput');

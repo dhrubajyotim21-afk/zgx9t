@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zubeen Garg Music Player</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #ff0055;
+      --secondary: #00f2fe;
+      --bg: #0b0c10;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --text: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Original Disco Light Effect */
+    .disco-light {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.15;
+      background: radial-gradient(circle at 50% 50%, #ff0055, transparent 60%),
+                  radial-gradient(circle at 20% 20%, #00f2fe, transparent 50%),
+                  radial-gradient(circle at 80% 80%, #7928ca, transparent 50%);
+      animation: discoPulse 4s infinite alternate ease-in-out;
+    }
+
+    @keyframes discoPulse {
+      0% {
+        transform: scale(1) rotate(0deg);
+        filter: hue-rotate(0deg);
+      }
+      100% {
+        transform: scale(1.2) rotate(10deg);
+        filter: hue-rotate(360deg);
+      }
+    }
+
+    /* Container Structure */
+    .app-container {
+      width: 100%;
+      max-width: 900px;
+      padding: 15px;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding-bottom: 100px;
+    }
+
+    /* Header - Compact Size */
+    header {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 10px 20px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .brand-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .cricket-live-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #00f2fe;
+    }
+
+    .cricket-icon-anim {
+      display: inline-flex;
+      gap: 3px;
+      align-items: center;
+      animation: batSwing 1.5s infinite ease-in-out;
+    }
+
+    @keyframes batSwing {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(-20deg); }
+    }
+
+    .ball-pulse {
+      width: 8px;
+      height: 8px;
+      background-color: #ff0055;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #ff0055;
+      animation: ballGlow 1s infinite alternate;
+    }
+
+    @keyframes ballGlow {
+      from { transform: scale(0.8); opacity: 0.7; }
+      to { transform: scale(1.2); opacity: 1; }
+    }
+
+    /* Main Section Title - Prominent */
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      text-align: center;
+      margin: 5px 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 15px rgba(255, 0, 85, 0.5);
+      background: linear-gradient(180deg, #ffffff, #b5b5b5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Playlist Section */
+    .playlist {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .playlist-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 15px;
+      border-radius: 12px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .playlist-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .playlist-item.active {
+      background: rgba(255, 0, 85, 0.15);
+      border-color: rgba(255, 0, 85, 0.4);
+    }
+
+    .item-info h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .item-info p {
+      font-size: 0.8rem;
+      color: #888;
+    }
+
+    /* Small Card Wave Visualizer (Only White) */
+    .card-wave {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 16px;
+      margin-left: 10px;
+    }
+
+    .card-wave span {
+      width: 3px;
+      height: 100%;
+      background-color: #ffffff;
+      border-radius: 2px;
+      animation: cardBarPulse 0.6s infinite alternate ease-in-out;
+    }
+
+    .card-wave span:nth-child(1) { animation-delay: 0.1s; }
+    .card-wave span:nth-child(2) { animation-delay: 0.3s; }
+    .card-wave span:nth-child(3) { animation-delay: 0.2s; }
+    .card-wave span:nth-child(4) { animation-delay: 0.4s; }
+
+    @keyframes cardBarPulse {
+      0% { height: 3px; }
+      100% { height: 16px; }
+    }
+
+    /* FULLSCREEN PLAYER OVERLAY */
+    .fullscreen-player {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(11, 12, 16, 0.98);
+      backdrop-filter: blur(25px);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 30px 20px;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .fullscreen-player.open {
+      transform: translateY(0);
+    }
+
+    .close-btn {
+      align-self: flex-start;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .album-art-large {
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      border: 4px solid var(--primary);
+      box-shadow: 0 0 30px rgba(255, 0, 85, 0.5);
+      object-fit: cover;
+      animation: spin 20s linear infinite;
+      animation-play-state: paused;
+    }
+
+    .album-art-large.playing {
+      animation-play-state: running;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+
+    .full-player-details {
+      text-align: center;
+    }
+
+    .full-player-details h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .full-player-details p {
+      font-size: 1rem;
+      color: #aaa;
+    }
+
+    .visualizer-container {
+      width: 100%;
+      max-width: 500px;
+      height: 50px;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: #ccc;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress {
+      width: 0%;
+      height: 100%;
+      background: var(--secondary);
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .btn {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: transform 0.2s, color 0.2s;
+    }
+
+    .btn:hover {
+      color: var(--secondary);
+      transform: scale(1.1);
+    }
+
+    .btn-play {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      box-shadow: 0 0 20px rgba(255, 0, 85, 0.6);
+    }
+
+    /* MINI PLAYER BAR AT BOTTOM */
+    .mini-player {
+      position: fixed;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 24px);
+      max-width: 870px;
+      background: rgba(20, 20, 25, 0.95);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      padding: 8px 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 90;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      cursor: pointer;
+    }
+
+    .mini-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mini-img {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .mini-text h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .mini-text p {
+      font-size: 0.75rem;
+      color: #888;
+    }
+
+    .mini-controls {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Original Disco Background Effect -->
+  <div class="disco-light"></div>
+
+  <div class="app-container">
+    <!-- Compact Header -->
+    <header>
+      <div class="brand-title">Zubeen Stream</div>
+      
+      <!-- Live Cricket Badge Animation -->
+      <div class="cricket-live-badge">
+        <span class="cricket-icon-anim">
+          <i class="fa-solid fa-cricket-bat-ball"></i>
+          <span class="ball-pulse"></span>
+        </span>
+        <span>aplt20_ Live Now</span>
+      </div>
+    </header>
+
+    <!-- Main Section Title -->
+    <h1 class="section-title">Only Zubeen Song</h1>
+
+    <!-- Song List Collection -->
+    <div class="playlist" id="playlist">
+      <!-- Songs injected via JavaScript -->
+    </div>
+  </div>
+
+  <!-- Bottom Mini Player -->
+  <div class="mini-player" id="mini-player">
+    <div class="mini-info" id="mini-info">
+      <img src="" alt="cover" class="mini-img" id="mini-img">
+      <div class="mini-text">
+        <h4 id="mini-title">Song Title</h4>
+        <p id="mini-artist">Artist Name</p>
+      </div>
+    </div>
+    <div class="mini-controls">
+      <button class="btn" id="mini-play"><i class="fa-solid fa-play" id="mini-play-icon"></i></button>
+    </div>
+  </div>
+
+  <!-- Fullscreen Player Overlay -->
+  <div class="fullscreen-player" id="fullscreen-player">
+    <button class="close-btn" id="close-fullscreen"><i class="fa-solid fa-chevron-down"></i></button>
+
+    <img src="" alt="Album Cover" class="album-art-large" id="full-album-art">
+
+    <div class="full-player-details">
+      <h2 id="full-song-title">Song Title</h2>
+      <p id="full-artist-name">Artist Name</p>
+    </div>
+
+    <!-- Wave Visualizer (White Only) -->
+    <div class="visualizer-container">
+      <canvas id="waveCanvas"></canvas>
+    </div>
+
+    <div class="progress-bar-container">
+      <span id="current-time">0:00</span>
+      <div class="progress-bar" id="progress-bar">
+        <div class="progress" id="progress"></div>
+      </div>
+      <span id="duration">0:00</span>
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="prev"><i class="fa-solid fa-backward-step"></i></button>
+      <button class="btn btn-play" id="play"><i class="fa-solid fa-play" id="play-icon"></i></button>
+      <button class="btn" id="next"><i class="fa-solid fa-forward-step"></i></button>
+    </div>
+  </div>
+
+  <script>
+    const songs = [
+      { title: "Ya Ali", artist: "Zubeen Garg", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", img: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=400&q=80" },
+      { title: "Mayabini", artist: "Zubeen Garg", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", img: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80" },
+      { title: "Dil Tu Hi Bataa", artist: "Zubeen Garg", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", img: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=400&q=80" }
+    ];
+
+    let currentSongIndex = 0;
+    let isPlaying = false;
+
+    const audio = new Audio(songs[currentSongIndex].src);
+    
+    // UI Elements
+    const playlistEl = document.getElementById('playlist');
+    const fullscreenPlayer = document.getElementById('fullscreen-player');
+    const closeFullscreen = document.getElementById('close-fullscreen');
+    
+    const fullAlbumArt = document.getElementById('full-album-art');
+    const fullSongTitle = document.getElementById('full-song-title');
+    const fullArtistName = document.getElementById('full-artist-name');
+    
+    const miniPlayer = document.getElementById('mini-player');
+    const miniInfo = document.getElementById('mini-info');
+    const miniImg = document.getElementById('mini-img');
+    const miniTitle = document.getElementById('mini-title');
+    const miniArtist = document.getElementById('mini-artist');
+    const miniPlayBtn = document.getElementById('mini-play');
+    const miniPlayIcon = document.getElementById('mini-play-icon');
+
+    const playBtn = document.getElementById('play');
+    const playIcon = document.getElementById('play-icon');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    
+    const progressBar = document.getElementById('progress-bar');
+    const progress = document.getElementById('progress');
+    const currentTimeEl = document.getElementById('current-time');
+    const durationEl = document.getElementById('duration');
+
+    // Canvas Visualizer Setup
+    const canvas = document.getElementById('waveCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
+    function renderPlaylist() {
+      playlistEl.innerHTML = '';
+      songs.forEach((song, index) => {
+        const item = document.createElement('div');
+        item.classList.add('playlist-item');
+        
+        const isCurrent = index === currentSongIndex;
+        if (isCurrent) item.classList.add('active');
+
+        item.innerHTML = `
+          <div class="item-info">
+            <h4>${song.title}</h4>
+            <p>${song.artist}</p>
+          </div>
+          <div style="display: flex; align-items: center;">
+            ${isCurrent && isPlaying ? `
+              <div class="card-wave">
+                <span></span><span></span><span></span><span></span>
+              </div>
+            ` : `<i class="fa-solid ${isCurrent && isPlaying ? 'fa-pause' : 'fa-play'}" style="color:#aaa;"></i>`}
+          </div>
+        `;
+
+        // Card Click Handler
+        item.addEventListener('click', () => {
+          if (currentSongIndex === index) {
+            // Same song tapped -> Open Fullscreen Player
+            fullscreenPlayer.classList.add('open');
+          } else {
+            // New song tapped -> Play from start
+            currentSongIndex = index;
+            loadSong(songs[currentSongIndex]);
+            playSong();
+          }
+        });
+
+        playlistEl.appendChild(item);
+      });
+    }
+
+    function loadSong(song) {
+      fullSongTitle.innerText = song.title;
+      fullArtistName.innerText = song.artist;
+      fullAlbumArt.src = song.img;
+
+      miniTitle.innerText = song.title;
+      miniArtist.innerText = song.artist;
+      miniImg.src = song.img;
+
+      audio.src = song.src;
+      renderPlaylist();
+    }
+
+    function playSong() {
+      isPlaying = true;
+      playIcon.className = 'fa-solid fa-pause';
+      miniPlayIcon.className = 'fa-solid fa-pause';
+      fullAlbumArt.classList.add('playing');
+      audio.play();
+      renderPlaylist();
+    }
+
+    function pauseSong() {
+      isPlaying = false;
+      playIcon.className = 'fa-solid fa-play';
+      miniPlayIcon.className = 'fa-solid fa-play';
+      fullAlbumArt.classList.remove('playing');
+      audio.pause();
+      renderPlaylist();
+    }
+
+    playBtn.addEventListener('click', () => isPlaying ? pauseSong() : playSong());
+    miniPlayBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      isPlaying ? pauseSong() : playSong();
+    });
+
+    miniInfo.addEventListener('click', () => fullscreenPlayer.classList.add('open'));
+    closeFullscreen.addEventListener('click', () => fullscreenPlayer.classList.remove('open'));
+
+    prevBtn.addEventListener('click', () => {
+      currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+      loadSong(songs[currentSongIndex]);
+      playSong();
+    });
+
+    nextBtn.addEventListener('click', () => {
+      currentSongIndex = (currentSongIndex + 1) % songs.length;
+      loadSong(songs[currentSongIndex]);
+      playSong();
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      if (audio.duration) {
+        const progressPercent = (audio.currentTime / audio.duration) * 100;
+        progress.style.width = `${progressPercent}%`;
+
+        let currentMin = Math.floor(audio.currentTime / 60);
+        let currentSec = Math.floor(audio.currentTime % 60);
+        if (currentSec < 10) currentSec = `0${currentSec}`;
+        currentTimeEl.innerText = `${currentMin}:${currentSec}`;
+
+        let durationMin = Math.floor(audio.duration / 60);
+        let durationSec = Math.floor(audio.duration % 60);
+        if (durationSec < 10) durationSec = `0${durationSec}`;
+        durationEl.innerText = `${durationMin}:${durationSec}`;
+      }
+    });
+
+    progressBar.addEventListener('click', (e) => {
+      const width = progressBar.clientWidth;
+      const clickX = e.offsetX;
+      audio.currentTime = (clickX / width) * audio.duration;
+    });
+
+    audio.addEventListener('ended', () => nextBtn.click());
+
+    // White Wave Visualizer Animation Loop
+    let phase = 0;
+    function drawWave() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#ffffff'; // White Wave
+
+      const amplitude = isPlaying ? 16 : 2;
+      const frequency = 0.02;
+
+      for (let x = 0; x < canvas.width; x++) {
+        const y = canvas.height / 2 + Math.sin(x * frequency + phase) * amplitude * Math.sin(x * 0.005);
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+
+      ctx.stroke();
+      phase += isPlaying ? 0.08 : 0.02;
+      requestAnimationFrame(drawWave);
+    }
+
+    loadSong(songs[currentSongIndex]);
+    drawWave();
+  </script>
+</body>
+</html>

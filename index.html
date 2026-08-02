@@ -99,7 +99,6 @@
             pointer-events: auto;
         }
 
-        /* SLEEK DISCO GLOW (THINNER PANEL EFFECT) */
         @keyframes dynamicDiscoGlow {
             0% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
             20% { border-color: #ff00ff; box-shadow: 0 0 18px #ff00ff; }
@@ -119,7 +118,6 @@
             touch-action: none !important;
         }
 
-        /* DYNAMIC EQUALIZER WAVE ANIMATION - METICULOUSLY YELLOW THREADS */
         .wave-bar {
             width: 3px;
             height: 4px;
@@ -128,7 +126,6 @@
             transition: height 0.07s ease-in-out;
         }
 
-        /* Smooth Modal Pop-up */
         .modal-animate {
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -149,7 +146,6 @@
                     <h1 class="text-3xl md:text-4xl font-black tracking-tighter uppercase truncate">
                         <span class="text-yellow-400">ZG</span> <span class="text-white">X9T</span>
                     </h1>
-                    <!-- USER ID PORTAL BUTTON -->
                     <button onclick="toggleDeviceModal()" class="flex items-center justify-center w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-yellow-400 hover:border-yellow-400 transition-all active:scale-95 shrink-0 mt-1">
                         <i class="fas fa-user-astronaut text-sm"></i>
                     </button>
@@ -247,23 +243,18 @@
         </div>
 
         <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/20 relative gap-4 overflow-hidden">
-            <!-- DISCO TOGGLE PANEL -->
             <div class="z-10 bg-zinc-900/50 backdrop-blur border border-zinc-800/80 px-2.5 py-0.5 rounded-full flex items-center gap-2 text-[10px] font-bold shadow-md">
                 <span class="text-zinc-400 uppercase tracking-wider text-[9px]">Disco Light</span>
                 <button id="discoToggleBtn" onclick="toggleDiscoSystem()" class="bg-yellow-400 text-black px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider transition-all">ON</button>
             </div>
 
             <div class="w-full max-w-lg flex flex-col gap-3 z-10">
-                <!-- SLEEK DISCO & TRACK TITLE BOX -->
                 <div id="visualizerLightBar" class="w-full h-11 rounded-lg bg-zinc-900/90 border border-zinc-800/80 flex flex-col items-center justify-center px-4 relative overflow-hidden transition-all duration-300">
                     <span id="visualizerText" class="text-sm font-black text-white tracking-wider uppercase truncate text-center z-10 transition-opacity duration-150">Jai Zubeen Da</span>
                 </div>
                 
-                <!-- VIDEO CONTAINER AND THE YELLOW EQUALIZER WAVE AT THE BOTTOM -->
                 <div class="w-full aspect-video bg-zinc-900/20 rounded-xl border border-zinc-900 shadow-2xl relative overflow-hidden">
                     <div id="fullPlayerAnchor" class="w-full h-full"></div>
-                    
-                    <!-- YELLOW WAVE CONTAINER -->
                     <div id="waveContainer" class="absolute bottom-0 inset-x-0 h-8 flex items-end justify-center gap-[2px] opacity-95 z-20 pointer-events-none px-2"></div>
                 </div>
             </div>
@@ -306,13 +297,11 @@
     </div>
 
     <script>
-        // YouTube API Instance Ready Check
         let isApiReady = false;
         function onYouTubeIframeAPIReady() {
             isApiReady = true;
         }
 
-        // FIREBASE SETUP
         const firebaseConfig = { 
             apiKey: "AIzaSyDISW7EbMP_eEt4GuR6cijgMyYKxgb7xIg", 
             authDomain: "music-b05e1.firebaseapp.com", 
@@ -340,7 +329,6 @@
         let textRotationIndex = 0;
         let userDeviceId = '';
 
-        // GENERATE YELLOW EQUALIZER BARS UNDER TRACK
         const waveContainer = document.getElementById('waveContainer');
         const totalBars = 38;
         const fragmentBars = document.createDocumentFragment();
@@ -351,7 +339,6 @@
         }
         waveContainer.appendChild(fragmentBars);
 
-        // UNIVERSAL SEQUENTIAL ID GENERATOR
         function initDeviceFingerprint() {
             let storedId = localStorage.getItem('zg_device_id');
             if (storedId) {
@@ -787,9 +774,10 @@
             if(ytPlayer) { 
                 try { 
                     ytPlayer.stopVideo();
-                    ytPlayer.destroy();
+                    if(typeof ytPlayer.clearVideo === 'function') {
+                        ytPlayer.clearVideo();
+                    }
                 } catch(e){} 
-                ytPlayer = null;
             }
             
             document.body.classList.remove('fullscreen-lock');
@@ -815,7 +803,6 @@
                 const index = parseInt(savedIndex);
                 const startSecs = savedTime ? parseFloat(savedTime) : 0;
                 if(index >= 0 && index < allSongs.length) {
-                    // Safe timeout to let page render before auto-initializing last played
                     setTimeout(() => playSong(index, startSecs), 500);
                 }
             }

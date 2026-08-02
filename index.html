@@ -139,49 +139,48 @@
     </div>
 
     <!-- APP MAIN CONTENT LIST LAYOUT -->
-    <div id="appScrollBody" class="w-full h-full pb-36 no-scrollbar allow-scroll">
-        <header class="p-4 border-b border-zinc-900 flex justify-between items-start sticky top-0 bg-black/95 backdrop-blur z-30">
+    <div id="appScrollBody" class="w-full h-full pb-36 no-scrollbar allow-scroll flex flex-col">
+        <!-- HEADER SECTION: STICKY & LARGER BOLD TEXT -->
+        <header class="p-4 border-b border-zinc-900 flex justify-between items-start sticky top-0 bg-black z-30 shadow-xl">
             <div class="min-w-0 flex-1 pr-2">
                 <div class="flex items-center gap-3">
-                    <h1 class="text-3xl md:text-4xl font-black tracking-tighter uppercase truncate">
+                    <h1 class="text-4xl md:text-5xl font-black tracking-tighter uppercase truncate">
                         <span class="text-yellow-400">ZG</span> <span class="text-white">X9T</span>
                     </h1>
-                    <button onclick="toggleDeviceModal()" class="flex items-center justify-center w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-yellow-400 hover:border-yellow-400 transition-all active:scale-95 shrink-0 mt-1">
-                        <i class="fas fa-user-astronaut text-sm"></i>
+                    <button onclick="toggleDeviceModal()" class="flex items-center justify-center w-9 h-9 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-yellow-400 hover:border-yellow-400 transition-all active:scale-95 shrink-0 mt-1">
+                        <i class="fas fa-user-astronaut text-base"></i>
                     </button>
                 </div>
-                <p class="text-[11px] font-black text-zinc-400 tracking-widest uppercase mt-1 truncate">ONLY ZUBEEN DA SONG</p>
-                <p class="text-base md:text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-white to-yellow-600 mt-1 truncate animate-pulse">#JusticeForZubeenGarg</p>
+                <p class="text-xs md:text-sm font-black text-zinc-300 tracking-wider uppercase mt-1.5 truncate">ONLY ZUBEEN DA SONG</p>
+                <p class="text-lg md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-white to-yellow-600 mt-1.5 truncate animate-pulse">#JusticeForZubeenGarg</p>
                 
-                <div class="mt-4 text-sm font-bold text-zinc-400 flex flex-wrap items-center justify-between gap-3 w-full">
+                <div class="mt-4 text-sm font-bold text-zinc-300 flex flex-wrap items-center justify-between gap-3 w-full">
                     <div class="flex items-center gap-2 shrink-0">
-                        <span>App By © Dhruba</span>
+                        <span class="font-bold text-xs">App By © Dhruba</span>
                     </div>
                     
                     <div class="relative flex-1 min-w-[140px] max-w-xs">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-500 text-xs">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400 text-xs">
                             <i class="fas fa-search"></i>
                         </span>
-                        <input type="text" id="searchInput" placeholder="Search song..." class="w-full bg-zinc-900 border border-zinc-800 rounded-lg pl-8 pr-3 py-1 text-xs focus:outline-none focus:border-yellow-500 text-white">
+                        <input type="text" id="searchInput" placeholder="Search song..." class="w-full bg-zinc-900 border border-zinc-800 rounded-lg pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:border-yellow-500 text-white font-medium">
                     </div>
                 </div>
             </div>
-            <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-600 rounded-xl flex items-center justify-center font-black text-xl text-black shadow-lg shrink-0 m-1">ZG</div>
+            <div class="w-14 h-14 bg-gradient-to-br from-yellow-400 to-amber-600 rounded-xl flex items-center justify-center font-black text-2xl text-black shadow-lg shrink-0 m-1">ZG</div>
         </header>
 
-        <section class="p-4 bg-zinc-950/40">
+        <section class="p-4 bg-zinc-950/40 shrink-0">
             <div class="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-zinc-400 px-1">
                 <span>All Song Collection</span>
                 <span id="totalSongsCount" class="bg-yellow-400/10 text-yellow-400 px-2 py-0.5 rounded-full border border-yellow-400/25">Loading...</span>
             </div>
         </section>
 
-        <main class="p-4">
-            <div id="songsContainer" class="flex flex-col gap-3">
-                <div class="animate-pulse flex flex-col gap-3">
-                    <div class="h-16 bg-zinc-900 rounded-lg"></div>
-                    <div class="h-16 bg-zinc-900 rounded-lg"></div>
-                </div>
+        <!-- MAIN CONTAINER: DOUBLE COLUMN GRID -->
+        <main class="p-4 flex-1">
+            <div id="songsContainer" class="grid grid-cols-2 gap-3">
+                <div class="animate-pulse bg-zinc-900 rounded-lg h-24 col-span-2"></div>
             </div>
         </main>
     </div>
@@ -434,15 +433,16 @@
                 const thumbUrl = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
 
                 const card = document.createElement('div');
-                card.className = "bg-zinc-900/60 hover:bg-zinc-800 border border-zinc-900 rounded-lg p-2 flex items-center gap-3 cursor-pointer transition-all active:scale-[0.99] group min-w-0";
+                // DOUBLE COLUMN CARD DESIGN WITH VERTICAL LAYOUT FOR COMPACT FIT
+                card.className = "bg-zinc-900/60 hover:bg-zinc-800 border border-zinc-900 rounded-xl p-2.5 flex flex-col gap-2 cursor-pointer transition-all active:scale-[0.98] group min-w-0";
                 card.onclick = () => playSong(globalIndex);
 
                 card.innerHTML = `
-                    <div class="w-20 h-12 bg-black rounded overflow-hidden shrink-0 border border-zinc-800 relative">
-                        <img src="${thumbUrl}" alt="thumbnail" class="w-full h-full object-cover" loading="lazy">
+                    <div class="w-full aspect-video bg-black rounded-lg overflow-hidden shrink-0 border border-zinc-800 relative">
+                        <img src="${thumbUrl}" alt="thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
                     </div>
-                    <div class="min-w-0 flex-1">
-                        <h3 class="text-sm font-bold text-zinc-100 group-hover:text-yellow-400 break-words line-clamp-2">${song.title}</h3>
+                    <div class="min-w-0 flex-1 flex flex-col justify-between">
+                        <h3 class="text-xs font-bold text-zinc-100 group-hover:text-yellow-400 break-words line-clamp-2">${song.title}</h3>
                     </div>
                 `;
                 fragment.appendChild(card);

@@ -46,7 +46,6 @@
                   radial-gradient(circle at 20% 20%, #00f2fe, transparent 50%),
                   radial-gradient(circle at 80% 80%, #7928ca, transparent 50%);
       animation: discoPulse 4s infinite alternate ease-in-out;
-      will-change: transform, filter;
     }
 
     @keyframes discoPulse {
@@ -133,7 +132,7 @@
       to { transform: scale(1.2); opacity: 1; }
     }
 
-    /* Main Section Title */
+    /* Main Section Title - Prominent */
     .section-title {
       font-size: 2.2rem;
       font-weight: 800;
@@ -168,8 +167,7 @@
       cursor: pointer;
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid transparent;
-      transition: background 0.2s, border 0.2s;
-      user-select: none;
+      transition: all 0.2s ease;
     }
 
     .playlist-item:hover {
@@ -195,7 +193,7 @@
     .card-wave {
       display: flex;
       align-items: flex-end;
-      gap: 3px;
+      gap: 2px;
       height: 16px;
       margin-left: 10px;
     }
@@ -234,7 +232,7 @@
       justify-content: space-between;
       padding: 30px 20px;
       transform: translateY(100%);
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .fullscreen-player.open {
@@ -248,12 +246,11 @@
       color: #fff;
       font-size: 1.5rem;
       cursor: pointer;
-      padding: 5px;
     }
 
     .album-art-large {
-      width: 220px;
-      height: 220px;
+      width: 240px;
+      height: 240px;
       border-radius: 50%;
       border: 4px solid var(--primary);
       box-shadow: 0 0 30px rgba(255, 0, 85, 0.5);
@@ -333,11 +330,12 @@
       color: #fff;
       font-size: 1.4rem;
       cursor: pointer;
-      transition: transform 0.2s;
+      transition: transform 0.2s, color 0.2s;
     }
 
-    .btn:active {
-      transform: scale(0.9);
+    .btn:hover {
+      color: var(--secondary);
+      transform: scale(1.1);
     }
 
     .btn-play {
@@ -428,7 +426,7 @@
 
     <!-- Song List Collection -->
     <div class="playlist" id="playlist">
-      <!-- Songs loaded dynamically -->
+      <!-- Songs injected via JavaScript -->
     </div>
   </div>
 
@@ -487,11 +485,9 @@
     let currentSongIndex = 0;
     let isPlaying = false;
 
-    // Single Audio Instance
-    const audio = new Audio();
-    audio.preload = "metadata";
-
-    // DOM Elements
+    const audio = new Audio(songs[currentSongIndex].src);
+    
+    // UI Elements
     const playlistEl = document.getElementById('playlist');
     const fullscreenPlayer = document.getElementById('fullscreen-player');
     const closeFullscreen = document.getElementById('close-fullscreen');
@@ -500,6 +496,7 @@
     const fullSongTitle = document.getElementById('full-song-title');
     const fullArtistName = document.getElementById('full-artist-name');
     
+    const miniPlayer = document.getElementById('mini-player');
     const miniInfo = document.getElementById('mini-info');
     const miniImg = document.getElementById('mini-img');
     const miniTitle = document.getElementById('mini-title');
@@ -517,22 +514,20 @@
     const currentTimeEl = document.getElementById('current-time');
     const durationEl = document.getElementById('duration');
 
-    // Canvas Setup
+    // Canvas Visualizer Setup
     const canvas = document.getElementById('waveCanvas');
     const ctx = canvas.getContext('2d');
-
-    function resizeCanvas() {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
 
     function renderPlaylist() {
       playlistEl.innerHTML = '';
       songs.forEach((song, index) => {
         const item = document.createElement('div');
-        item.className = 'playlist-item' + (index === currentSongIndex ? ' active' : '');
+        item.classList.add('playlist-item');
+        
+        const isCurrent = index === currentSongIndex;
+        if (isCurrent) item.classList.add('active');
 
         item.innerHTML = `
           <div class="item-info">
@@ -540,21 +535,21 @@
             <p>${song.artist}</p>
           </div>
           <div style="display: flex; align-items: center;">
-            ${(index === currentSongIndex && isPlaying) ? `
+            ${isCurrent && isPlaying ? `
               <div class="card-wave">
                 <span></span><span></span><span></span><span></span>
               </div>
-            ` : `<i class="fa-solid ${(index === currentSongIndex && isPlaying) ? 'fa-pause' : 'fa-play'}" style="color:#aaa;"></i>`}
+            ` : `<i class="fa-solid ${isCurrent && isPlaying ? 'fa-pause' : 'fa-play'}" style="color:#aaa;"></i>`}
           </div>
         `;
 
-        // Card Click Logic
+        // Card Click Handler
         item.addEventListener('click', () => {
           if (currentSongIndex === index) {
-            // Already playing song clicked -> Open Fullscreen
+            // Same song tapped -> Open Fullscreen Player
             fullscreenPlayer.classList.add('open');
           } else {
-            // New song clicked -> Change & Play
+            // New song tapped -> Play from start
             currentSongIndex = index;
             loadSong(songs[currentSongIndex]);
             playSong();
@@ -583,16 +578,7 @@
       playIcon.className = 'fa-solid fa-pause';
       miniPlayIcon.className = 'fa-solid fa-pause';
       fullAlbumArt.classList.add('playing');
-      
-      const playPromise = audio.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          isPlaying = false;
-          playIcon.className = 'fa-solid fa-play';
-          miniPlayIcon.className = 'fa-solid fa-play';
-          fullAlbumArt.classList.remove('playing');
-        });
-      }
+      audio.play();
       renderPlaylist();
     }
 
@@ -646,20 +632,18 @@
     progressBar.addEventListener('click', (e) => {
       const width = progressBar.clientWidth;
       const clickX = e.offsetX;
-      if (audio.duration) {
-        audio.currentTime = (clickX / width) * audio.duration;
-      }
+      audio.currentTime = (clickX / width) * audio.duration;
     });
 
     audio.addEventListener('ended', () => nextBtn.click());
 
-    // Pure White Wave Visualizer
+    // White Wave Visualizer Animation Loop
     let phase = 0;
     function drawWave() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.beginPath();
       ctx.lineWidth = 2;
-      ctx.strokeStyle = '#ffffff'; // Always White
+      ctx.strokeStyle = '#ffffff'; // White Wave
 
       const amplitude = isPlaying ? 16 : 2;
       const frequency = 0.02;
@@ -675,7 +659,6 @@
       requestAnimationFrame(drawWave);
     }
 
-    // Init App
     loadSong(songs[currentSongIndex]);
     drawWave();
   </script>

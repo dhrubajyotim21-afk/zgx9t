@@ -6,7 +6,7 @@
     <title>ZG X9T - ONLY ZUBEEN DA SONG</title>
     
     <!-- PWA Setup -->
-    <meta name="description" content="ZG X9T - ONLY ZUBEEN DA SONG. Dedicated to Zubeen Garg."
+    <meta name="description" content="ZG X9T - ONLY ZUBEEN DA SONG. Dedicated to Zubeen Garg.">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ZG X9T">
@@ -159,10 +159,7 @@
                 
                 <div class="mt-4 text-sm font-bold text-zinc-400 flex flex-wrap items-center justify-between gap-3 w-full">
                     <div class="flex items-center gap-2 shrink-0">
-                        <span>App By
-
-                            <i class= 0"></i> ©Dhruba
-                        </a>
+                        <span>App By © Dhruba</span>
                     </div>
                     
                     <div class="relative flex-1 min-w-[140px] max-w-xs">
@@ -193,7 +190,7 @@
         </main>
     </div>
 
-    <!-- DEVICE ID MODAL POPUP (DEVICE NAME REMOVED AS REQUESTED) -->
+    <!-- DEVICE ID MODAL POPUP -->
     <div id="deviceModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] hidden items-center justify-center p-4 modal-animate opacity-0">
         <div class="bg-zinc-950 border border-zinc-800 w-full max-w-xs rounded-2xl p-5 shadow-2xl flex flex-col items-center text-center relative">
             <button onclick="toggleDeviceModal()" class="absolute top-3 right-3 text-zinc-500 hover:text-white transition-colors"><i class="fas fa-times"></i></button>
@@ -266,10 +263,8 @@
                 <div class="w-full aspect-video bg-zinc-900/20 rounded-xl border border-zinc-900 shadow-2xl relative overflow-hidden">
                     <div id="fullPlayerAnchor" class="w-full h-full"></div>
                     
-                    <!-- YELLOW WAVE CONTAINER POWERED BY MUSIC TALE -->
-                    <div id="waveContainer" class="absolute bottom-0 inset-x-0 h-8 flex items-end justify-center gap-[2px] opacity-95 z-20 pointer-events-none px-2">
-                        <!-- Yellow bars populated dynamically -->
-                    </div>
+                    <!-- YELLOW WAVE CONTAINER -->
+                    <div id="waveContainer" class="absolute bottom-0 inset-x-0 h-8 flex items-end justify-center gap-[2px] opacity-95 z-20 pointer-events-none px-2"></div>
                 </div>
             </div>
 
@@ -311,6 +306,11 @@
     </div>
 
     <script>
+        // YouTube API Ready Fallback Function
+        function onYouTubeIframeAPIReady() {
+            // API loaded successfully
+        }
+
         // FIREBASE SETUP
         const firebaseConfig = { 
             apiKey: "AIzaSyDISW7EbMP_eEt4GuR6cijgMyYKxgb7xIg", 
@@ -584,7 +584,6 @@
             }
         }
 
-        // AMINATED YELLOW WAVE ENGINE (BASED ON TRACK STATE)
         function animateWave(start) {
             clearInterval(waveAnimationInterval);
             const bars = document.querySelectorAll('.wave-bar');
@@ -594,7 +593,6 @@
                 return;
             }
 
-            // High frequency simulation loop that responds immediately to state
             waveAnimationInterval = setInterval(() => {
                 bars.forEach(bar => {
                     const randomHeight = Math.floor(Math.random() * 26) + 4; 
@@ -603,7 +601,6 @@
             }, 75);
         }
 
-        // TEXT REPLACEMENT INSIDE DISCO ENGINE ("WEB BY - DHRUBA")
         function runDynamicDiscoEngine(shouldRun) {
             clearInterval(textRotationInterval);
             clearInterval(discoControlInterval);
@@ -622,7 +619,6 @@
             textRotationInterval = setInterval(() => {
                 if(!allSongs[currentSongIndex]) return;
                 const songTitle = allSongs[currentSongIndex].title;
-                // REPLACED DEVICE ID WITH "WEB BY - DHRUBA" SUCCESSFULLY
                 const phrases = ["Joy Zubeen Da", "#JusticeForZubeenGarg", songTitle, "WEB BY - DHRUBA"];
                 
                 textRotationIndex = (textRotationIndex + 1) % phrases.length;

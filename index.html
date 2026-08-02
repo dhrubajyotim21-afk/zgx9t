@@ -1,666 +1,873 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zubeen Garg Music Player</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    :root {
-      --primary: #ff0055;
-      --secondary: #00f2fe;
-      --bg: #0b0c10;
-      --card-bg: rgba(255, 255, 255, 0.05);
-      --text: #ffffff;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    /* Original Disco Light Effect */
-    .disco-light {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.15;
-      background: radial-gradient(circle at 50% 50%, #ff0055, transparent 60%),
-                  radial-gradient(circle at 20% 20%, #00f2fe, transparent 50%),
-                  radial-gradient(circle at 80% 80%, #7928ca, transparent 50%);
-      animation: discoPulse 4s infinite alternate ease-in-out;
-    }
-
-    @keyframes discoPulse {
-      0% {
-        transform: scale(1) rotate(0deg);
-        filter: hue-rotate(0deg);
-      }
-      100% {
-        transform: scale(1.2) rotate(10deg);
-        filter: hue-rotate(360deg);
-      }
-    }
-
-    /* Container Structure */
-    .app-container {
-      width: 100%;
-      max-width: 900px;
-      padding: 15px;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      padding-bottom: 100px;
-    }
-
-    /* Header - Compact Size */
-    header {
-      background: var(--card-bg);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 10px 20px;
-      border-radius: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    }
-
-    .brand-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      background: linear-gradient(45deg, var(--primary), var(--secondary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .cricket-live-badge {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 5px 12px;
-      border-radius: 20px;
-      border: 1px solid rgba(0, 242, 254, 0.3);
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #00f2fe;
-    }
-
-    .cricket-icon-anim {
-      display: inline-flex;
-      gap: 3px;
-      align-items: center;
-      animation: batSwing 1.5s infinite ease-in-out;
-    }
-
-    @keyframes batSwing {
-      0%, 100% { transform: rotate(0deg); }
-      50% { transform: rotate(-20deg); }
-    }
-
-    .ball-pulse {
-      width: 8px;
-      height: 8px;
-      background-color: #ff0055;
-      border-radius: 50%;
-      box-shadow: 0 0 8px #ff0055;
-      animation: ballGlow 1s infinite alternate;
-    }
-
-    @keyframes ballGlow {
-      from { transform: scale(0.8); opacity: 0.7; }
-      to { transform: scale(1.2); opacity: 1; }
-    }
-
-    /* Main Section Title - Prominent */
-    .section-title {
-      font-size: 2.2rem;
-      font-weight: 800;
-      text-align: center;
-      margin: 5px 0;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      text-shadow: 0 0 15px rgba(255, 0, 85, 0.5);
-      background: linear-gradient(180deg, #ffffff, #b5b5b5);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    /* Playlist Section */
-    .playlist {
-      background: var(--card-bg);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .playlist-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 15px;
-      border-radius: 12px;
-      cursor: pointer;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid transparent;
-      transition: all 0.2s ease;
-    }
-
-    .playlist-item:hover {
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .playlist-item.active {
-      background: rgba(255, 0, 85, 0.15);
-      border-color: rgba(255, 0, 85, 0.4);
-    }
-
-    .item-info h4 {
-      font-size: 0.95rem;
-      font-weight: 600;
-    }
-
-    .item-info p {
-      font-size: 0.8rem;
-      color: #888;
-    }
-
-    /* Small Card Wave Visualizer (Only White) */
-    .card-wave {
-      display: flex;
-      align-items: flex-end;
-      gap: 2px;
-      height: 16px;
-      margin-left: 10px;
-    }
-
-    .card-wave span {
-      width: 3px;
-      height: 100%;
-      background-color: #ffffff;
-      border-radius: 2px;
-      animation: cardBarPulse 0.6s infinite alternate ease-in-out;
-    }
-
-    .card-wave span:nth-child(1) { animation-delay: 0.1s; }
-    .card-wave span:nth-child(2) { animation-delay: 0.3s; }
-    .card-wave span:nth-child(3) { animation-delay: 0.2s; }
-    .card-wave span:nth-child(4) { animation-delay: 0.4s; }
-
-    @keyframes cardBarPulse {
-      0% { height: 3px; }
-      100% { height: 16px; }
-    }
-
-    /* FULLSCREEN PLAYER OVERLAY */
-    .fullscreen-player {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(11, 12, 16, 0.98);
-      backdrop-filter: blur(25px);
-      z-index: 100;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      padding: 30px 20px;
-      transform: translateY(100%);
-      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .fullscreen-player.open {
-      transform: translateY(0);
-    }
-
-    .close-btn {
-      align-self: flex-start;
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-
-    .album-art-large {
-      width: 240px;
-      height: 240px;
-      border-radius: 50%;
-      border: 4px solid var(--primary);
-      box-shadow: 0 0 30px rgba(255, 0, 85, 0.5);
-      object-fit: cover;
-      animation: spin 20s linear infinite;
-      animation-play-state: paused;
-    }
-
-    .album-art-large.playing {
-      animation-play-state: running;
-    }
-
-    @keyframes spin {
-      100% { transform: rotate(360deg); }
-    }
-
-    .full-player-details {
-      text-align: center;
-    }
-
-    .full-player-details h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-    }
-
-    .full-player-details p {
-      font-size: 1rem;
-      color: #aaa;
-    }
-
-    .visualizer-container {
-      width: 100%;
-      max-width: 500px;
-      height: 50px;
-    }
-
-    canvas {
-      width: 100%;
-      height: 100%;
-    }
-
-    .progress-bar-container {
-      width: 100%;
-      max-width: 500px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.85rem;
-      color: #ccc;
-    }
-
-    .progress-bar {
-      flex: 1;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 5px;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .progress {
-      width: 0%;
-      height: 100%;
-      background: var(--secondary);
-    }
-
-    .controls {
-      display: flex;
-      align-items: center;
-      gap: 25px;
-    }
-
-    .btn {
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 1.4rem;
-      cursor: pointer;
-      transition: transform 0.2s, color 0.2s;
-    }
-
-    .btn:hover {
-      color: var(--secondary);
-      transform: scale(1.1);
-    }
-
-    .btn-play {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
-      box-shadow: 0 0 20px rgba(255, 0, 85, 0.6);
-    }
-
-    /* MINI PLAYER BAR AT BOTTOM */
-    .mini-player {
-      position: fixed;
-      bottom: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% - 24px);
-      max-width: 870px;
-      background: rgba(20, 20, 25, 0.95);
-      backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 14px;
-      padding: 8px 15px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 90;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-      cursor: pointer;
-    }
-
-    .mini-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .mini-img {
-      width: 42px;
-      height: 42px;
-      border-radius: 8px;
-      object-fit: cover;
-    }
-
-    .mini-text h4 {
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-
-    .mini-text p {
-      font-size: 0.75rem;
-      color: #888;
-    }
-
-    .mini-controls {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Original Disco Background Effect -->
-  <div class="disco-light"></div>
-
-  <div class="app-container">
-    <!-- Compact Header -->
-    <header>
-      <div class="brand-title">Zubeen Stream</div>
-      
-      <!-- Live Cricket Badge Animation -->
-      <div class="cricket-live-badge">
-        <span class="cricket-icon-anim">
-          <i class="fa-solid fa-cricket-bat-ball"></i>
-          <span class="ball-pulse"></span>
-        </span>
-        <span>aplt20_ Live Now</span>
-      </div>
-    </header>
-
-    <!-- Main Section Title -->
-    <h1 class="section-title">Only Zubeen Song</h1>
-
-    <!-- Song List Collection -->
-    <div class="playlist" id="playlist">
-      <!-- Songs injected via JavaScript -->
-    </div>
-  </div>
-
-  <!-- Bottom Mini Player -->
-  <div class="mini-player" id="mini-player">
-    <div class="mini-info" id="mini-info">
-      <img src="" alt="cover" class="mini-img" id="mini-img">
-      <div class="mini-text">
-        <h4 id="mini-title">Song Title</h4>
-        <p id="mini-artist">Artist Name</p>
-      </div>
-    </div>
-    <div class="mini-controls">
-      <button class="btn" id="mini-play"><i class="fa-solid fa-play" id="mini-play-icon"></i></button>
-    </div>
-  </div>
-
-  <!-- Fullscreen Player Overlay -->
-  <div class="fullscreen-player" id="fullscreen-player">
-    <button class="close-btn" id="close-fullscreen"><i class="fa-solid fa-chevron-down"></i></button>
-
-    <img src="" alt="Album Cover" class="album-art-large" id="full-album-art">
-
-    <div class="full-player-details">
-      <h2 id="full-song-title">Song Title</h2>
-      <p id="full-artist-name">Artist Name</p>
-    </div>
-
-    <!-- Wave Visualizer (White Only) -->
-    <div class="visualizer-container">
-      <canvas id="waveCanvas"></canvas>
-    </div>
-
-    <div class="progress-bar-container">
-      <span id="current-time">0:00</span>
-      <div class="progress-bar" id="progress-bar">
-        <div class="progress" id="progress"></div>
-      </div>
-      <span id="duration">0:00</span>
-    </div>
-
-    <div class="controls">
-      <button class="btn" id="prev"><i class="fa-solid fa-backward-step"></i></button>
-      <button class="btn btn-play" id="play"><i class="fa-solid fa-play" id="play-icon"></i></button>
-      <button class="btn" id="next"><i class="fa-solid fa-forward-step"></i></button>
-    </div>
-  </div>
-
-  <script>
-    const songs = [
-      { title: "Ya Ali", artist: "Zubeen Garg", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", img: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=400&q=80" },
-      { title: "Mayabini", artist: "Zubeen Garg", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", img: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80" },
-      { title: "Dil Tu Hi Bataa", artist: "Zubeen Garg", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", img: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=400&q=80" }
-    ];
-
-    let currentSongIndex = 0;
-    let isPlaying = false;
-
-    const audio = new Audio(songs[currentSongIndex].src);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ZGX - ONLY ZUBEEN SONG</title>
     
-    // UI Elements
-    const playlistEl = document.getElementById('playlist');
-    const fullscreenPlayer = document.getElementById('fullscreen-player');
-    const closeFullscreen = document.getElementById('close-fullscreen');
+    <!-- PWA Setup -->
+    <meta name="description" content="ZGX - ONLY ZUBEEN SONG. Dedicated to Zubeen Garg.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ZGX">
+    <meta name="mobile-web-app-capable" content="yes">
     
-    const fullAlbumArt = document.getElementById('full-album-art');
-    const fullSongTitle = document.getElementById('full-song-title');
-    const fullArtistName = document.getElementById('full-artist-name');
+    <meta name="keywords" content="ZGX, zgx, zg, ZG, Dhruba, Zubeen Da, Zubeen garg song, zubeen, zubeen song, assamese song, zubeen garg">
     
-    const miniPlayer = document.getElementById('mini-player');
-    const miniInfo = document.getElementById('mini-info');
-    const miniImg = document.getElementById('mini-img');
-    const miniTitle = document.getElementById('mini-title');
-    const miniArtist = document.getElementById('mini-artist');
-    const miniPlayBtn = document.getElementById('mini-play');
-    const miniPlayIcon = document.getElementById('mini-play-icon');
-
-    const playBtn = document.getElementById('play');
-    const playIcon = document.getElementById('play-icon');
-    const prevBtn = document.getElementById('prev');
-    const nextBtn = document.getElementById('next');
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlpHWCAtIE9OTFkgWlVCRUVOIFNPTkciLAogICJzaG9ydF9uYW1lIjogIlpHWCIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMDAwMDAwIiwKICAidGhlbWVfY29sb3IiOiAiIzAwMDAwMCIsCiAgIm9yaWVudGF0aW9uIjogInBvcnRyYWl0Igp9">
     
-    const progressBar = document.getElementById('progress-bar');
-    const progress = document.getElementById('progress');
-    const currentTimeEl = document.getElementById('current-time');
-    const durationEl = document.getElementById('duration');
+    <!-- Tailwind CSS & FontAwesome -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <!-- YouTube Iframe API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
 
-    // Canvas Visualizer Setup
-    const canvas = document.getElementById('waveCanvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    <style>
+        * {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            box-sizing: border-box;
+        }
 
-    function renderPlaylist() {
-      playlistEl.innerHTML = '';
-      songs.forEach((song, index) => {
-        const item = document.createElement('div');
-        item.classList.add('playlist-item');
+        html, body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .timeline-container {
+            position: relative;
+            width: 100%;
+            height: 8px;
+            background: #27272a;
+            border-radius: 9999px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            touch-action: none;
+        }
         
-        const isCurrent = index === currentSongIndex;
-        if (isCurrent) item.classList.add('active');
+        .timeline-progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #facc15, #ffffff);
+            border-radius: 9999px;
+            width: 0%;
+            pointer-events: none;
+        }
 
-        item.innerHTML = `
-          <div class="item-info">
-            <h4>${song.title}</h4>
-            <p>${song.artist}</p>
-          </div>
-          <div style="display: flex; align-items: center;">
-            ${isCurrent && isPlaying ? `
-              <div class="card-wave">
-                <span></span><span></span><span></span><span></span>
-              </div>
-            ` : `<i class="fa-solid ${isCurrent && isPlaying ? 'fa-pause' : 'fa-play'}" style="color:#aaa;"></i>`}
-          </div>
-        `;
+        .timeline-thumb {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #ffffff;
+            border: 2px solid #facc15;
+            border-radius: 50%;
+            left: 0%;
+            transform: translateX(-50%);
+            pointer-events: none;
+        }
 
-        // Card Click Handler
-        item.addEventListener('click', () => {
-          if (currentSongIndex === index) {
-            // Same song tapped -> Open Fullscreen Player
-            fullscreenPlayer.classList.add('open');
-          } else {
-            // New song tapped -> Play from start
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .yt-strict-blocker {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 40;
+            background: transparent;
+            pointer-events: auto;
+        }
+
+        /* Border Light Flickering (No Inner Light / Glow) */
+        @keyframes dynamicDiscoBorder {
+            0% { border-color: #ff0000; }
+            20% { border-color: #ff00ff; }
+            40% { border-color: #0000ff; }
+            60% { border-color: #00ffff; }
+            80% { border-color: #00ff00; }
+            100% { border-color: #ffff00; }
+        }
+
+        .disco-border-active {
+            animation: dynamicDiscoBorder var(--disco-speed, 0.15s) infinite alternate ease-in-out !important;
+            background-color: #09090b !important;
+            box-shadow: none !important;
+        }
+
+        .fullscreen-lock {
+            overflow: hidden !important;
+            touch-action: none !important;
+        }
+
+        /* Alternating White and Yellow Wave Bars */
+        .wave-bar {
+            width: 4px;
+            height: 4px;
+            border-radius: 2px;
+            transition: height 0.08s ease-in-out;
+        }
+
+        .wave-bar-white {
+            background-color: #ffffff !important;
+        }
+
+        .wave-bar-yellow {
+            background-color: #facc15 !important;
+        }
+
+        .modal-animate {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="antialiased flex flex-col h-screen w-screen overflow-hidden" oncontextmenu="return false;">
+
+    <div style="display: none !important; visibility: hidden !important; opacity: 0 !important; width: 0; height: 0; overflow: hidden;">
+        <h2>ZUBEEN GARG SONG - ZGX ONLY ZUBEEN SONG Collection</h2>
+        <p>Listen to latest assamese song, zubeen song, and tracks by Zubeen Da.</p>
+    </div>
+
+    <!-- MAIN APP WRAPPER -->
+    <div class="flex flex-col h-full w-full relative overflow-hidden bg-black">
+        
+        <!-- HEADER SECTION: LARGER & ENHANCED -->
+        <header class="p-4 border-b border-zinc-900 bg-black z-30 shadow-2xl shrink-0">
+            <div class="min-w-0 flex-1">
+                <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <h1 class="text-5xl md:text-6xl font-black tracking-tighter uppercase truncate">
+                            <span class="text-yellow-400">ZG</span><span class="text-white">X</span>
+                        </h1>
+                        <button onclick="toggleDeviceModal()" class="flex items-center justify-center w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-yellow-400 hover:border-yellow-400 transition-all active:scale-95 shrink-0">
+                            <i class="fas fa-user-astronaut text-lg"></i>
+                        </button>
+                    </div>
+                    <div class="w-14 h-14 bg-gradient-to-br from-yellow-400 to-amber-600 rounded-2xl flex items-center justify-center font-black text-2xl text-black shadow-lg shrink-0">ZGX</div>
+                </div>
+                
+                <p class="text-sm md:text-base font-black text-zinc-200 tracking-wider uppercase mt-1.5 truncate">ONLY ZUBEEN SONG</p>
+                <p class="text-lg md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-white to-yellow-400 mt-1 truncate animate-pulse tracking-wide">#JusticeForZubeenGarg</p>
+                
+                <div class="mt-3 text-sm font-bold text-zinc-300 flex items-center justify-between gap-3 w-full">
+                    <a href="https://facebook.com/dhruba.fyp" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 shrink-0 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 px-3 py-1.5 rounded-lg text-yellow-400 hover:text-yellow-300 text-xs font-black transition-all">
+                        <i class="fab fa-facebook text-blue-500"></i>
+                        <span>App By © DhrubaX</span>
+                    </a>
+                    
+                    <div class="relative flex-1 min-w-[130px] max-w-xs">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400 text-xs">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" id="searchInput" placeholder="Search zubeen song..." class="w-full bg-zinc-900 border border-zinc-800 rounded-lg pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:border-yellow-500 text-white font-medium">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="p-3 bg-zinc-950/60 border-b border-zinc-900 shrink-0 z-20">
+            <div class="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-zinc-400 px-1">
+                <span>Zubeen Song Collection</span>
+                <span id="totalSongsCount" class="bg-yellow-400/10 text-yellow-400 px-2 py-0.5 rounded-full border border-yellow-400/25">Loading...</span>
+            </div>
+        </section>
+
+        <!-- MAIN SCROLLABLE AREA: HOMEPAGE SONG GRID -->
+        <main class="flex-1 overflow-y-auto no-scrollbar p-4 pb-32">
+            <div id="songsContainer" class="grid grid-cols-2 gap-3">
+                <div class="animate-pulse bg-zinc-900 rounded-xl h-28 col-span-2 flex items-center justify-center text-zinc-600 text-xs font-bold">Loading Songs...</div>
+            </div>
+        </main>
+    </div>
+
+    <!-- DEVICE ID MODAL POPUP -->
+    <div id="deviceModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] hidden items-center justify-center p-4 modal-animate opacity-0">
+        <div class="bg-zinc-950 border border-zinc-800 w-full max-w-xs rounded-2xl p-5 shadow-2xl flex flex-col items-center text-center relative">
+            <button onclick="toggleDeviceModal()" class="absolute top-3 right-3 text-zinc-500 hover:text-white transition-colors"><i class="fas fa-times"></i></button>
+            <div class="w-14 h-14 rounded-full bg-yellow-400/10 border border-yellow-400/30 flex items-center justify-center text-yellow-400 text-2xl mb-3">
+                <i class="fas fa-id-card"></i>
+            </div>
+            <h3 class="text-sm font-black uppercase tracking-widest text-zinc-400">Your Unique Key</h3>
+            
+            <div class="w-full bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 mt-4 flex flex-col items-center justify-center">
+                <span class="text-[10px] uppercase font-black tracking-wider text-zinc-500 block mb-1">Device ID</span>
+                <span id="displayDeviceId" class="text-yellow-400 font-mono font-black text-lg tracking-wider">Generating...</span>
+            </div>
+            <p class="text-[9px] text-zinc-600 font-bold uppercase mt-4 tracking-widest">Logged into Admin Monitor Dashboard</p>
+        </div>
+    </div>
+
+    <!-- ACCURATELY ALIGNED VIDEO HOLDER -->
+    <div id="unifiedVideoHolder" class="fixed z-[42] bg-black rounded overflow-hidden border border-zinc-800 hidden pointer-events-none">
+        <div id="ytPlayerContainer" class="w-full h-full scale-105"></div>
+        <div class="yt-strict-blocker"></div>
+    </div>
+
+    <!-- BOTTOM MINI PLAYER -->
+    <div id="miniPlayer" class="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-900 p-2.5 z-40 hidden flex-col gap-1.5 shadow-2xl select-none">
+        <div id="miniTimeline" class="timeline-container w-full">
+            <div id="miniTimelineProgress" class="timeline-progress"></div>
+            <div id="miniTimelineThumb" class="timeline-thumb"></div>
+        </div>
+        <div class="flex items-center justify-between gap-2 mt-0.5">
+            <div id="miniFrameSlot" class="w-16 h-10 bg-black/50 border border-zinc-800 rounded shrink-0 relative overflow-hidden"></div>
+            
+            <div onclick="openFullScreenPlayer()" class="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
+                <div class="min-w-0 flex-1 pl-1">
+                    <h4 id="miniPlayerTitle" class="text-xs font-bold truncate text-zinc-100">Song Title</h4>
+                    <div class="flex items-center gap-2 mt-0.5">
+                        <span id="miniTimeLabel" class="text-[10px] font-mono font-bold text-yellow-400">0:00 / 0:00</span>
+                        <span class="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">• Expand</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 px-1">
+                <button onclick="playPrevious()" class="text-zinc-400 hover:text-white text-sm p-1.5"><i class="fas fa-backward-step"></i></button>
+                <button onclick="togglePlayPause()" class="w-9 h-9 bg-yellow-400 rounded-full flex items-center justify-center text-black text-xs shrink-0 font-bold shadow-md"><i id="miniPlayIcon" class="fas fa-play pl-0.5"></i></button>
+                <button onclick="playNext()" class="text-zinc-400 hover:text-white text-sm p-1.5"><i class="fas fa-forward-step"></i></button>
+                <button onclick="closeVideo()" class="text-zinc-500 hover:text-red-500 text-sm p-1.5 ml-0.5"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FULL SCREEN PLAYER -->
+    <div id="fullScreenPlayer" class="fixed inset-0 bg-black z-50 hidden flex-col justify-between overflow-hidden select-none">
+        <div class="p-4 flex justify-between items-center border-b border-zinc-900 bg-gradient-to-b from-black/90 to-transparent z-10">
+            <button onclick="closeFullScreenPlayer()" class="text-zinc-400 hover:text-white text-xl p-1"><i class="fas fa-chevron-down"></i></button>
+            <div class="text-center px-4 flex-1 min-w-0 mr-6">
+                <span class="text-[10px] font-black tracking-widest text-yellow-400 uppercase block">Now Playing</span>
+                <h3 id="fullPlayerTitle" class="text-sm font-bold truncate text-white">Song Title</h3>
+            </div>
+        </div>
+
+        <div class="flex-1 flex flex-col items-center justify-center p-4 bg-zinc-950/20 relative gap-4 overflow-hidden">
+            <div class="z-10 bg-zinc-900/50 backdrop-blur border border-zinc-800/80 px-3 py-1 rounded-full flex items-center gap-2 text-[10px] font-bold shadow-md">
+                <span class="text-zinc-400 uppercase tracking-wider text-[9px]">Disco Light</span>
+                <button id="discoToggleBtn" onclick="toggleDiscoSystem()" class="bg-yellow-400 text-black px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider transition-all">ON</button>
+            </div>
+
+            <div class="w-full max-w-lg flex flex-col gap-3 z-10">
+                <div id="visualizerLightBar" class="w-full h-12 rounded-xl bg-zinc-900 border-2 border-zinc-800 flex flex-col items-center justify-center px-4 relative overflow-hidden transition-all duration-200">
+                    <span id="visualizerText" class="text-sm font-black text-white tracking-wider uppercase truncate text-center z-10 transition-opacity duration-150">Jai Zubeen Da</span>
+                </div>
+                
+                <div class="w-full aspect-video bg-zinc-900/20 rounded-xl border border-zinc-900 shadow-2xl relative overflow-hidden">
+                    <div id="fullPlayerAnchor" class="w-full h-full"></div>
+                </div>
+            </div>
+
+            <div class="text-center px-4 w-full max-w-xl z-10">
+                <h2 class="text-xl md:text-2xl font-extrabold tracking-wide text-white uppercase">
+                    <span class="text-yellow-400">ZG</span>X <span class="text-yellow-400">MUSIC</span>
+                </h2>
+                <p class="text-[10px] font-bold tracking-widest mt-1 text-zinc-400 uppercase"> JAI ZUBEEN DA </p>
+            </div>
+        </div>
+
+        <div class="p-6 bg-gradient-to-t from-black via-black/95 to-transparent z-10 flex flex-col gap-3">
+            
+            <!-- ALTERNATING WHITE-YELLOW WAVE VISUALIZER -->
+            <div id="waveWrapper" class="w-full h-8 flex items-end justify-center gap-[3px] opacity-0 transition-opacity duration-300 pointer-events-none px-2 mb-1">
+                <div id="waveContainer" class="w-full h-full flex items-end justify-center gap-[3px]"></div>
+            </div>
+
+            <div class="flex flex-col gap-2 mb-2">
+                <div class="flex items-center gap-3 w-full">
+                    <button onclick="seekSeconds(-5)" class="text-zinc-400 hover:text-yellow-400 text-sm p-1 shrink-0 active:scale-95 transition-transform">
+                        <i class="fas fa-rotate-left"></i> <span class="text-[10px] font-bold font-mono">5s</span>
+                    </button>
+                    
+                    <div id="fullTimeline" class="timeline-container flex-1">
+                        <div id="fullTimelineProgress" class="timeline-progress"></div>
+                        <div id="fullTimelineThumb" class="timeline-thumb"></div>
+                    </div>
+                    
+                    <button onclick="seekSeconds(5)" class="text-zinc-400 hover:text-yellow-400 text-sm p-1 shrink-0 active:scale-95 transition-transform">
+                        <span class="text-[10px] font-bold font-mono">5s</span> <i class="fas fa-rotate-right"></i>
+                    </button>
+                </div>
+                <div class="flex justify-between text-[11px] font-mono font-bold text-zinc-400 px-8">
+                    <span id="currentTimeLabel">0:00</span>
+                    <span id="totalTimeLabel">0:00</span>
+                </div>
+            </div>
+            <div class="flex items-center justify-center gap-8 mb-2">
+                <button onclick="playPrevious()" class="text-zinc-400 hover:text-white text-xl"><i class="fas fa-backward-step"></i></button>
+                <button onclick="togglePlayPause()" class="w-16 h-16 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center text-black text-2xl shadow-lg"><i id="fullPlayIcon" class="fas fa-pause"></i></button>
+                <button onclick="playNext()" class="text-zinc-400 hover:text-white text-xl"><i class="fas fa-forward-step"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isApiReady = false;
+        function onYouTubeIframeAPIReady() {
+            isApiReady = true;
+        }
+
+        const firebaseConfig = { 
+            apiKey: "AIzaSyDISW7EbMP_eEt4GuR6cijgMyYKxgb7xIg", 
+            authDomain: "music-b05e1.firebaseapp.com", 
+            databaseURL: "https://music-b05e1-default-rtdb.firebaseio.com", 
+            projectId: "music-b05e1", 
+            storageBucket: "music-b05e1.firebasestorage.app", 
+            messagingSenderId: "771714302354", 
+            appId: "1:771714302354:web:43b3f590e1ff70a851014b" 
+        };
+        
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        let allSongs = [];
+        let filteredSongs = [];
+        let currentSongIndex = -1;
+        let ytPlayer = null;
+        let timelineInterval = null;
+        let textRotationInterval = null;
+        let discoControlInterval = null;
+        let waveAnimationInterval = null;
+        let isDraggingTimeline = false;
+        let isPlayerFullscreen = false;
+        let isDiscoEnabled = true; 
+        let textRotationIndex = 0;
+        let userDeviceId = '';
+
+        // Generate Alternating Audio Wave Bars (One White, One Yellow)
+        const waveContainer = document.getElementById('waveContainer');
+        const totalBars = 36;
+        const fragmentBars = document.createDocumentFragment();
+        for (let i = 0; i < totalBars; i++) {
+            const bar = document.createElement('div');
+            const colorClass = (i % 2 === 0) ? 'wave-bar-white' : 'wave-bar-yellow';
+            bar.className = `wave-bar ${colorClass}`;
+            fragmentBars.appendChild(bar);
+        }
+        waveContainer.appendChild(fragmentBars);
+
+        function initDeviceFingerprint() {
+            let storedId = localStorage.getItem('zg_device_id');
+            if (storedId) {
+                userDeviceId = storedId;
+                const devElem = document.getElementById('displayDeviceId');
+                if(devElem) devElem.innerText = userDeviceId;
+                syncDeviceMetricsWithAdmin(userDeviceId);
+            } else {
+                database.ref('admin/device_counter').transaction((currentCount) => {
+                    return (currentCount || 0) + 1;
+                }, (error, committed, snapshot) => {
+                    let sequenceNum = committed && snapshot.val() ? snapshot.val() : (Math.floor(Math.random() * 800) + 11);
+                    const formattedId = `zgx-${String(sequenceNum).padStart(3, '0')}`;
+                    localStorage.setItem('zg_device_id', formattedId);
+                    userDeviceId = formattedId;
+                    const devElem = document.getElementById('displayDeviceId');
+                    if(devElem) devElem.innerText = userDeviceId;
+                    syncDeviceMetricsWithAdmin(userDeviceId);
+                });
+            }
+        }
+
+        function syncDeviceMetricsWithAdmin(id) {
+            database.ref(`admin/active_devices/${id}`).set({
+                deviceId: id,
+                lastActive: firebase.database.ServerValue.TIMESTAMP,
+                userAgent: navigator.userAgent
+            });
+        }
+
+        function toggleDeviceModal() {
+            const modal = document.getElementById('deviceModal');
+            if(modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            } else {
+                modal.classList.add('opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }, 250);
+            }
+        }
+
+        function getYoutubeId(url) {
+            if (!url) return '';
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : '';
+        }
+
+        function extractSongs(obj) {
+            let songsList = [];
+            function recurse(current) {
+                if (!current || typeof current !== 'object') return;
+                if (current.url || current.videoUrl || current.link || current.songUrl) {
+                    songsList.push({
+                        title: current.title || current.name || current.songName || 'Zubeen Song',
+                        url: current.url || current.videoUrl || current.link || current.songUrl
+                    });
+                    return;
+                }
+                Object.keys(current).forEach(key => recurse(current[key]));
+            }
+            recurse(obj);
+            return songsList;
+        }
+
+        const fallbackSongs = [
+            { title: "Mayabini Radio Version - Zubeen Garg", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+            { title: "Ya Ali - Zubeen Garg Classic", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+            { title: "Mon Mohoini - Zubeen Da Hits", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
+        ];
+
+        function loadSongsFromDatabase() {
+            database.ref('/').on('value', (snapshot) => {
+                const data = snapshot.val();
+                let fetched = extractSongs(data);
+                allSongs = (fetched && fetched.length > 0) ? fetched : fallbackSongs;
+                filteredSongs = [...allSongs];
+                const countElem = document.getElementById('totalSongsCount');
+                if(countElem) countElem.innerText = `${allSongs.length} Tracks`;
+                renderSongsList();
+            }, (error) => {
+                allSongs = fallbackSongs;
+                filteredSongs = [...allSongs];
+                renderSongsList();
+            });
+        }
+
+        function renderSongsList() {
+            const container = document.getElementById('songsContainer');
+            if(!container) return;
+            container.innerHTML = '';
+            const fragment = document.createDocumentFragment();
+            filteredSongs.forEach((song) => {
+                const globalIndex = allSongs.indexOf(song);
+                const ytId = getYoutubeId(song.url);
+                const thumbUrl = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
+
+                const card = document.createElement('div');
+                card.className = "bg-zinc-900/60 hover:bg-zinc-800 border border-zinc-900 rounded-xl p-2.5 flex flex-col gap-2 cursor-pointer transition-all active:scale-[0.98] group min-w-0";
+                card.onclick = () => playSong(globalIndex);
+
+                card.innerHTML = `
+                    <div class="w-full aspect-video bg-black rounded-lg overflow-hidden shrink-0 border border-zinc-800 relative">
+                        <img src="${thumbUrl}" alt="thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" onerror="this.src='https://via.placeholder.com/320x180/18181b/facc15?text=ZGX+Song'">
+                    </div>
+                    <div class="min-w-0 flex-1 flex flex-col justify-between">
+                        <h3 class="text-xs font-bold text-zinc-100 group-hover:text-yellow-400 break-words line-clamp-2">${song.title}</h3>
+                    </div>
+                `;
+                fragment.appendChild(card);
+            });
+            container.appendChild(fragment);
+        }
+
+        /* Dynamic iFrame Holder Positioning */
+        function refreshVideoFramePosition() {
+            const holder = document.getElementById('unifiedVideoHolder');
+            if(!holder) return;
+
+            if(isPlayerFullscreen) {
+                const anchor = document.getElementById('fullPlayerAnchor');
+                if(anchor) {
+                    const bounds = anchor.getBoundingClientRect();
+                    holder.style.top = `${bounds.top}px`;
+                    holder.style.left = `${bounds.left}px`;
+                    holder.style.width = `${bounds.width}px`;
+                    holder.style.height = `${bounds.height}px`;
+                    holder.style.bottom = "auto";
+                    holder.style.zIndex = "51";
+                    holder.style.borderRadius = "12px";
+                }
+            } else {
+                const slot = document.getElementById('miniFrameSlot');
+                if(slot) {
+                    const bounds = slot.getBoundingClientRect();
+                    holder.style.top = `${bounds.top}px`;
+                    holder.style.left = `${bounds.left}px`;
+                    holder.style.width = `${bounds.width}px`;
+                    holder.style.height = `${bounds.height}px`;
+                    holder.style.bottom = "auto";
+                    holder.style.zIndex = "41";
+                    holder.style.borderRadius = "4px";
+                }
+            }
+        }
+
+        window.addEventListener('resize', refreshVideoFramePosition);
+
+        /* Fast Instant Play System */
+        function playSong(index, startAtSeconds = 0) {
+            if (index < 0 || index >= allSongs.length) return;
+            
+            const isSameSong = (currentSongIndex === index);
             currentSongIndex = index;
-            loadSong(songs[currentSongIndex]);
-            playSong();
-          }
+            const song = allSongs[index];
+            const ytId = getYoutubeId(song.url) || 'dQw4w9WgXcQ';
+
+            const fTitle = document.getElementById('fullPlayerTitle');
+            const mTitle = document.getElementById('miniPlayerTitle');
+            if(fTitle) fTitle.innerText = song.title;
+            if(mTitle) mTitle.innerText = song.title;
+            
+            const miniPly = document.getElementById('miniPlayer');
+            if(miniPly) {
+                miniPly.classList.remove('hidden');
+                miniPly.classList.add('flex');
+            }
+
+            const holder = document.getElementById('unifiedVideoHolder');
+            if(holder) holder.classList.remove('hidden');
+            
+            setTimeout(refreshVideoFramePosition, 30);
+
+            if (ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
+                ytPlayer.loadVideoById({
+                    videoId: ytId,
+                    startSeconds: startAtSeconds
+                });
+                ytPlayer.playVideo();
+            } else {
+                const containerElem = document.getElementById('ytPlayerContainer');
+                if(containerElem) containerElem.innerHTML = '';
+                
+                ytPlayer = new YT.Player('ytPlayerContainer', {
+                    height: '100%',
+                    width: '100%',
+                    videoId: ytId,
+                    playerVars: { 
+                        'controls': 0, 
+                        'disablekb': 1, 
+                        'rel': 0, 
+                        'modestbranding': 1, 
+                        'iv_load_policy': 3, 
+                        'fs': 0, 
+                        'playsinline': 1,
+                        'showinfo': 0,
+                        'autohide': 1,
+                        'autoplay': 1
+                    },
+                    events: {
+                        'onReady': (e) => { 
+                            if(startAtSeconds > 0) e.target.seekTo(startAtSeconds, true);
+                            e.target.playVideo(); 
+                            refreshVideoFramePosition();
+                            startTimelineSync(); 
+                        },
+                        'onStateChange': onPlayerStateChange
+                    }
+                });
+            }
+        }
+
+        function onPlayerStateChange(event) {
+            const fIcon = document.getElementById('fullPlayIcon');
+            const mIcon = document.getElementById('miniPlayIcon');
+
+            if (event.data == YT.PlayerState.PLAYING) {
+                if(fIcon) fIcon.className = "fas fa-pause";
+                if(mIcon) mIcon.className = "fas fa-pause";
+                startTimelineSync();
+                runDynamicDiscoEngine(true);
+                animateWave(true);
+            } else {
+                if(fIcon) fIcon.className = "fas fa-play pl-1";
+                if(mIcon) mIcon.className = "fas fa-play pl-0.5";
+                clearInterval(timelineInterval);
+                runDynamicDiscoEngine(false);
+                animateWave(false);
+            }
+            if (event.data == YT.PlayerState.ENDED) playNext();
+        }
+
+        function toggleDiscoSystem() {
+            isDiscoEnabled = !isDiscoEnabled;
+            const btn = document.getElementById('discoToggleBtn');
+            if(!btn) return;
+            if(isDiscoEnabled) {
+                btn.innerText = "ON";
+                btn.className = "bg-yellow-400 text-black px-2 py-0.5 rounded text-[8px] font-black";
+                if(ytPlayer && typeof ytPlayer.getPlayerState === 'function' && ytPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
+                    runDynamicDiscoEngine(true);
+                }
+            } else {
+                btn.innerText = "OFF";
+                btn.className = "bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded text-[8px] font-black";
+                runDynamicDiscoEngine(false);
+            }
+        }
+
+        function animateWave(start) {
+            clearInterval(waveAnimationInterval);
+            const waveWrapper = document.getElementById('waveWrapper');
+            const bars = document.querySelectorAll('.wave-bar');
+            
+            if (!start) {
+                if(waveWrapper) waveWrapper.style.opacity = '0';
+                bars.forEach(bar => bar.style.height = '4px');
+                return;
+            }
+
+            if(waveWrapper) waveWrapper.style.opacity = '1';
+
+            waveAnimationInterval = setInterval(() => {
+                bars.forEach(bar => {
+                    const randomHeight = Math.floor(Math.random() * 28) + 4; 
+                    bar.style.height = `${randomHeight}px`;
+                });
+            }, 80);
+        }
+
+        /* Strict Border-Only Disco Flickering */
+        function runDynamicDiscoEngine(shouldRun) {
+            clearInterval(textRotationInterval);
+            clearInterval(discoControlInterval);
+            const lightBar = document.getElementById('visualizerLightBar');
+            const textBox = document.getElementById('visualizerText');
+            if(!lightBar || !textBox) return;
+
+            if (!shouldRun || !isDiscoEnabled) {
+                lightBar.classList.remove('disco-border-active');
+                lightBar.className = "w-full h-12 rounded-xl bg-zinc-900 border-2 border-zinc-800 flex flex-col items-center justify-center px-4";
+                return;
+            }
+
+            lightBar.classList.add('disco-border-active');
+            textRotationIndex = 0;
+            
+            textRotationInterval = setInterval(() => {
+                if(!allSongs[currentSongIndex]) return;
+                const songTitle = allSongs[currentSongIndex].title;
+                const phrases = ["Jai Zubeen Da", "#JusticeForZubeenGarg", songTitle, "ZGX BY DHRUBAX"];
+                
+                textRotationIndex = (textRotationIndex + 1) % phrases.length;
+                
+                textBox.style.opacity = '0';
+                setTimeout(() => {
+                    textBox.innerText = phrases[textRotationIndex];
+                    textBox.style.opacity = '1';
+                }, 100);
+            }, 2500);
+
+            discoControlInterval = setInterval(() => {
+                const speedFactor = Math.random();
+                let speed = "0.15s";
+                if (speedFactor > 0.75) speed = "0.05s"; 
+                else if (speedFactor > 0.40) speed = "0.1s";
+                else speed = "0.22s";
+                lightBar.style.setProperty('--disco-speed', speed);
+            }, 300);
+        }
+
+        function startTimelineSync() {
+            clearInterval(timelineInterval);
+            timelineInterval = setInterval(() => {
+                if (ytPlayer && typeof ytPlayer.getCurrentTime === 'function' && !isDraggingTimeline) {
+                    try {
+                        const current = ytPlayer.getCurrentTime() || 0;
+                        const duration = ytPlayer.getDuration() || 0;
+                        const pct = duration > 0 ? (current / duration) * 100 : 0;
+                        
+                        const fProg = document.getElementById('fullTimelineProgress');
+                        const fThumb = document.getElementById('fullTimelineThumb');
+                        const mProg = document.getElementById('miniTimelineProgress');
+                        const mThumb = document.getElementById('miniTimelineThumb');
+                        
+                        if(fProg) fProg.style.width = `${pct}%`;
+                        if(fThumb) fThumb.style.left = `${pct}%`;
+                        if(mProg) mProg.style.width = `${pct}%`;
+                        if(mThumb) mThumb.style.left = `${pct}%`;
+
+                        const curLab = document.getElementById('currentTimeLabel');
+                        const totLab = document.getElementById('totalTimeLabel');
+                        const mTimeLab = document.getElementById('miniTimeLabel');
+                        
+                        const curFormatted = formatTime(current);
+                        const totFormatted = formatTime(duration);
+
+                        if(curLab) curLab.innerText = curFormatted;
+                        if(totLab) totLab.innerText = totFormatted;
+                        if(mTimeLab) mTimeLab.innerText = `${curFormatted} / ${totFormatted}`;
+
+                    } catch(err) {}
+                }
+            }, 300);
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function seekSeconds(seconds) {
+            if (ytPlayer && typeof ytPlayer.getCurrentTime === 'function' && typeof ytPlayer.getDuration === 'function') {
+                const currentTime = ytPlayer.getCurrentTime();
+                const duration = ytPlayer.getDuration() || 0;
+                let targetTime = currentTime + seconds;
+                
+                if (targetTime < 0) targetTime = 0;
+                if (targetTime > duration) targetTime = duration;
+                
+                ytPlayer.seekTo(targetTime, true);
+                
+                const pct = duration > 0 ? (targetTime / duration) * 100 : 0;
+                const fProg = document.getElementById('fullTimelineProgress');
+                const fThumb = document.getElementById('fullTimelineThumb');
+                const curLab = document.getElementById('currentTimeLabel');
+
+                if(fProg) fProg.style.width = `${pct}%`;
+                if(fThumb) fThumb.style.left = `${pct}%`;
+                if(curLab) curLab.innerText = formatTime(targetTime);
+            }
+        }
+
+        /* Seamless Global Timeline Drag Handler */
+        function attachTimelineEvents(containerId, progressId, thumbId) {
+            const container = document.getElementById(containerId);
+            if(!container) return;
+            
+            function handleInteraction(e) {
+                if (!ytPlayer || typeof ytPlayer.getDuration !== 'function') return 0;
+                const rect = container.getBoundingClientRect();
+                let clientX = e.clientX;
+                if (e.touches && e.touches[0]) clientX = e.touches[0].clientX;
+                let clickX = clientX - rect.left;
+                clickX = Math.max(0, Math.min(clickX, rect.width));
+                const pct = clickX / rect.width;
+                const targetTime = pct * (ytPlayer.getDuration() || 0);
+                
+                const progElem = document.getElementById(progressId);
+                const thumbElem = document.getElementById(thumbId);
+                if(progElem) progElem.style.width = `${pct * 100}%`;
+                if(thumbElem) thumbElem.style.left = `${pct * 100}%`;
+                return targetTime;
+            }
+
+            const startDrag = (e) => {
+                isDraggingTimeline = true; 
+                let t = handleInteraction(e);
+                
+                const moveDrag = (me) => { 
+                    if(isDraggingTimeline) t = handleInteraction(me); 
+                };
+                
+                const endDrag = () => { 
+                    if (isDraggingTimeline) {
+                        isDraggingTimeline = false; 
+                        if(ytPlayer && typeof ytPlayer.seekTo === 'function') {
+                            ytPlayer.seekTo(t, true);
+                        }
+                    }
+                    window.removeEventListener('mousemove', moveDrag); 
+                    window.removeEventListener('mouseup', endDrag);
+                    window.removeEventListener('touchmove', moveDrag);
+                    window.removeEventListener('touchend', endDrag);
+                };
+
+                window.addEventListener('mousemove', moveDrag); 
+                window.addEventListener('mouseup', endDrag);
+                window.addEventListener('touchmove', moveDrag, { passive: false });
+                window.addEventListener('touchend', endDrag);
+            };
+
+            container.addEventListener('mousedown', startDrag);
+            container.addEventListener('touchstart', startDrag, { passive: false });
+        }
+
+        attachTimelineEvents('fullTimeline', 'fullTimelineProgress', 'fullTimelineThumb');
+        attachTimelineEvents('miniTimeline', 'miniTimelineProgress', 'miniTimelineThumb');
+
+        function openFullScreenPlayer() {
+            if(!ytPlayer) return;
+            isPlayerFullscreen = true;
+            document.body.classList.add('fullscreen-lock');
+            const fullScr = document.getElementById('fullScreenPlayer');
+            if(fullScr) {
+                fullScr.classList.remove('hidden');
+                fullScr.classList.add('flex');
+            }
+            setTimeout(refreshVideoFramePosition, 50);
+        }
+
+        function closeFullScreenPlayer() {
+            if(!ytPlayer) return;
+            isPlayerFullscreen = false;
+            document.body.classList.remove('fullscreen-lock');
+            const fullScr = document.getElementById('fullScreenPlayer');
+            if(fullScr) {
+                fullScr.classList.add('hidden');
+                fullScr.classList.remove('flex');
+            }
+            setTimeout(refreshVideoFramePosition, 50);
+        }
+
+        function togglePlayPause() {
+            if(!ytPlayer || typeof ytPlayer.getPlayerState !== 'function') return;
+            const state = ytPlayer.getPlayerState();
+            state === YT.PlayerState.PLAYING ? ytPlayer.pauseVideo() : ytPlayer.playVideo();
+        }
+
+        function playNext() { if(currentSongIndex < allSongs.length - 1) playSong(currentSongIndex + 1); else playSong(0); }
+        function playPrevious() { if(currentSongIndex > 0) playSong(currentSongIndex - 1); else playSong(allSongs.length - 1); }
+
+        function closeVideo() {
+            clearInterval(timelineInterval); 
+            clearInterval(textRotationInterval); 
+            clearInterval(discoControlInterval); 
+            clearInterval(waveAnimationInterval);
+            
+            if(ytPlayer) { 
+                try { 
+                    ytPlayer.stopVideo();
+                } catch(e){} 
+            }
+            
+            document.body.classList.remove('fullscreen-lock');
+            
+            const miniPly = document.getElementById('miniPlayer');
+            const fullScr = document.getElementById('fullScreenPlayer');
+            const vidHolder = document.getElementById('unifiedVideoHolder');
+            
+            if(miniPly) { miniPly.classList.add('hidden'); miniPly.classList.remove('flex'); }
+            if(fullScr) { fullScr.classList.add('hidden'); fullScr.classList.remove('flex'); }
+            if(vidHolder) { vidHolder.classList.add('hidden'); }
+            
+            isPlayerFullscreen = false; 
+            currentSongIndex = -1;
+        }
+
+        const searchInputElem = document.getElementById('searchInput');
+        if(searchInputElem) {
+            searchInputElem.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                filteredSongs = query === '' ? [...allSongs] : allSongs.filter(s => s.title.toLowerCase().includes(query));
+                renderSongsList();
+            });
+        }
+
+        window.addEventListener('load', () => {
+            initDeviceFingerprint();
+            loadSongsFromDatabase();
         });
-
-        playlistEl.appendChild(item);
-      });
-    }
-
-    function loadSong(song) {
-      fullSongTitle.innerText = song.title;
-      fullArtistName.innerText = song.artist;
-      fullAlbumArt.src = song.img;
-
-      miniTitle.innerText = song.title;
-      miniArtist.innerText = song.artist;
-      miniImg.src = song.img;
-
-      audio.src = song.src;
-      renderPlaylist();
-    }
-
-    function playSong() {
-      isPlaying = true;
-      playIcon.className = 'fa-solid fa-pause';
-      miniPlayIcon.className = 'fa-solid fa-pause';
-      fullAlbumArt.classList.add('playing');
-      audio.play();
-      renderPlaylist();
-    }
-
-    function pauseSong() {
-      isPlaying = false;
-      playIcon.className = 'fa-solid fa-play';
-      miniPlayIcon.className = 'fa-solid fa-play';
-      fullAlbumArt.classList.remove('playing');
-      audio.pause();
-      renderPlaylist();
-    }
-
-    playBtn.addEventListener('click', () => isPlaying ? pauseSong() : playSong());
-    miniPlayBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      isPlaying ? pauseSong() : playSong();
-    });
-
-    miniInfo.addEventListener('click', () => fullscreenPlayer.classList.add('open'));
-    closeFullscreen.addEventListener('click', () => fullscreenPlayer.classList.remove('open'));
-
-    prevBtn.addEventListener('click', () => {
-      currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
-      loadSong(songs[currentSongIndex]);
-      playSong();
-    });
-
-    nextBtn.addEventListener('click', () => {
-      currentSongIndex = (currentSongIndex + 1) % songs.length;
-      loadSong(songs[currentSongIndex]);
-      playSong();
-    });
-
-    audio.addEventListener('timeupdate', () => {
-      if (audio.duration) {
-        const progressPercent = (audio.currentTime / audio.duration) * 100;
-        progress.style.width = `${progressPercent}%`;
-
-        let currentMin = Math.floor(audio.currentTime / 60);
-        let currentSec = Math.floor(audio.currentTime % 60);
-        if (currentSec < 10) currentSec = `0${currentSec}`;
-        currentTimeEl.innerText = `${currentMin}:${currentSec}`;
-
-        let durationMin = Math.floor(audio.duration / 60);
-        let durationSec = Math.floor(audio.duration % 60);
-        if (durationSec < 10) durationSec = `0${durationSec}`;
-        durationEl.innerText = `${durationMin}:${durationSec}`;
-      }
-    });
-
-    progressBar.addEventListener('click', (e) => {
-      const width = progressBar.clientWidth;
-      const clickX = e.offsetX;
-      audio.currentTime = (clickX / width) * audio.duration;
-    });
-
-    audio.addEventListener('ended', () => nextBtn.click());
-
-    // White Wave Visualizer Animation Loop
-    let phase = 0;
-    function drawWave() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.beginPath();
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = '#ffffff'; // White Wave
-
-      const amplitude = isPlaying ? 16 : 2;
-      const frequency = 0.02;
-
-      for (let x = 0; x < canvas.width; x++) {
-        const y = canvas.height / 2 + Math.sin(x * frequency + phase) * amplitude * Math.sin(x * 0.005);
-        if (x === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      }
-
-      ctx.stroke();
-      phase += isPlaying ? 0.08 : 0.02;
-      requestAnimationFrame(drawWave);
-    }
-
-    loadSong(songs[currentSongIndex]);
-    drawWave();
-  </script>
+    </script>
 </body>
 </html>

@@ -20,6 +20,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Google Fonts for Bio Page -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Noto+Serif+Bengali:wght@400;700&display=swap" rel="stylesheet">
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -145,6 +148,204 @@
         .modal-animate {
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+        /* ====== BIO WEBSITE STYLES ====== */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #ffffff 0%, #fffbeb 35%, #fef3c7 70%, #ffedd5 100%);
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --primary-orange: #ea580c;
+            --accent-yellow: #d97706;
+            --highlight-yellow: #facc15;
+            --text-dark: #1c1917;
+            --text-muted: #57534e;
+            --soft-shadow: 0 10px 30px rgba(234, 88, 12, 0.08);
+        }
+
+        #bioPageModal {
+            font-family: 'Plus Jakarta Sans', 'Noto Serif Bengali', sans-serif;
+            color: var(--text-dark);
+        }
+
+        #bioPageModal .nav-wrapper {
+            position: sticky;
+            top: 10px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 1000;
+            padding: 0 10px;
+        }
+        #bioPageModal .thin-nav {
+            width: 100%;
+            max-width: 550px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            padding: 4px 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+        #bioPageModal .nav-links { 
+            display: flex; 
+            gap: 4px; 
+            list-style: none; 
+            width: 100%;
+            justify-content: space-between;
+        }
+        #bioPageModal .nav-links a {
+            text-decoration: none; 
+            color: var(--text-muted); 
+            font-size: 0.65rem;
+            font-weight: 700; 
+            padding: 4px 8px; 
+            border-radius: 15px; 
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        #bioPageModal .nav-links a.active { 
+            background-color: var(--highlight-yellow); 
+            color: #000; 
+            font-weight: 800;
+            box-shadow: 0 2px 8px rgba(250, 204, 21, 0.5);
+        }
+
+        #bioPageModal .container { max-width: 800px; margin: 0 auto; padding: 15px; }
+        #bioPageModal section { padding: 40px 0; border-bottom: 1px dashed rgba(234, 88, 12, 0.15); }
+
+        #bioPageModal .animate-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: opacity, transform;
+        }
+        #bioPageModal .animate-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #bioPageModal .home-title { 
+            font-size: 2.8rem; 
+            font-weight: 800; 
+            background: linear-gradient(90deg, #ea580c, #d97706);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center; 
+            letter-spacing: 1px; 
+        }
+        #bioPageModal .home-subhead { font-size: 1.1rem; font-weight: 700; color: var(--text-dark); text-align: center; margin-top: 6px; }
+        #bioPageModal .tagline { text-align: center; font-size: 0.85rem; font-weight: 700; color: #c2410c; margin: 8px 0 16px 0; }
+        #bioPageModal .home-desc-english { font-weight: 600; text-align: center; color: var(--text-muted); font-size: 0.95rem; margin-bottom: 8px; }
+        #bioPageModal .home-desc-assamese { text-align: center; font-size: 0.95rem; line-height: 1.7; color: var(--text-dark); margin-bottom: 20px; }
+
+        #bioPageModal .stat-dashed-box {
+            border-top: 2px dashed #f97316;
+            border-bottom: 2px dashed #f97316;
+            padding: 18px 10px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+        }
+        #bioPageModal .stat-num { font-size: 1.6rem; font-weight: 800; color: var(--primary-orange); }
+        #bioPageModal .stat-lbl { font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-top: 4px; }
+
+        #bioPageModal .photo-container {
+            width: 100%;
+            max-width: 280px;
+            aspect-ratio: 3 / 4;
+            margin: 20px auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(234, 88, 12, 0.15);
+            background: #fff;
+            padding: 5px;
+        }
+        #bioPageModal .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+            display: block;
+        }
+
+        #bioPageModal .life-span-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: 14px;
+            box-shadow: var(--soft-shadow);
+            margin-top: 15px;
+        }
+
+        #bioPageModal .date-card { text-align: center; }
+        #bioPageModal .date-card h4 { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; }
+        #bioPageModal .date-card p { font-size: 0.95rem; font-weight: 800; color: var(--primary-orange); margin-top: 2px; }
+        #bioPageModal .date-card span { font-size: 0.75rem; color: var(--text-muted); }
+
+        #bioPageModal .sec-head { font-size: 1.6rem; font-weight: 800; color: var(--primary-orange); text-align: center; margin-bottom: 4px; }
+        #bioPageModal .sec-subhead { font-size: 0.95rem; font-weight: 700; color: var(--accent-yellow); text-align: center; margin-bottom: 20px; }
+
+        #bioPageModal .card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: var(--soft-shadow);
+            margin-bottom: 16px;
+            border: none;
+        }
+
+        #bioPageModal .card h3 { font-size: 1.05rem; color: var(--primary-orange); margin-bottom: 8px; }
+        #bioPageModal .card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        #bioPageModal .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 10px; }
+        
+        #bioPageModal .grid-card { 
+            background: #fff; 
+            padding: 12px; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+            border: none;
+        }
+        #bioPageModal .grid-card strong { display: block; font-size: 0.85rem; color: var(--primary-orange); margin-bottom: 2px; }
+        #bioPageModal .grid-card span { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
+
+        #bioPageModal .pills-box { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+        #bioPageModal .pill { 
+            background: #ffedd5; 
+            color: #c2410c; 
+            padding: 5px 10px; 
+            border-radius: 15px; 
+            font-size: 0.75rem; 
+            font-weight: 700;
+        }
+
+        #bioPageModal .quote-card {
+            background: #fff;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: var(--soft-shadow);
+            margin-bottom: 14px;
+            border: none;
+        }
+        #bioPageModal .quote-card p { color: var(--text-dark); font-size: 0.9rem; font-weight: 600; line-height: 1.6; }
+        #bioPageModal .quote-card span { display: block; margin-top: 6px; font-size: 0.8rem; color: var(--primary-orange); font-weight: 700; }
+
+        #bioPageModal .direct-footer-text {
+            text-align: center;
+            padding: 30px 10px 20px 10px;
+            margin-top: 20px;
+            background: transparent;
+            border: none;
+        }
     </style>
 </head>
 <body class="antialiased flex flex-col h-screen w-screen overflow-x-hidden" oncontextmenu="return false;">
@@ -175,11 +376,19 @@
                 <p class="text-sm md:text-base font-black text-zinc-200 tracking-wider uppercase mt-1.5 truncate">ONLY ZUBEEN SONG</p>
                 <p class="text-lg md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-white to-yellow-400 mt-1 truncate animate-pulse tracking-wide">#JusticeForZubeenGarg</p>
                 
-                <div class="mt-3 text-sm font-bold text-zinc-300 flex items-center justify-between gap-3 w-full">
-                    <a href="https://facebook.com/dhruba.fyp" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 shrink-0 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 px-3 py-1.5 rounded-lg text-yellow-400 hover:text-yellow-300 text-xs font-black transition-all">
-                        <i class="fab fa-facebook text-blue-500"></i>
-                        <span>App By © DhrubaJyoti</span>
-                    </a>
+                <div class="mt-3 text-sm font-bold text-zinc-300 flex items-center justify-between gap-2 w-full flex-wrap">
+                    <div class="flex items-center gap-2">
+                        <a href="https://facebook.com/dhruba.fyp" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 shrink-0 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 px-3 py-1.5 rounded-lg text-yellow-400 hover:text-yellow-300 text-xs font-black transition-all">
+                            <i class="fab fa-facebook text-blue-500"></i>
+                            <span>App By © DhrubaJyoti</span>
+                        </a>
+
+                        <!-- BIO BUTTON ADDED HERE IN HEADER -->
+                        <button onclick="toggleBioModal()" class="flex items-center gap-1.5 shrink-0 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 border border-yellow-300 px-3 py-1.5 rounded-lg text-black text-xs font-black transition-all shadow-md active:scale-95">
+                            <i class="fas fa-book-open text-xs"></i>
+                            <span>BIO</span>
+                        </button>
+                    </div>
                     
                     <div class="relative flex-1 min-w-[130px] max-w-xs">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400 text-xs">
@@ -220,6 +429,388 @@
                 <span id="displayDeviceId" class="text-yellow-400 font-mono font-black text-lg tracking-wider">Generating...</span>
             </div>
             <p class="text-[9px] text-zinc-600 font-bold uppercase mt-4 tracking-widest">Logged into Admin Monitor Dashboard</p>
+        </div>
+    </div>
+
+    <!-- BIO FULLSCREEN MODAL / WEBSITE OVERLAY -->
+    <div id="bioPageModal" class="fixed inset-0 bg-white z-[70] hidden flex-col overflow-y-auto transition-opacity duration-300 opacity-0" style="background: var(--bg-gradient);">
+        <!-- CLOSE BUTTON FOR BIO -->
+        <button onclick="toggleBioModal()" class="fixed top-4 right-4 z-[1001] bg-black/70 hover:bg-black text-white w-9 h-9 rounded-full flex items-center justify-center shadow-lg transition-transform active:scale-95">
+            <i class="fas fa-times text-base"></i>
+        </button>
+
+        <!-- ULTRA THIN NAVIGATION BAR -->
+        <div class="nav-wrapper">
+            <nav class="thin-nav">
+                <ul class="nav-links">
+                    <li><a href="#home" class="active">HOME</a></li>
+                    <li><a href="#about">ABOUT</a></li>
+                    <li><a href="#journey">JOURNEY</a></li>
+                    <li><a href="#legacy">LEGACY</a></li>
+                    <li><a href="#farewell">FAREWELL</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="container">
+
+            <!-- ================= HOME SECTION ================= -->
+            <section id="home">
+                <div class="animate-scroll">
+                    <h1 class="home-title">ZUBEEN GARG</h1>
+                    <h2 class="home-subhead">জুবিন গাৰ্গ — অসমীয়া সংগীতৰ এক যুগ</h2>
+                    <div class="tagline">World Humming King · Heartthrob of Assam</div>
+                    
+                    <p class="home-desc-english">A legendary voice. A remarkable journey. A legacy beyond languages.</p>
+                    <p class="home-desc-assamese">৩৩ বছৰৰ সংগীত যাত্ৰাত ৪০+ ভাষাত কণ্ঠদান   আৰু ৩৮,০০০+ গানৰ ৰেকৰ্ডিং—জুবিন গাৰ্গৰ কণ্ঠই সংগীতৰ পৰিসৰক ভাষা আৰু সীমাৰ বহু ওপৰলৈ লৈ গৈছিল।</p>
+                </div>
+
+                <!-- COUNTING STATS -->
+                <div class="stat-dashed-box animate-scroll">
+                    <div>
+                        <div class="stat-num"><span class="counter" data-target="40">0</span>+</div>
+                        <div class="stat-lbl">Languages</div>
+                    </div>
+                    <div>
+                        <div class="stat-num"><span class="counter" data-target="38000">0</span>+</div>
+                        <div class="stat-lbl">Recordings</div>
+                    </div>
+                    <div>
+                        <div class="stat-num"><span class="counter" data-target="33">0</span></div>
+                        <div class="stat-lbl">Years of Musical Journey</div>
+                    </div>
+                </div>
+
+                <!-- 3:4 PORTRAIT PHOTO -->
+                <div class="photo-container animate-scroll">
+                    <a href="https://ibb.co/Pv6vsNKp"><img src="https://i.ibb.co/ZpMpRV5s/IMG-20260813-144859.jpg" alt="IMG-20260813-144859" border="0"></a>
+                </div>
+
+                <!-- DATES -->
+                <div class="animate-scroll">
+                    <p style="text-align: center; font-weight: 800; color: var(--primary-orange); font-size: 1.1rem; margin-top: 10px;">1972 — 2025</p>
+                    
+                    <div class="life-span-container">
+                        <div class="date-card">
+                            <h4>BORN</h4>
+                            <p>18 November 1972</p>
+                            <span>Meghalaya,Tura</span>
+                        </div>
+                        <div style="font-size: 1.4rem; color: var(--accent-yellow);">🕊️</div>
+                        <div class="date-card">
+                            <h4>PASSED</h4>
+                            <p>19 September 2025</p>
+                            <span>Singapore</span>
+                        </div>
+                    </div>
+
+                    <p style="text-align: center; font-style: italic; color: var(--text-muted); font-size: 0.85rem; margin-top: 12px;">A voice remembered. A legacy that remains.</p>
+                </div>
+            </section>
+
+
+            <!-- ================= ABOUT & BIO ================= -->
+            <section id="about">
+                <div class="animate-scroll">
+                    <h2 class="sec-head">ABOUT & BIO</h2>
+                    <h3 class="sec-subhead">Beyond the Legend • কিংবদন্তিৰ আঁৰৰ মানুহজন</h3>
+                </div>
+
+                <div class="card animate-scroll">
+                    <p>জুবিন গাৰ্গৰ জন্মনাম আছিল জুবিন বৰঠাকুৰ। পৰৱৰ্তী সময়ত তেওঁ নিজৰ Brahmin gotra “Garg”-ৰ পৰা “Garg” নামটো গ্ৰহণ কৰে। তেওঁৰ পৰিচয় আৰু সৃষ্টিশীলতাত অসমীয়া সংস্কৃতি আৰু পৰম্পৰাৰ শিপাৰ সৈতে বিশ্ব সংগীতৰ প্ৰভাৱৰ এক সুন্দৰ সমন্বয় দেখা যায়।</p>
+                </div>
+
+                <div class="card animate-scroll">
+                    <h3>Early Years & Family----</h3>
+                    <h4 style="font-size: 0.88rem; color: var(--primary-orange); margin: 6px 0 4px 0;">EarlyY Life -</h4>
+                    <p><strong>Born — Tura, Meghalaya</strong></p>
+                    <p style="margin-top: 4px;">মেঘালয়ৰ তুৰাত এটা অসমীয়া ব্ৰাহ্মণ পৰিয়ালত জন্মগ্ৰহণ কৰি জুবিন গাৰ্গে তেওঁৰ জীৱনৰ উল্লেখযোগ্য সময় যোৰহাট, অসমত অতিবাহিত কৰে।</p>
+
+                    <h4 style="font-size: 0.88rem; color: var(--primary-orange); margin: 12px 0 6px 0;">A Family of Talent • প্ৰতিভাৰে ভৰা এটা পৰিয়াল</h4>
+                    <div class="grid-2">
+                        <div class="grid-card">
+                            <strong>Father — Mohini Mohon Borthakur</strong>
+                            <span>Magistrate & Poet, known as “Kapil Thakur”</span>
+                        </div>
+                        <div class="grid-card">
+                            <strong>Mother — Ily Borthakur</strong>
+                            <span>Singer and his first musical guru</span>
+                        </div>
+                        <div class="grid-card">
+                            <strong>Sister — Jonkey Borthakur</strong>
+                            <span>Singer & Actress</span>
+                        </div>
+                        <div class="grid-card">
+                            <strong>Sister — Palme Borthakur</strong>
+                            <span>Professor of Geography</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card animate-scroll">
+                    <h3>Education & Musical Start • শিক্ষা আৰু সংগীতৰ আৰম্ভণি</h3>
+                    <h4 style="font-size: 0.85rem; color: var(--accent-yellow); margin: 6px 0 4px 0;">Educational Journey</h4>
+                    <ul style="padding-left: 18px; font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+                        <li><strong>Matriculation:</strong> Tamulpur Higher Secondary School</li>
+                        <li><strong>Higher Secondary:</strong> J.B. College & Karimganj College (1990–1992)</li>
+                        <li><strong>Bachelor's:</strong> B. Borooah College (Later left college to pursue his musical journey.)</li>
+                    </ul>
+
+                    <h4 style="font-size: 0.85rem; color: var(--accent-yellow); margin: 12px 0 4px 0;">The First Steps Into Music • সংগীতৰ জগতত প্ৰথম খোজ----</h4>
+                    <p style="font-size: 0.85rem; font-weight: 700; color: var(--primary-orange);">সংগীতৰ ভেটি</p>
+                    <p style="font-size: 0.88rem; margin-top: 2px;">তেওঁৰ সংগীতৰ আৰম্ভণিৰ অন্যতম প্ৰধান প্ৰেৰণা আছিল তেওঁৰ মাতৃ Ily Borthakur।</p>
+                    
+                    <div class="grid-2" style="margin-top: 8px;">
+                        <div class="grid-card"><strong>Tabla</strong><span>Pandit Robin Banerjee-ৰ অধীনত ১১ বছৰীয়া প্ৰশিক্ষণ</span></div>
+                        <div class="grid-card"><strong>Folk Music</strong><span>Guru Ramani Rai</span></div>
+                        <div class="grid-card"><strong>Classical Music</strong><span>Hindustani Classical tradition</span></div>
+                    </div>
+                </div>
+
+                <div class="card animate-scroll">
+                    <h3>A Multi-Instrumental Maestro • বিভিন্ন বাদ্যযন্ত্ৰৰ এজন দক্ষ শিল্পী</h3>
+                    <p>জুবিন গাৰ্গৰ সংগীত-সত্তাৰ অন্যতম বিশেষ দিশ আছিল বিভিন্ন বাদ্যযন্ত্ৰৰ সৈতে তেওঁৰ পৰিচয় আৰু দক্ষতা।</p>
+                    <div class="pills-box">
+                        <span class="pill">Anandalahari</span> <span class="pill">Dhol</span> <span class="pill">Dotara</span> 
+                        <span class="pill">Drums</span> <span class="pill">Guitar</span> <span class="pill">Harmonica</span> 
+                        <span class="pill">Harmonium</span> <span class="pill">Mandolin</span> <span class="pill">Keyboard</span> 
+                        <span class="pill">Tabla</span> <span class="pill">Percussion</span> <span class="pill">Various Others.</span>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ================= MUSICAL JOURNEY ================= -->
+            <section id="journey">
+                <div class="animate-scroll">
+                    <h2 class="sec-head">Musical Journey</h2>
+                    <h3 class="sec-subhead">A Journey Written in Music • সুৰেৰে লিখা এক যাত্ৰা</h3>
+                    <p style="text-align: center; font-size: 0.88rem; color: var(--text-muted); margin-bottom: 15px;">From Assamese melodies to a musical journey beyond borders.</p>
+                </div>
+
+                <div class="animate-scroll">
+                    <h4 style="color: var(--primary-orange); margin-bottom: 8px; font-size: 0.9rem;">Milestones of a Musical Journey • সংগীতৰ বাটত গুৰুত্বপূৰ্ণ মাইলষ্টোন</h4>
+                    
+                    <div class="grid-2">
+                        <div class="grid-card">
+                            <strong>1992 — The Beginning</strong>
+                            <span style="display:block; font-weight:600; color:var(--text-dark); margin-bottom:2px;">সংগীতৰ যাত্ৰাৰ আৰম্ভণি</span>
+                            <span>নৱেম্বৰ ১৯৯২ত প্ৰথম অসমীয়া album ‘Anamika’-ৰ জৰিয়তে তেওঁৰ সংগীত যাত্ৰাই এক নতুন অধ্যায়ত প্ৰৱেশ কৰে।</span>
+                        </div>
+                        <div class="grid-card">
+                            <strong>1995 — Bollywood Entry</strong>
+                            <span style="display:block; font-weight:600; color:var(--text-dark); margin-bottom:2px;">অসমৰ পৰা বহল সংগীতৰ পৃথিৱীলৈ</span>
+                            <span>মুম্বাইলৈ যাত্ৰা কৰি ‘Chandni Raat’ Indipop album-ৰ জৰিয়তে Bollywood music scene-ত আত্মপ্ৰকাশ কৰে।</span>
+                        </div>
+                        <div class="grid-card">
+                            <strong>2003 — Into Bengali Cinema</strong>
+                            <span style="display:block; font-weight:600; color:var(--text-dark); margin-bottom:2px;">বাংলা সংগীত জগতত প্ৰৱেশ</span>
+                            <span>‘Mon’ ছবিৰ জৰিয়তে বাংলা চলচ্চিত্ৰৰ সংগীত জগতত তেওঁৰ যাত্ৰা আৰম্ভ হয়।</span>
+                        </div>
+                        <div class="grid-card">
+                            <strong>2006 — The Song That Changed Everything</strong>
+                            <span style="display:block; font-weight:600; color:var(--text-dark); margin-bottom:2px;">এটা গানে সলনি কৰা এটা অধ্যায়</span>
+                            <span>‘Gangster’ ছবিৰ ‘Ya Ali’ গানে তেওঁক Bollywood-ত ব্যাপক জনপ্ৰিয়তা প্ৰদান কৰে আৰু তেওঁৰ সংগীত যাত্ৰাৰ এক উল্লেখযোগ্য milestone হৈ পৰে। </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card animate-scroll" style="margin-top: 15px;">
+                    <h3>A Voice Across Languages • বহু ভাষাত, একেই কণ্ঠৰ অনুৰণন</h3>
+                    <p>Zubeen Garg sang across 40+ languages and dialects, connecting listeners across cultures and musical traditions.</p>
+                    <p style="font-weight: 700; color: var(--primary-orange); margin-top: 8px; font-size: 0.8rem;">Languages & Dialects</p>
+                    <div class="pills-box">
+                        <span class="pill">Assamese</span> <span class="pill">Bengali</span> <span class="pill">Hindi</span> <span class="pill">English</span> <span class="pill">Bishnupriya Manipuri</span> <span class="pill">Adi</span> <span class="pill">Boro</span> <span class="pill">Dimasa</span> <span class="pill">Goalpariya</span> <span class="pill">Kannada</span> <span class="pill">Karbi</span> <span class="pill">Malayalam</span> <span class="pill">Marathi</span> <span class="pill">Mising</span> <span class="pill">Nepali</span> <span class="pill">Bhojpuri</span> <span class="pill">Odia</span> <span class="pill">Sanskrit</span> <span class="pill">Sindhi</span> <span class="pill">Tamil</span> <span class="pill">Telugu</span> <span class="pill">Tiwa</span> <span class="pill">Punjabi</span> <span class="pill">Gujarati</span> <span class="pill">Urdu</span> <span class="pill">Rajasthani</span> <span class="pill">Maithili</span> <span class="pill">Magahi</span> <span class="pill">Angika</span> <span class="pill">Bajjika</span> <span class="pill">Konkani</span> <span class="pill">Tulu</span> <span class="pill">Kodava</span> <span class="pill">Manipuri</span> <span class="pill">Mizo</span> <span class="pill">Khasi</span> <span class="pill">Garo</span> <span class="pill">Kokborok</span> <span class="pill">Rabha</span>
+                    </div>
+                </div>
+
+                <div class="stat-dashed-box animate-scroll">
+                    <div>
+                        <div class="stat-num"><span class="counter" data-target="38000">0</span>+</div>
+                        <div class="stat-lbl">Songs Recorded</div>
+                        <span style="font-size:0.65rem; color: var(--text-muted);">Over 33 years of musical journey</span>
+                    </div>
+                    <div>
+                        <div class="stat-num"><span class="counter" data-target="40">0</span>+</div>
+                        <div class="stat-lbl">Languages & Dialects</div>
+                        <span style="font-size:0.65rem; color: var(--text-muted);">Connecting diverse cultures</span>
+                    </div>
+                    <div>
+                        <div class="stat-num"><span class="counter" data-target="12">0</span></div>
+                        <div class="stat-lbl">Musical Instruments.</div>
+                    </div>
+                </div>
+
+                <div class="card animate-scroll">
+                    <h3><span class="counter" data-target="50">0</span>+Award Winner</h3>
+                    <p style="font-weight: 700; color: var(--accent-yellow); font-size: 0.85rem; margin-top: 2px;">2006 GIFA AWARD</p>
+                    <h4 style="margin-top: 8px; font-size: 0.88rem; color: var(--primary-orange);">Multi-talented artist Not Only On Music</h4>
+                    <p style="margin-top: 2px;">He Know For Film Producer,composser,producer, Director,Lyricist, Playback Singer ,Actors,Poets, instrumentalist etc...</p>
+                </div>
+
+                <div class="card animate-scroll">
+                    <h3>A Master of Musical Styles • বিভিন্ন সংগীতধাৰাৰ এক বহুমুখী শিল্পী</h3>
+                    <p>From traditional folk to modern rock, his musical versatility crossed genres and generations.</p>
+                    <div class="pills-box" style="margin-top: 8px;">
+                        <span class="pill">Indian Folk</span> <span class="pill">Indian Pop</span> <span class="pill">Rock</span> 
+                        <span class="pill">Jazz</span> <span class="pill">Hindustani Classical</span> <span class="pill">Sufi</span> 
+                        <span class="pill">Filmi</span> <span class="pill">Assamese Traditional</span> <span class="pill">Bihu Assamese Classical</span> <span class="pill">More…</span>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ================= LEGACY ================= -->
+            <section id="legacy">
+                <div class="animate-scroll">
+                    <h2 class="sec-head">LEGACY</h2>
+                    <h3 class="sec-subhead">A Legacy That Lives On • সুৰৰ মাজত ৰৈ যোৱা এক অমৰ যাত্ৰা</h3>
+                </div>
+
+                <div class="card animate-scroll">
+                    <p>জুবিন গাৰ্গ কেৱল এগৰাকী গায়ক নাছিল—তেওঁ আছিল অসমীয়া সংস্কৃতি আৰু সংগীতৰ সৈতে গভীৰভাৱে জড়িত এগৰাকী সাংস্কৃতিক প্ৰতীক। পৰম্পৰাগত অসমীয়া সংগীতৰ শিপাৰ সৈতে আধুনিক সুৰৰ সংযোগ ঘটাই তেওঁ বহু প্ৰজন্মৰ শিল্পী আৰু শ্ৰোতাক প্ৰভাৱিত কৰিছিল।</p>
+                </div>
+
+                <div class="animate-scroll">
+                    <h4 style="color: var(--primary-orange); text-align: center; margin-bottom: 2px; font-size: 1rem;">Many Names, One Legend</h4>
+                    <p style="text-align: center; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px;">এজন শিল্পী, অসংখ্য মৰমৰ নাম<br>তেওঁক মানুহে বিভিন্ন নামেৰে মৰম আৰু সন্মান জনাইছিল। প্ৰতিটো নামৰ আঁৰত আছিল তেওঁৰ সৈতে শ্ৰোতাৰ এক বিশেষ সম্পৰ্ক।</p>
+                    
+                    <div class="grid-2">
+                        <div class="grid-card"><strong>Luit Kontho</strong><span>Voice of the Brahmaputra</span></div>
+                        <div class="grid-card"><strong>Goldie</strong><span>The Golden Voice</span></div>
+                        <div class="grid-card"><strong>King of Humming</strong><span>Master of Melodious Humming</span></div>
+                        <div class="grid-card"><strong>Heartthrob of Assam</strong><span>Beloved by Assamese People</span></div>
+                        <div class="grid-card"><strong>Zubeen Da</strong><span>A Respected Elder Brother</span></div>
+                    </div>
+                </div>
+
+                <div class="animate-scroll" style="margin-top: 15px;">
+                    <h4 style="color: var(--primary-orange); margin-bottom: 2px; font-size: 1rem;">His Words, His Philosophy</h4>
+                    <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px;">তেওঁৰ কথাত তেওঁৰ দৰ্শন<br>সংগীতক ভাষা, পৰিচয় আৰু সীমাৰ ওপৰত ৰাখি মানুহৰ মাজত সংযোগ সৃষ্টি কৰাৰ তেওঁৰ দৃষ্টিভংগী তেওঁৰ কথাতো প্ৰতিফলিত হৈছিল।</p>
+
+                    <div class="quote-card">
+                        <p>“সংগীতৰ কোনো ভাষাৰ বাধা নাই। ই পোনপটীয়াকৈ হৃদয়ত কথা কয়।”</p>
+                        <span>— Zubeen Garg</span>
+                    </div>
+
+                    <div class="quote-card">
+                        <p>তেওঁৰ আন একটা বহুল স্মৰণীয় বক্তব্যই স্বাধীনতা আৰু নিজস্ব পৰিচয়ৰ প্ৰতি তেওঁৰ দৃষ্টিভংগীৰ কথা প্ৰকাশ কৰে:<br><br>
+                        “মোৰ কোনো জাতি নাই, মোৰ কোনো ধৰ্ম নাই, মোৰ কোনো भगৱান নাই, মই মুক্ত।”</p>
+                        <span>— Zubeen Garg</span>
+                    </div>
+
+                    <div class="quote-card">
+                        <p>“কিতাপ নপঢ়া জাতিক গামোচাই বচাব  নোৱাৰে।”</p>
+                        <span>— জুবিন গাৰ্গ</span>
+                    </div>
+                </div>
+
+                <div class="card animate-scroll">
+                    <h3>Life Beyond the Spotlight</h3>
+                    <h4 style="font-size: 0.85rem; color: var(--accent-yellow); margin-bottom: 4px;">মঞ্চৰ আঁৰৰ ব্যক্তিগত জীৱন</h4>
+                    <p><strong>Married — Garima Saikia Garg (2002)</strong></p>
+                    <p style="margin-top:2px;"><strong>Sister — Jonkie Borthakur (Singer & Actress .)</strong></p>
+                    <p style="margin-top: 4px;">জংকী বৰঠাকুৰৰ অকাল মৃত্যুৰ পিছত তেওঁৰ স্মৃতিত জুবিনে ‘Xixhu’ album প্ৰকাশ কৰিছিল।</p>
+                    <p style="margin-top: 2px;">পৰিয়াল আৰু ব্যক্তিগত সম্পৰ্কও তেওঁৰ জীৱন আৰু সৃষ্টিশীলতাৰ এক গুৰুত্বপূৰ্ণ অংশ আছিল।</p>
+                </div>
+
+                <div class="card animate-scroll">
+                    <h3>A Cultural Impact That Reaches Beyond Music</h3>
+                    <h4 style="font-size: 0.85rem; color: var(--accent-yellow); margin-bottom: 6px;">সংগীতৰ সীমা পাৰ হোৱা সাংস্কৃতিক প্ৰভাৱ</h4>
+                    
+                    <div style="margin-top: 8px;">
+                        <strong style="color: var(--primary-orange); font-size: 0.85rem;">Cultural Ambassador</strong>
+                        <p style="font-size: 0.85rem; margin-top: 2px;">অসমীয়া ভাষা আৰু সংস্কৃতিক সংগীতৰ জৰিয়তে অসমৰ বাহিৰলৈও পৰিচিত কৰাত তেওঁৰ এক বিশেষ ভূমিকা আছিল।</p>
+                    </div>
+
+                    <div style="margin-top: 8px;">
+                        <strong style="color: var(--primary-orange); font-size: 0.85rem;">Youth Inspiration</strong>
+                        <p style="font-size: 0.85rem; margin-top: 2px;">তেওঁৰ সংগীত আৰু ব্যক্তিত্বই বহু যুৱ শিল্পীক নিজৰ প্ৰতিভা অনুসৰণ কৰিবলৈ আৰু নিজৰ সাংস্কৃতিক শিপাৰ সৈতে সংযোগ বজাই ৰাখিবলৈ অনুপ্ৰাণিত কৰিছিল।</p>
+                    </div>
+
+                    <div style="margin-top: 8px;">
+                        <strong style="color: var(--primary-orange); font-size: 0.85rem;">A Bridge Between Cultures</strong>
+                        <p style="font-size: 0.85rem; margin-top: 2px;">বহু ভাষাত সংগীত সৃষ্টি কৰাৰ জৰিয়তে তেওঁ বিভিন্ন ভাষা, সংস্কৃতি আৰু মানুহৰ মাজত এক সংযোগৰ সেতু গঢ়ি তুলিছিল।</p>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin: 15px 0; font-weight: 800; font-size: 1.1rem; color: var(--primary-orange); line-height: 1.4;" class="animate-scroll">
+                    The Voice May Fall Silent.<br>But the Music Lives On.
+                </div>
+            </section>
+
+
+            <!-- ================= FAREWELL ================= -->
+            <section id="farewell" style="border: none;">
+                <div class="animate-scroll">
+                    <h2 class="sec-head">FAREWELL</h2>
+                    <h3 class="sec-subhead">A Hero’s Final Journey</h3>
+                </div>
+
+                <div class="card animate-scroll">
+                    <p>When a legend leaves this world, the music never truly fades. It continues to live through memories, melodies, and the hearts of those who loved him.</p>
+                    <p style="margin-top: 4px;">Zubeen Da’s final farewell became a powerful reflection of the extraordinary love and respect he received from millions.</p>
+                    <p style="margin-top: 4px; font-weight: 700; color: var(--primary-orange);">His farewell achieved the Guinness World Record for the 4th Largest Funeral Gathering in history, reflecting the immense place he held in the hearts of people across the world.</p>
+                    <p style="margin-top: 4px;">As Assam bid farewell to its beloved son, “Mayabini” echoed through the air—turning the final goodbye into an unforgettable moment.</p>
+                </div>
+
+                <div class="card animate-scroll">
+                    <h3 style="color: var(--accent-yellow); margin-bottom: 6px;">STATE HONOURS</h3>
+                    <div class="grid-2">
+                        <div class="grid-card">
+                            <strong>21-Gun Salute</strong>
+                            <span>He was laid to rest with full state honours, including a ceremonial 21-gun salute.</span>
+                        </div>
+                        <div class="grid-card">
+                            <strong>Three Days of Mourning</strong>
+                            <span>Assam CM Himanta Biswa Sarma declared three days of state mourning.</span>
+                        </div>
+                        <div class="grid-card">
+                            <strong>CM in Attendance</strong>
+                            <span>Assam Chief Minister Himanta Biswa Sarma attended the final rites at Kamarkuchi NC village.</span>
+                        </div>
+                        <div class="grid-card">
+                            <strong>A Massive Public Farewell</strong>
+                            <span>More than 15 lakh people gathered at Sarusajai Stadium to pay their final respects.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card animate-scroll">
+                    <h3 style="color: var(--accent-yellow); margin-bottom: 6px;">FINAL RITES</h3>
+                    <p>The final rites were performed by his younger sister, Palmi Borthakur, alongside close associates.</p>
+                    <p style="margin-top: 2px;">Following a second post-mortem, his body was taken to Sarusajai Stadium and later to the cremation ground.</p>
+                    <p style="margin-top: 2px;">Thousands of admirers gathered at Kamarkuchi NC village, near Guwahati, to say their final goodbye.</p>
+                    <p style="margin-top: 2px;">As the beloved song “Mayabini” played during the farewell, fans joined together in chorus.</p>
+
+                    <h4 style="margin-top: 12px; color: var(--primary-orange);">His Final Resting Place</h4>
+                    <h5 style="color: var(--text-muted); font-size: 0.78rem; margin-bottom: 2px;">শেষ বিশ্ৰামৰ স্থান</h5>
+                    <p>Zubeen Garg was laid to rest at Sonapur.</p>
+                    <p style="margin-top: 2px;">The place is now known as <strong>“Zubeen Khetra”</strong>, a place that stands as a lasting symbol of remembrance and respect for the legendary artist.</p>
+
+                    <h4 style="margin-top: 12px; color: var(--accent-yellow);">Roi Roi Binale</h4>
+                    <p>A final masterpiece — a lasting gift from a legend to Assamese cinema.</p>
+                    <p style="margin-top: 2px;">Roi Roi Binale stands as one of the most successful films in the history of Assamese cinema.</p>
+                </div>
+
+                <!-- DIRECT TEXT FOOTER (NO BORDER & NO BOX) -->
+                <div class="direct-footer-text animate-scroll">
+                    <h2 style="color: var(--primary-orange); font-size: 1.5rem; letter-spacing: 1px; margin-bottom: 2px;">JAI ZUBEEN DAA</h2>
+                    <p style="color: var(--accent-yellow); font-weight: 800; font-size: 0.88rem; margin-bottom: 12px;">#JusticeForZubeenDaa</p>
+
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5;">This tribute website celebrates the extraordinary life, music, and enduring legacy of Zubeen Garg.<br>Made with ❤️ for future generations to remember the legend.</p>
+
+                    <div style="font-size: 1.15rem; font-weight: 800; color: var(--text-dark); margin: 12px 0;">
+                        শ্রদ্ধাঞ্জলি<br>
+                        <span style="color: var(--primary-orange); font-size: 0.95rem; letter-spacing: 2px;">LEGEND NAVER DIE</span>
+                    </div>
+
+                    <p style="font-size: 0.85rem; font-weight: 700; color: var(--text-dark); margin-top: 15px;">Made By —  @zg.dhruva07</p>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Note: This website is created solely as an individual tribute to Zubeen Garg.</p>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-top: 2px;">© 2026 DhrubaJyoti — All Rights Reserved.</p>
+                </div>
+            </section>
+
         </div>
     </div>
 
@@ -416,6 +1007,24 @@
             }
         }
 
+        /* Bio Page Overlay Modal Toggle */
+        function toggleBioModal() {
+            const bioModal = document.getElementById('bioPageModal');
+            if(!bioModal) return;
+
+            if(bioModal.classList.contains('hidden')) {
+                bioModal.classList.remove('hidden');
+                bioModal.classList.add('flex');
+                setTimeout(() => bioModal.classList.remove('opacity-0'), 10);
+            } else {
+                bioModal.classList.add('opacity-0');
+                setTimeout(() => {
+                    bioModal.classList.add('hidden');
+                    bioModal.classList.remove('flex');
+                }, 300);
+            }
+        }
+
         function getYoutubeId(url) {
             if (!url) return '';
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -478,7 +1087,6 @@
                 const card = document.createElement('div');
                 card.className = `bg-zinc-900/60 hover:bg-zinc-800 border ${isPlaying ? 'border-yellow-400 bg-zinc-900' : 'border-zinc-900'} rounded-xl p-2.5 flex flex-col gap-2 cursor-pointer transition-all active:scale-[0.98] group min-w-0 relative overflow-hidden`;
                 
-                // Clicking Logic: If currently playing, open fullscreen. If new, just play background/mini player.
                 card.onclick = () => {
                     if (currentSongIndex === globalIndex) {
                         openFullScreenPlayer();
@@ -906,6 +1514,77 @@
             initDeviceFingerprint();
             loadSongsFromDatabase();
         });
+
+        /* --- JS FOR BIO PAGE REPEATABLE ANIMATIONS & ACCURATE HIGHLIGHT --- */
+        const bioModal = document.getElementById('bioPageModal');
+
+        const animateObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                } else {
+                    entry.target.classList.remove('visible');
+                }
+            });
+        }, { root: bioModal, threshold: 0.1 });
+
+        document.querySelectorAll('#bioPageModal .animate-scroll').forEach(el => animateObserver.observe(el));
+
+        // Counting Up Animation
+        const counters = document.querySelectorAll('#bioPageModal .counter');
+        
+        const runCounters = () => {
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                let count = 0;
+                const speed = target > 5000 ? 25 : 20; 
+                const increment = Math.ceil(target / 35);
+
+                const updateCounter = () => {
+                    count += increment;
+                    if (count < target) {
+                        counter.innerText = count.toLocaleString();
+                        setTimeout(updateCounter, speed);
+                    } else {
+                        counter.innerText = target.toLocaleString();
+                    }
+                };
+                updateCounter();
+            });
+        };
+
+        let counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    runCounters();
+                }
+            });
+        }, { root: bioModal, threshold: 0.3 });
+
+        document.querySelectorAll('#bioPageModal .stat-dashed-box').forEach(box => counterObserver.observe(box));
+
+        // Strict Single Section Navigation Highlight for Bio Modal
+        const bioSections = document.querySelectorAll('#bioPageModal section');
+        const bioNavLinks = document.querySelectorAll('#bioPageModal .nav-links a');
+
+        if(bioModal) {
+            bioModal.addEventListener('scroll', () => {
+                let current = '';
+                bioSections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (bioModal.scrollTop >= (sectionTop - 150)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                bioNavLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        }
 
         /* --- SECURITY SCRIPT: Disable Copy, Cut, Paste, Shortcuts & Screen Capture Clear --- */
         document.addEventListener('copy', (e) => e.preventDefault());

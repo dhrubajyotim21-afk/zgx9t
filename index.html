@@ -36,10 +36,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        html {
-            scrollbar-gutter: stable;
-        }
-
         /* Disable Text Selection & Main Window Scroll */
         html, body {
             background-color: #000000;
@@ -47,11 +43,9 @@
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             width: 100%;
             height: 100%;
-            height: 100vh;
-            height: 100dvh;
             margin: 0;
             padding: 0;
-            overflow: hidden !important; /* Full page scroll blocked */
+            overflow: hidden !important;
             touch-action: manipulation;
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -108,7 +102,6 @@
             pointer-events: auto;
         }
 
-        /* Fully Square Dynamic Disco Border */
         @keyframes dynamicDiscoBorder {
             0% { border-color: #ff0000; }
             20% { border-color: #ff00ff; }
@@ -125,7 +118,6 @@
             border-radius: 0px !important;
         }
 
-        /* Pure White Wave Bars */
         .wave-bar {
             width: 4px;
             height: 4px;
@@ -134,7 +126,6 @@
             background-color: #ffffff !important;
         }
 
-        /* Mini Card Small Playing Wave Animation */
         .card-wave-bar {
             width: 3px;
             height: 3px;
@@ -149,7 +140,7 @@
         }
 
         .modal-animate {
-            transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* ====== BIO WEBSITE STYLES ====== */
@@ -167,26 +158,21 @@
         #bioPageModal {
             font-family: 'Plus Jakarta Sans', 'Noto Serif Bengali', sans-serif;
             color: var(--text-dark);
-            overscroll-behavior-y: contain;
+            overscroll-behavior: contain;
             -webkit-overflow-scrolling: touch;
             scroll-behavior: smooth;
-            width: 100vw;
-            height: 100vh;
-            height: 100dvh;
-            will-change: opacity, transform;
-            transform: translateZ(0);
-            backface-visibility: hidden;
+            will-change: transform, opacity;
         }
 
         #bioPageModal .nav-wrapper {
             position: sticky;
-            top: 0;
+            top: 10px;
             left: 0;
             width: 100%;
             display: flex;
             justify-content: center;
             z-index: 1000;
-            padding: 10px 10px 0 10px;
+            padding: 0 10px;
         }
         #bioPageModal .thin-nav {
             width: 100%;
@@ -217,7 +203,7 @@
             font-weight: 700; 
             padding: 4px 8px; 
             border-radius: 15px; 
-            transition: background-color 0.2s ease, color 0.2s ease;
+            transition: all 0.2s ease;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -231,10 +217,12 @@
         #bioPageModal .container { max-width: 800px; margin: 0 auto; padding: 15px; }
         #bioPageModal section { padding: 40px 0; border-bottom: 1px dashed rgba(234, 88, 12, 0.15); scroll-margin-top: 60px; }
 
+        /* Smooth non-shaking animation */
         #bioPageModal .animate-scroll {
             opacity: 0;
-            transform: translateY(16px);
+            transform: translateY(20px);
             transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+            will-change: opacity, transform;
         }
         #bioPageModal .animate-scroll.visible {
             opacity: 1;
@@ -961,6 +949,14 @@
         let currentSongIndex = -1;
         let ytPlayer = null;
         let timelineInterval = null;
+        let textRotationInterval = null;
+        let discoControlInterval = null;
+        let waveAnimationInterval = null;
+        let isDraggingTimeline = false;
+        let isPlayerFullscreen = false;
+        let isDiscoEnabled = true; 
+        let textRotationIndex = 0;
+        let userDeviceId = '';
         let bioObserver = null;
 
         // Generate Pure White Waves
@@ -979,9 +975,10 @@
         function initDeviceFingerprint() {
             let storedId = localStorage.getItem('zg_device_id');
             if (storedId) {
+                userDeviceId = storedId;
                 const devElem = document.getElementById('displayDeviceId');
-                if(devElem) devElem.innerText = storedId;
-                syncDeviceMetricsWithAdmin(storedId);
+                if(devElem) devElem.innerText = userDeviceId;
+                syncDeviceMetricsWithAdmin(userDeviceId);
             } else {
                 database.ref('admin/device_counter').transaction((currentCount) => {
                     return (currentCount || 0) + 1;
@@ -989,9 +986,10 @@
                     let sequenceNum = (committed && snapshot && snapshot.val()) ? snapshot.val() : (Math.floor(Math.random() * 800) + 11);
                     const formattedId = `zgx-${String(sequenceNum).padStart(3, '0')}`;
                     localStorage.setItem('zg_device_id', formattedId);
+                    userDeviceId = formattedId;
                     const devElem = document.getElementById('displayDeviceId');
-                    if(devElem) devElem.innerText = formattedId;
-                    syncDeviceMetricsWithAdmin(formattedId);
+                    if(devElem) devElem.innerText = userDeviceId;
+                    syncDeviceMetricsWithAdmin(userDeviceId);
                 });
             }
         }
@@ -1020,7 +1018,7 @@
             }
         }
 
-        /* Bio Page Overlay Modal Toggle & Smooth Animations */
+        /* Bio Page Overlay Modal Toggle & Scroll Animations */
         function toggleBioModal() {
             const bioModal = document.getElementById('bioPageModal');
             if(!bioModal) return;
@@ -1028,19 +1026,42 @@
             if(bioModal.classList.contains('hidden')) {
                 bioModal.classList.remove('hidden');
                 bioModal.classList.add('flex');
-                document.body.style.overflow = 'hidden';
-                requestAnimationFrame(() => {
+                setTimeout(() => {
                     bioModal.classList.remove('opacity-0');
                     initBioAnimations();
-                });
+                }, 10);
             } else {
                 bioModal.classList.add('opacity-0');
                 setTimeout(() => {
                     bioModal.classList.add('hidden');
                     bioModal.classList.remove('flex');
-                    document.body.style.overflow = '';
                 }, 300);
             }
+        }
+
+        function triggerCounters(container) {
+            const counters = container.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                if (counter.dataset.animated === "true") return;
+                counter.dataset.animated = "true";
+                
+                const target = parseInt(counter.getAttribute('data-target'), 10);
+                let count = 0;
+                const speed = target > 1000 ? 50 : 25;
+                const step = Math.max(1, Math.floor(target / speed));
+                
+                counter.innerText = '0';
+                const updateCount = () => {
+                    count += step;
+                    if (count < target) {
+                        counter.innerText = count.toLocaleString();
+                        requestAnimationFrame(updateCount);
+                    } else {
+                        counter.innerText = target.toLocaleString();
+                    }
+                };
+                updateCount();
+            });
         }
 
         function initBioAnimations() {
@@ -1049,34 +1070,13 @@
 
             if (bioObserver) bioObserver.disconnect();
 
+            // Unobserve handled elements to prevent re-triggering shaking/flashing
             bioObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
-                        
-                        const counters = entry.target.querySelectorAll('.counter');
-                        counters.forEach(counter => {
-                            const target = parseInt(counter.getAttribute('data-target'), 10);
-                            let count = 0;
-                            const speed = target > 1000 ? 50 : 25;
-                            const step = Math.max(1, Math.floor(target / speed));
-                            
-                            counter.innerText = '0';
-                            const updateCount = () => {
-                                count += step;
-                                if (count < target) {
-                                    counter.innerText = count.toLocaleString();
-                                    requestAnimationFrame(updateCount);
-                                } else {
-                                    counter.innerText = target.toLocaleString();
-                                }
-                            };
-                            updateCount();
-                        });
-                    } else {
-                        entry.target.classList.remove('visible');
-                        const counters = entry.target.querySelectorAll('.counter');
-                        counters.forEach(counter => counter.innerText = '0');
+                        triggerCounters(entry.target);
+                        bioObserver.unobserve(entry.target); // Fixed: Stop observer once animated
                     }
                 });
             }, {
@@ -1087,24 +1087,32 @@
             const animElements = bioModal.querySelectorAll('.animate-scroll');
             animElements.forEach(el => bioObserver.observe(el));
 
+            // Optimized scroll listener for active section indicator
+            let isTicking = false;
             bioModal.onscroll = () => {
-                const sections = bioModal.querySelectorAll('section');
-                const navLinks = bioModal.querySelectorAll('.nav-links a');
-                let current = '';
+                if (!isTicking) {
+                    window.requestAnimationFrame(() => {
+                        const sections = bioModal.querySelectorAll('section');
+                        const navLinks = bioModal.querySelectorAll('.nav-links a');
+                        let current = '';
 
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop - 120;
-                    if (bioModal.scrollTop >= sectionTop) {
-                        current = section.getAttribute('id');
-                    }
-                });
+                        sections.forEach(section => {
+                            const sectionTop = section.offsetTop - 140;
+                            if (bioModal.scrollTop >= sectionTop) {
+                                current = section.getAttribute('id');
+                            }
+                        });
 
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${current}`) {
-                        link.classList.add('active');
-                    }
-                });
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${current}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                        isTicking = false;
+                    });
+                    isTicking = true;
+                }
             };
         }
 
@@ -1198,6 +1206,303 @@
                 fragment.appendChild(card);
             });
             container.appendChild(fragment);
+        }
+
+        /* Dynamic iFrame Precise Positioning */
+        function refreshVideoFramePosition() {
+            const holder = document.getElementById('unifiedVideoHolder');
+            if(!holder) return;
+
+            if(isPlayerFullscreen) {
+                const anchor = document.getElementById('fullPlayerAnchor');
+                if(anchor) {
+                    const bounds = anchor.getBoundingClientRect();
+                    holder.style.top = `${bounds.top}px`;
+                    holder.style.left = `${bounds.left}px`;
+                    holder.style.width = `${bounds.width}px`;
+                    holder.style.height = `${bounds.height}px`;
+                    holder.style.bottom = "auto";
+                    holder.style.zIndex = "51";
+                    holder.style.borderRadius = "12px";
+                }
+            } else {
+                const slot = document.getElementById('miniFrameSlot');
+                if(slot) {
+                    const bounds = slot.getBoundingClientRect();
+                    holder.style.top = `${bounds.top}px`;
+                    holder.style.left = `${bounds.left}px`;
+                    holder.style.width = `${bounds.width}px`;
+                    holder.style.height = `${bounds.height}px`;
+                    holder.style.bottom = "auto";
+                    holder.style.zIndex = "41";
+                    holder.style.borderRadius = "8px";
+                }
+            }
+        }
+
+        window.addEventListener('resize', refreshVideoFramePosition);
+        window.addEventListener('scroll', refreshVideoFramePosition, true);
+
+        function playSong(index, startAtSeconds = 0) {
+            if (index < 0 || index >= allSongs.length) return;
+            
+            if (typeof YT === 'undefined' || !YT.Player) {
+                setTimeout(() => playSong(index, startAtSeconds), 300);
+                return;
+            }
+
+            currentSongIndex = index;
+            renderSongsList(); // UI Update
+            
+            const song = allSongs[index];
+            const ytId = getYoutubeId(song.url) || 'dQw4w9WgXcQ';
+
+            const fTitle = document.getElementById('fullPlayerTitle');
+            const mTitle = document.getElementById('miniPlayerTitle');
+            if(fTitle) fTitle.innerText = song.title;
+            if(mTitle) mTitle.innerText = song.title;
+            
+            const miniPly = document.getElementById('miniPlayer');
+            if(miniPly) {
+                miniPly.classList.remove('hidden');
+                miniPly.classList.add('flex');
+            }
+
+            const holder = document.getElementById('unifiedVideoHolder');
+            if(holder) holder.classList.remove('hidden');
+            
+            setTimeout(refreshVideoFramePosition, 30);
+
+            if (ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
+                ytPlayer.loadVideoById({
+                    videoId: ytId,
+                    startSeconds: startAtSeconds
+                });
+                ytPlayer.playVideo();
+            } else {
+                const containerElem = document.getElementById('ytPlayerContainer');
+                if(containerElem) containerElem.innerHTML = '';
+                
+                ytPlayer = new YT.Player('ytPlayerContainer', {
+                    height: '100%',
+                    width: '100%',
+                    videoId: ytId,
+                    playerVars: { 
+                        'controls': 0, 
+                        'disablekb': 1, 
+                        'rel': 0, 
+                        'modestbranding': 1, 
+                        'iv_load_policy': 3, 
+                        'fs': 0, 
+                        'playsinline': 1,
+                        'showinfo': 0,
+                        'autohide': 1,
+                        'autoplay': 1
+                    },
+                    events: {
+                        'onReady': (e) => { 
+                            if(startAtSeconds > 0) e.target.seekTo(startAtSeconds, true);
+                            e.target.playVideo(); 
+                            refreshVideoFramePosition();
+                            startTimelineSync(); 
+                        },
+                        'onStateChange': onPlayerStateChange
+                    }
+                });
+            }
+        }
+
+        function onPlayerStateChange(event) {
+            const fIcon = document.getElementById('fullPlayIcon');
+            const mIcon = document.getElementById('miniPlayIcon');
+
+            if (event.data == YT.PlayerState.PLAYING) {
+                if(fIcon) fIcon.className = "fas fa-pause";
+                if(mIcon) mIcon.className = "fas fa-pause";
+                startTimelineSync();
+                runDynamicDiscoEngine(true);
+                animateWave(true);
+            } else {
+                if(fIcon) fIcon.className = "fas fa-play pl-1";
+                if(mIcon) mIcon.className = "fas fa-play pl-0.5";
+                clearInterval(timelineInterval);
+                runDynamicDiscoEngine(false);
+                animateWave(false);
+            }
+            if (event.data == YT.PlayerState.ENDED) playNext();
+        }
+
+        function togglePlayPause() {
+            if (!ytPlayer || typeof ytPlayer.getPlayerState !== 'function') return;
+            const state = ytPlayer.getPlayerState();
+            if (state === YT.PlayerState.PLAYING) {
+                ytPlayer.pauseVideo();
+            } else {
+                ytPlayer.playVideo();
+            }
+        }
+
+        function playNext() {
+            if (allSongs.length === 0) return;
+            let nextIndex = currentSongIndex + 1;
+            if (nextIndex >= allSongs.length) nextIndex = 0;
+            playSong(nextIndex);
+        }
+
+        function playPrevious() {
+            if (allSongs.length === 0) return;
+            let prevIndex = currentSongIndex - 1;
+            if (prevIndex < 0) prevIndex = allSongs.length - 1;
+            playSong(prevIndex);
+        }
+
+        function openFullScreenPlayer() {
+            isPlayerFullscreen = true;
+            const fullPly = document.getElementById('fullScreenPlayer');
+            if(fullPly) {
+                fullPly.classList.remove('hidden');
+                fullPly.classList.add('flex');
+            }
+            refreshVideoFramePosition();
+        }
+
+        function closeFullScreenPlayer() {
+            isPlayerFullscreen = false;
+            const fullPly = document.getElementById('fullScreenPlayer');
+            if(fullPly) {
+                fullPly.classList.add('hidden');
+                fullPly.classList.remove('flex');
+            }
+            refreshVideoFramePosition();
+        }
+
+        function closeVideo() {
+            if (ytPlayer && typeof ytPlayer.stopVideo === 'function') ytPlayer.stopVideo();
+            const holder = document.getElementById('unifiedVideoHolder');
+            const miniPly = document.getElementById('miniPlayer');
+            if(holder) holder.classList.add('hidden');
+            if(miniPly) {
+                miniPly.classList.add('hidden');
+                miniPly.classList.remove('flex');
+            }
+            currentSongIndex = -1;
+            renderSongsList();
+            closeFullScreenPlayer();
+        }
+
+        function toggleDiscoSystem() {
+            isDiscoEnabled = !isDiscoEnabled;
+            const btn = document.getElementById('discoToggleBtn');
+            if(!btn) return;
+            if(isDiscoEnabled) {
+                btn.innerText = "ON";
+                btn.className = "bg-yellow-400 text-black px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider transition-all";
+                if(ytPlayer && typeof ytPlayer.getPlayerState === 'function' && ytPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
+                    runDynamicDiscoEngine(true);
+                }
+            } else {
+                btn.innerText = "OFF";
+                btn.className = "bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider transition-all";
+                runDynamicDiscoEngine(false);
+            }
+        }
+
+        function animateWave(start) {
+            clearInterval(waveAnimationInterval);
+            waveAnimationInterval = null;
+            const waveWrapper = document.getElementById('waveWrapper');
+            const bars = document.querySelectorAll('.wave-bar');
+            
+            if (!start) {
+                if(waveWrapper) waveWrapper.style.opacity = '0';
+                bars.forEach(bar => bar.style.height = '4px');
+                return;
+            }
+
+            if(waveWrapper) waveWrapper.style.opacity = '1';
+
+            waveAnimationInterval = setInterval(() => {
+                bars.forEach(bar => {
+                    const randomHeight = Math.floor(Math.random() * 28) + 4; 
+                    bar.style.height = `${randomHeight}px`;
+                });
+            }, 80);
+        }
+
+        function runDynamicDiscoEngine(shouldRun) {
+            clearInterval(textRotationInterval);
+            clearInterval(discoControlInterval);
+            textRotationInterval = null;
+            discoControlInterval = null;
+
+            const lightBar = document.getElementById('visualizerLightBar');
+            const textBox = document.getElementById('visualizerText');
+            if(!lightBar || !textBox) return;
+
+            if (!shouldRun || !isDiscoEnabled) {
+                lightBar.classList.remove('disco-border-active');
+                lightBar.className = "w-full h-12 rounded-none bg-zinc-900 border-2 border-zinc-800 flex flex-col items-center justify-center px-4";
+                return;
+            }
+
+            lightBar.classList.add('disco-border-active');
+            textRotationIndex = 0;
+            
+            textRotationInterval = setInterval(() => {
+                if(!allSongs[currentSongIndex]) return;
+                const songTitle = allSongs[currentSongIndex].title;
+                const phrases = ["Jai Zubeen Da", "#JusticeForZubeenGarg", songTitle, "BY-DHRUBAJYOTI"];
+                
+                textRotationIndex = (textRotationIndex + 1) % phrases.length;
+                
+                textBox.style.opacity = '0';
+                setTimeout(() => {
+                    textBox.innerText = phrases[textRotationIndex];
+                    textBox.style.opacity = '1';
+                }, 100);
+            }, 2500);
+
+            discoControlInterval = setInterval(() => {
+                const speedFactor = Math.random();
+                let speed = "0.15s";
+                if (speedFactor > 0.75) speed = "0.05s"; 
+            }, 1000);
+        }
+
+        function startTimelineSync() {
+            clearInterval(timelineInterval);
+            timelineInterval = setInterval(() => {
+                if (!ytPlayer || typeof ytPlayer.getCurrentTime !== 'function' || isDraggingTimeline) return;
+                const current = ytPlayer.getCurrentTime() || 0;
+                const duration = ytPlayer.getDuration() || 0;
+                const progressPct = duration > 0 ? (current / duration) * 100 : 0;
+
+                const mProgress = document.getElementById('miniTimelineProgress');
+                const mThumb = document.getElementById('miniTimelineThumb');
+                const fProgress = document.getElementById('fullTimelineProgress');
+                const fThumb = document.getElementById('fullTimelineThumb');
+                const mLabel = document.getElementById('miniTimeLabel');
+                const cLabel = document.getElementById('currentTimeLabel');
+                const tLabel = document.getElementById('totalTimeLabel');
+
+                if(mProgress) mProgress.style.width = `${progressPct}%`;
+                if(mThumb) mThumb.style.left = `${progressPct}%`;
+                if(fProgress) fProgress.style.width = `${progressPct}%`;
+                if(fThumb) fThumb.style.left = `${progressPct}%`;
+
+                const formattedCurrent = formatTime(current);
+                const formattedDuration = formatTime(duration);
+
+                if(mLabel) mLabel.innerText = `${formattedCurrent} / ${formattedDuration}`;
+                if(cLabel) cLabel.innerText = formattedCurrent;
+                if(tLabel) tLabel.innerText = formattedDuration;
+            }, 500);
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
         }
 
         window.onload = function() {

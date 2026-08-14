@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ZGX - ONLY ZUBEEN DA SONG</title>
     
     <!-- PWA Setup -->
@@ -33,22 +33,27 @@
     <style>
         * {
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* Disable Text Selection & Copying */
+        /* Prevent Page Bounce / Overscroll Lag & Lock Body */
         html, body {
             background-color: #000000;
             color: #ffffff;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             width: 100%;
-            min-height: 100vh;
+            height: 100vh;
+            height: 100dvh;
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none;    /* Firefox */
-            -ms-user-select: none;     /* IE 10+ */
-            user-select: none;         /* Standard */
+            overflow: hidden;
+            position: fixed;
+            touch-action: pan-x pan-y;
+            overscroll-behavior: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
         .timeline-container {
@@ -129,6 +134,7 @@
             border-radius: 2px;
             transition: height 0.08s ease-in-out;
             background-color: #ffffff !important;
+            will-change: height;
         }
 
         /* Mini Card Small Playing Wave Animation */
@@ -149,7 +155,7 @@
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* ====== BIO WEBSITE STYLES ====== */
+        /* ====== BIO WEBSITE STYLES & OVERSCROLL FIX ====== */
         :root {
             --bg-gradient: linear-gradient(135deg, #ffffff 0%, #fffbeb 35%, #fef3c7 70%, #ffedd5 100%);
             --card-bg: rgba(255, 255, 255, 0.92);
@@ -164,6 +170,9 @@
         #bioPageModal {
             font-family: 'Plus Jakarta Sans', 'Noto Serif Bengali', sans-serif;
             color: var(--text-dark);
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
         }
 
         #bioPageModal .nav-wrapper {
@@ -348,7 +357,7 @@
         }
     </style>
 </head>
-<body class="antialiased flex flex-col h-screen w-screen overflow-x-hidden" oncontextmenu="return false;">
+<body class="antialiased flex flex-col h-screen w-screen overflow-hidden" oncontextmenu="return false;">
 
     <div style="display: none !important; visibility: hidden !important; opacity: 0 !important; width: 0; height: 0; overflow: hidden;">
         <h2>ZUBEEN GARG SONG - ZGX ONLY ZUBEEN SONG Collection</h2>
@@ -362,12 +371,18 @@
         <header class="p-4 border-b border-zinc-900 bg-black z-30 shadow-2xl shrink-0">
             <div class="min-w-0 flex-1">
                 <div class="flex items-center justify-between gap-3">
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2">
                         <h1 class="text-5xl md:text-6xl font-black tracking-tighter uppercase truncate">
                             <span class="text-yellow-400">ZG</span><span class="text-white">X</span>
                         </h1>
-                        <button onclick="toggleDeviceModal()" class="flex items-center justify-center w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-yellow-400 hover:border-yellow-400 transition-all active:scale-95 shrink-0">
+                        <!-- USER ASTRONAUT BUTTON -->
+                        <button onclick="toggleDeviceModal()" title="Device Key" class="flex items-center justify-center w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-yellow-400 hover:border-yellow-400 transition-all active:scale-95 shrink-0">
                             <i class="fas fa-user-astronaut text-lg"></i>
+                        </button>
+
+                        <!-- REFRESH WEBSITE BUTTON ADDED HERE -->
+                        <button onclick="window.location.reload()" title="Refresh Website" class="flex items-center justify-center w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-yellow-400 hover:border-yellow-400 transition-all active:scale-95 shrink-0">
+                            <i class="fas fa-rotate text-lg"></i>
                         </button>
                     </div>
                     <div class="w-14 h-14 bg-gradient-to-br from-yellow-400 to-amber-600 rounded-2xl flex items-center justify-center font-black text-2xl text-black shadow-lg shrink-0">ZGX</div>
@@ -407,8 +422,8 @@
             </div>
         </section>
 
-        <!-- MAIN SCROLLABLE AREA: HOMEPAGE SONG GRID -->
-        <main class="flex-1 overflow-y-auto no-scrollbar p-4 pb-32">
+        <!-- MAIN SCROLLABLE AREA: HOMEPAGE SONG GRID ONLY -->
+        <main class="flex-1 overflow-y-auto no-scrollbar p-4 pb-36 overscroll-contain" style="-webkit-overflow-scrolling: touch; touch-action: pan-y;">
             <div id="songsContainer" class="grid grid-cols-2 gap-3">
                 <div class="animate-pulse bg-zinc-900 rounded-xl h-28 col-span-2 flex items-center justify-center text-zinc-600 text-xs font-bold">Loading Songs...</div>
             </div>
@@ -610,7 +625,7 @@
                         <div class="grid-card">
                             <strong>2006 — The Song That Changed Everything</strong>
                             <span style="display:block; font-weight:600; color:var(--text-dark); margin-bottom:2px;">এটা গানে সলনি কৰা এটা অধ্যায়</span>
-                            <span>‘Gangster’ ছবিৰ ‘Ya Ali’ গানে তেওঁক Bollywood-ত ব্যাপক জনপ্ৰিয়তা প্ৰদান কৰে আৰু তেওঁৰ সংগীত যাত্ৰাৰ এক উল্লেখযোগ্য milestone হৈ পৰে। </span>
+                            <span>‘Gangster’ ছবিৰ ‘Ya Ali’ গানে তেওঁক Bollywood-ত ব্যাপক জনপ্ৰিয়তা প্ৰদান কৰে আৰু তেওঁৰ সংগীত যাত্ৰাৰ এক উল্লেখযোগ্য milestone হৈ পৰے۔ </span>
                         </div>
                     </div>
                 </div>
@@ -814,35 +829,36 @@
         </div>
     </div>
 
-    <!-- ACCURATELY ALIGNED VIDEO HOLDER -->
-    <div id="unifiedVideoHolder" class="fixed z-[42] bg-black rounded overflow-hidden border border-zinc-800 hidden pointer-events-none">
+    <!-- ACCURATELY ALIGNED VIDEO HOLDER WITH FIXED POSITIONING -->
+    <div id="unifiedVideoHolder" class="fixed z-[42] bg-black rounded overflow-hidden border border-zinc-800 hidden pointer-events-none transition-all duration-150">
         <div id="ytPlayerContainer" class="w-full h-full scale-105"></div>
         <div class="yt-strict-blocker"></div>
     </div>
 
-    <!-- BOTTOM MINI PLAYER -->
-    <div id="miniPlayer" class="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-900 p-2.5 z-40 hidden flex-col gap-1.5 shadow-2xl select-none">
+    <!-- LARGER FIXED BOTTOM MINI PLAYER -->
+    <div id="miniPlayer" class="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-900 p-3 z-40 hidden flex-col gap-2 shadow-2xl select-none">
         <div id="miniTimeline" class="timeline-container w-full">
             <div id="miniTimelineProgress" class="timeline-progress"></div>
             <div id="miniTimelineThumb" class="timeline-thumb"></div>
         </div>
-        <div class="flex items-center justify-between gap-2 mt-0.5">
-            <div id="miniFrameSlot" class="w-16 h-10 bg-black/50 border border-zinc-800 rounded shrink-0 relative overflow-hidden"></div>
+        <div class="flex items-center justify-between gap-2.5 mt-0.5">
+            <!-- INCREASED MINI PLAYER VIDEO SLOT SIZE (W-24 H-14) -->
+            <div id="miniFrameSlot" class="w-24 h-14 bg-black/50 border border-zinc-800 rounded-lg shrink-0 relative overflow-hidden shadow-md"></div>
             
             <div onclick="openFullScreenPlayer()" class="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
                 <div class="min-w-0 flex-1 pl-1">
-                    <h4 id="miniPlayerTitle" class="text-xs font-bold truncate text-zinc-100">Song Title</h4>
-                    <div class="flex items-center gap-2 mt-0.5">
-                        <span id="miniTimeLabel" class="text-[10px] font-mono font-bold text-yellow-400">0:00 / 0:00</span>
+                    <h4 id="miniPlayerTitle" class="text-xs md:text-sm font-bold truncate text-zinc-100">Song Title</h4>
+                    <div class="flex items-center gap-2 mt-1">
+                        <span id="miniTimeLabel" class="text-[10px] md:text-xs font-mono font-bold text-yellow-400">0:00 / 0:00</span>
                         <span class="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">• Expand</span>
                     </div>
                 </div>
             </div>
             <div class="flex items-center gap-2 shrink-0 px-1">
-                <button onclick="playPrevious()" class="text-zinc-400 hover:text-white text-sm p-1.5"><i class="fas fa-backward-step"></i></button>
-                <button onclick="togglePlayPause()" class="w-9 h-9 bg-yellow-400 rounded-full flex items-center justify-center text-black text-xs shrink-0 font-bold shadow-md"><i id="miniPlayIcon" class="fas fa-play pl-0.5"></i></button>
-                <button onclick="playNext()" class="text-zinc-400 hover:text-white text-sm p-1.5"><i class="fas fa-forward-step"></i></button>
-                <button onclick="closeVideo()" class="text-zinc-500 hover:text-red-500 text-sm p-1.5 ml-0.5"><i class="fas fa-times"></i></button>
+                <button onclick="playPrevious()" class="text-zinc-400 hover:text-white text-base p-1.5"><i class="fas fa-backward-step"></i></button>
+                <button onclick="togglePlayPause()" class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-black text-xs shrink-0 font-bold shadow-md active:scale-95 transition-transform"><i id="miniPlayIcon" class="fas fa-play pl-0.5"></i></button>
+                <button onclick="playNext()" class="text-zinc-400 hover:text-white text-base p-1.5"><i class="fas fa-forward-step"></i></button>
+                <button onclick="closeVideo()" class="text-zinc-500 hover:text-red-500 text-base p-1.5 ml-0.5"><i class="fas fa-times"></i></button>
             </div>
         </div>
     </div>
@@ -911,7 +927,7 @@
             </div>
             <div class="flex items-center justify-center gap-8 mb-2">
                 <button onclick="playPrevious()" class="text-zinc-400 hover:text-white text-xl"><i class="fas fa-backward-step"></i></button>
-                <button onclick="togglePlayPause()" class="w-16 h-16 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center text-black text-2xl shadow-lg"><i id="fullPlayIcon" class="fas fa-pause"></i></button>
+                <button onclick="togglePlayPause()" class="w-16 h-16 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center text-black text-2xl shadow-lg active:scale-95 transition-transform"><i id="fullPlayIcon" class="fas fa-pause"></i></button>
                 <button onclick="playNext()" class="text-zinc-400 hover:text-white text-xl"><i class="fas fa-forward-step"></i></button>
             </div>
         </div>
@@ -960,7 +976,7 @@
             bar.className = 'wave-bar';
             fragmentBars.appendChild(bar);
         }
-        waveContainer.appendChild(fragmentBars);
+        if(waveContainer) waveContainer.appendChild(fragmentBars);
 
         function initDeviceFingerprint() {
             let storedId = localStorage.getItem('zg_device_id');
@@ -1016,7 +1032,6 @@
                 bioModal.classList.remove('hidden');
                 bioModal.classList.add('flex');
                 setTimeout(() => bioModal.classList.remove('opacity-0'), 10);
-                initBioInteractions();
             } else {
                 bioModal.classList.add('opacity-0');
                 setTimeout(() => {
@@ -1024,83 +1039,6 @@
                     bioModal.classList.remove('flex');
                 }, 300);
             }
-        }
-
-        /* Bio Scroll Animations & Number Counters Initialization */
-        let bioInteractionsInitialized = false;
-        function initBioInteractions() {
-            const bioModal = document.getElementById('bioPageModal');
-            if(!bioModal) return;
-
-            // Smooth Scroll for Nav Links
-            const navLinks = bioModal.querySelectorAll('.thin-nav a');
-            navLinks.forEach(link => {
-                link.onclick = (e) => {
-                    e.preventDefault();
-                    const targetId = link.getAttribute('href').substring(1);
-                    const targetSection = bioModal.querySelector(`#${targetId}`);
-                    if(targetSection) {
-                        targetSection.scrollIntoView({ behavior: 'smooth' });
-                    }
-                };
-            });
-
-            // Intersection Observer for Scroll Animations & Active Nav
-            const sections = bioModal.querySelectorAll('section');
-            const observerOptions = {
-                root: bioModal,
-                threshold: 0.2
-            };
-
-            const sectionObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const id = entry.target.getAttribute('id');
-                        navLinks.forEach(link => {
-                            if (link.getAttribute('href') === `#${id}`) {
-                                link.classList.add('active');
-                            } else {
-                                link.classList.remove('active');
-                            }
-                        });
-                    }
-                });
-            }, observerOptions);
-
-            sections.forEach(section => sectionObserver.observe(section));
-
-            const animElements = bioModal.querySelectorAll('.animate-scroll');
-            const animObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        
-                        // Trigger counters inside visible section
-                        const counters = entry.target.querySelectorAll('.counter');
-                        counters.forEach(counter => {
-                            if(!counter.classList.contains('counted')) {
-                                counter.classList.add('counted');
-                                const target = +counter.getAttribute('data-target');
-                                const duration = 1500;
-                                const step = target / (duration / 16);
-                                let current = 0;
-                                const updateCounter = () => {
-                                    current += step;
-                                    if(current < target) {
-                                        counter.innerText = Math.ceil(current);
-                                        requestAnimationFrame(updateCounter);
-                                    } else {
-                                        counter.innerText = target;
-                                    }
-                                };
-                                updateCounter();
-                            }
-                        });
-                    }
-                });
-            }, { root: bioModal, threshold: 0.1 });
-
-            animElements.forEach(el => animObserver.observe(el));
         }
 
         function getYoutubeId(url) {
@@ -1149,7 +1087,7 @@
             });
         }
 
-        /* Smart Tap/Click Logic Render Function */
+        /* Render Song Cards */
         function renderSongsList() {
             const container = document.getElementById('songsContainer');
             if(!container) return;
@@ -1195,40 +1133,39 @@
             container.appendChild(fragment);
         }
 
-        /* Dynamic iFrame Positioning */
+        /* FIXED DYNAMIC IFRAME POSITIONING TO PREVENT DRIFTING OUTSIDE FRAME */
         function refreshVideoFramePosition() {
             const holder = document.getElementById('unifiedVideoHolder');
-            if(!holder) return;
+            if(!holder || holder.classList.contains('hidden')) return;
 
-            if(isPlayerFullscreen) {
-                const anchor = document.getElementById('fullPlayerAnchor');
-                if(anchor) {
-                    const bounds = anchor.getBoundingClientRect();
-                    holder.style.top = `${bounds.top}px`;
-                    holder.style.left = `${bounds.left}px`;
-                    holder.style.width = `${bounds.width}px`;
-                    holder.style.height = `${bounds.height}px`;
-                    holder.style.bottom = "auto";
-                    holder.style.zIndex = "51";
-                    holder.style.borderRadius = "12px";
-                }
-            } else {
-                const slot = document.getElementById('miniFrameSlot');
-                if(slot) {
-                    const bounds = slot.getBoundingClientRect();
-                    holder.style.top = `${bounds.top}px`;
-                    holder.style.left = `${bounds.left}px`;
-                    holder.style.width = `${bounds.width}px`;
-                    holder.style.height = `${bounds.height}px`;
-                    holder.style.bottom = "auto";
-                    holder.style.zIndex = "41";
-                    holder.style.borderRadius = "4px";
-                }
+            let targetSlot = isPlayerFullscreen ? document.getElementById('fullPlayerAnchor') : document.getElementById('miniFrameSlot');
+            
+            if(targetSlot) {
+                const bounds = targetSlot.getBoundingClientRect();
+                holder.style.top = `${Math.round(bounds.top)}px`;
+                holder.style.left = `${Math.round(bounds.left)}px`;
+                holder.style.width = `${Math.round(bounds.width)}px`;
+                holder.style.height = `${Math.round(bounds.height)}px`;
+                holder.style.bottom = "auto";
+                holder.style.zIndex = isPlayerFullscreen ? "51" : "41";
+                holder.style.borderRadius = isPlayerFullscreen ? "12px" : "8px";
             }
         }
 
-        window.addEventListener('resize', refreshVideoFramePosition);
-        window.addEventListener('scroll', refreshVideoFramePosition, true);
+        window.addEventListener('resize', () => requestAnimationFrame(refreshVideoFramePosition));
+        window.addEventListener('scroll', () => requestAnimationFrame(refreshVideoFramePosition), true);
+
+        // ResizeObserver to automatically lock video into frame when layout shifts
+        const frameObserver = new ResizeObserver(() => {
+            requestAnimationFrame(refreshVideoFramePosition);
+        });
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const miniSlot = document.getElementById('miniFrameSlot');
+            const fullAnchor = document.getElementById('fullPlayerAnchor');
+            if(miniSlot) frameObserver.observe(miniSlot);
+            if(fullAnchor) frameObserver.observe(fullAnchor);
+        });
 
         function playSong(index, startAtSeconds = 0) {
             if (index < 0 || index >= allSongs.length) return;
@@ -1258,7 +1195,7 @@
             const holder = document.getElementById('unifiedVideoHolder');
             if(holder) holder.classList.remove('hidden');
             
-            setTimeout(refreshVideoFramePosition, 30);
+            setTimeout(() => requestAnimationFrame(refreshVideoFramePosition), 30);
 
             if (ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
                 ytPlayer.loadVideoById({
@@ -1508,44 +1445,18 @@
 
                 window.addEventListener('mousemove', moveDrag); 
                 window.addEventListener('mouseup', endDrag);
-                window.addEventListener('touchmove', moveDrag, { passive: false });
+                window.addEventListener('touchmove', moveDrag);
                 window.addEventListener('touchend', endDrag);
             };
 
             container.addEventListener('mousedown', startDrag);
-            container.addEventListener('touchstart', startDrag, { passive: false });
-        }
-
-        attachTimelineEvents('fullTimeline', 'fullTimelineProgress', 'fullTimelineThumb');
-        attachTimelineEvents('miniTimeline', 'miniTimelineProgress', 'miniTimelineThumb');
-
-        function openFullScreenPlayer() {
-            if(!ytPlayer) return;
-            isPlayerFullscreen = true;
-            document.body.classList.add('fullscreen-lock');
-            const fullScr = document.getElementById('fullScreenPlayer');
-            if(fullScr) {
-                fullScr.classList.remove('hidden');
-                fullScr.classList.add('flex');
-            }
-            setTimeout(refreshVideoFramePosition, 30);
-        }
-
-        function closeFullScreenPlayer() {
-            isPlayerFullscreen = false;
-            document.body.classList.remove('fullscreen-lock');
-            const fullScr = document.getElementById('fullScreenPlayer');
-            if(fullScr) {
-                fullScr.classList.add('hidden');
-                fullScr.classList.remove('flex');
-            }
-            setTimeout(refreshVideoFramePosition, 30);
+            container.addEventListener('touchstart', startDrag, { passive: true });
         }
 
         function togglePlayPause() {
             if (!ytPlayer || typeof ytPlayer.getPlayerState !== 'function') return;
             const state = ytPlayer.getPlayerState();
-            if (state == YT.PlayerState.PLAYING) {
+            if (state === YT.PlayerState.PLAYING) {
                 ytPlayer.pauseVideo();
             } else {
                 ytPlayer.playVideo();
@@ -1554,48 +1465,83 @@
 
         function playNext() {
             if (allSongs.length === 0) return;
-            let nextIndex = currentSongIndex + 1;
-            if (nextIndex >= allSongs.length) nextIndex = 0;
+            let nextIndex = (currentSongIndex + 1) % allSongs.length;
             playSong(nextIndex);
         }
 
         function playPrevious() {
             if (allSongs.length === 0) return;
-            let prevIndex = currentSongIndex - 1;
-            if (prevIndex < 0) prevIndex = allSongs.length - 1;
+            let prevIndex = (currentSongIndex - 1 + allSongs.length) % allSongs.length;
             playSong(prevIndex);
         }
 
+        function openFullScreenPlayer() {
+            isPlayerFullscreen = true;
+            const fullPly = document.getElementById('fullScreenPlayer');
+            if(fullPly) {
+                fullPly.classList.remove('hidden');
+                fullPly.classList.add('flex');
+            }
+            requestAnimationFrame(refreshVideoFramePosition);
+        }
+
+        function closeFullScreenPlayer() {
+            isPlayerFullscreen = false;
+            const fullPly = document.getElementById('fullScreenPlayer');
+            if(fullPly) {
+                fullPly.classList.add('hidden');
+                fullPly.classList.remove('flex');
+            }
+            requestAnimationFrame(refreshVideoFramePosition);
+        }
+
         function closeVideo() {
-            if (ytPlayer && typeof ytPlayer.stopVideo === 'function') ytPlayer.stopVideo();
+            if(ytPlayer && typeof ytPlayer.stopVideo === 'function') {
+                ytPlayer.stopVideo();
+            }
             currentSongIndex = -1;
             renderSongsList();
             
             const miniPly = document.getElementById('miniPlayer');
-            const holder = document.getElementById('unifiedVideoHolder');
             if(miniPly) miniPly.classList.add('hidden');
+            
+            const holder = document.getElementById('unifiedVideoHolder');
             if(holder) holder.classList.add('hidden');
             
             closeFullScreenPlayer();
-            runDynamicDiscoEngine(false);
-            animateWave(false);
         }
 
         // Search Filter Logic
-        document.getElementById('searchInput')?.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase().trim();
-            if (!query) {
-                filteredSongs = [...allSongs];
-            } else {
-                filteredSongs = allSongs.filter(song => song.title.toLowerCase().includes(query));
-            }
-            renderSongsList();
-        });
+        const searchInput = document.getElementById('searchInput');
+        if(searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                filteredSongs = allSongs.filter(s => s.title.toLowerCase().includes(query));
+                renderSongsList();
+            });
+        }
+
+        // Bio Section Intersection Observer for Scroll Animation
+        function setupBioAnimations() {
+            const bioElements = document.querySelectorAll('#bioPageModal .animate-scroll');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            bioElements.forEach(el => observer.observe(el));
+        }
 
         // Initialize App
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('load', () => {
             initDeviceFingerprint();
             loadSongsFromDatabase();
+            attachTimelineEvents('miniTimeline', 'miniTimelineProgress', 'miniTimelineThumb');
+            attachTimelineEvents('fullTimeline', 'fullTimelineProgress', 'fullTimelineThumb');
+            setupBioAnimations();
         });
     </script>
 </body>

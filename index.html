@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -155,13 +156,19 @@
             --soft-shadow: 0 10px 30px rgba(234, 88, 12, 0.08);
         }
 
+        /* BIO MODAL FIXED SCROLL ISSUE */
         #bioPageModal {
             font-family: 'Plus Jakarta Sans', 'Noto Serif Bengali', sans-serif;
             color: var(--text-dark);
-            overscroll-behavior: contain;
+            background-color: #ffffff !important;
+            background: var(--bg-gradient) !important;
+            overscroll-behavior: contain !important;
             -webkit-overflow-scrolling: touch;
             scroll-behavior: smooth;
             will-change: transform, opacity;
+            height: 100%;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         #bioPageModal .nav-wrapper {
@@ -347,6 +354,11 @@
             background: transparent;
             border: none;
         }
+
+        /* REMOVED TRANSITION ANIMATION TO FIX FRAME JUMPING */
+        #unifiedVideoHolder {
+            transition: none !important;
+        }
     </style>
 </head>
 <body class="antialiased flex flex-col h-screen w-screen overflow-hidden" oncontextmenu="return false;">
@@ -439,7 +451,7 @@
     </div>
 
     <!-- BIO FULLSCREEN MODAL / WEBSITE OVERLAY -->
-    <div id="bioPageModal" class="fixed inset-0 bg-white z-[70] hidden flex-col overflow-y-auto transition-opacity duration-300 opacity-0" style="background: var(--bg-gradient);">
+    <div id="bioPageModal" class="fixed inset-0 z-[70] hidden flex-col overflow-y-auto transition-opacity duration-300 opacity-0">
         <!-- CLOSE BUTTON FOR BIO -->
         <button onclick="toggleBioModal()" class="fixed top-4 right-4 z-[1001] bg-black/70 hover:bg-black text-white w-9 h-9 rounded-full flex items-center justify-center shadow-lg transition-transform active:scale-95">
             <i class="fas fa-times text-base"></i>
@@ -701,7 +713,7 @@
 
                     <div class="quote-card">
                         <p>তেওঁৰ আন একটা বহুল স্মৰণীয় বক্তব্যই স্বাধীনতা আৰু নিজস্ব পৰিচয়ৰ প্ৰতি তেওঁৰ দৃষ্টিভংগীৰ কথা প্ৰকাশ কৰে:<br><br>
-                        “মোৰ কোনো জাতি নাই, মোৰ কোনো ধৰ্ম নাই, মোৰ কোনো ভগৱান নাই, মই মুক্ত।”</p>
+                        “মোৰ কোনো জাতি নাই, মোৰ কোনো ধৰ্ম নাই, মোৰ কোনো भगৱান নাই, মই মুক্ত।”</p>
                         <span>— Zubeen Garg</span>
                     </div>
 
@@ -821,7 +833,7 @@
     </div>
 
     <!-- ACCURATELY ALIGNED VIDEO HOLDER FRAME -->
-    <div id="unifiedVideoHolder" class="fixed z-[42] bg-black rounded overflow-hidden border border-zinc-800 hidden pointer-events-none transition-all duration-200">
+    <div id="unifiedVideoHolder" class="fixed z-[42] bg-black rounded overflow-hidden border border-zinc-800 hidden pointer-events-none">
         <div id="ytPlayerContainer" class="w-full h-full scale-105"></div>
         <div class="yt-strict-blocker"></div>
     </div>
@@ -1286,7 +1298,7 @@
             const holder = document.getElementById('unifiedVideoHolder');
             if(holder) holder.classList.remove('hidden');
             
-            setTimeout(refreshVideoFramePosition, 50);
+            refreshVideoFramePosition();
 
             if (ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
                 ytPlayer.loadVideoById({
@@ -1378,7 +1390,7 @@
                 fullPly.classList.remove('hidden');
                 fullPly.classList.add('flex');
             }
-            setTimeout(refreshVideoFramePosition, 50);
+            refreshVideoFramePosition();
         }
 
         function closeFullScreenPlayer() {
@@ -1388,7 +1400,7 @@
                 fullPly.classList.add('hidden');
                 fullPly.classList.remove('flex');
             }
-            setTimeout(refreshVideoFramePosition, 50);
+            refreshVideoFramePosition();
         }
 
         function closeVideo() {
@@ -1582,6 +1594,7 @@
         }
 
         function formatTime(seconds) {
+            if (isNaN(seconds) || seconds < 0) return "0:00";
             const mins = Math.floor(seconds / 60);
             const secs = Math.floor(seconds % 60);
             return `${mins}:${secs < 10 ? '0' : ''}${secs}`;

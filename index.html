@@ -574,7 +574,7 @@
                 </div>
 
                 <div class="card animate-scroll">
-                    <h3>A Multi-Instrumental Maestro • বিভিন্ন বাদ্যযন্ত্ৰৰ এজন দক্ষ শিল্পী</h3>
+                    <h3>A Multi-Instrumental Maestro • विभिन्न বাদ্যযন্ত্ৰৰ এজন দক্ষ শিল্পী</h3>
                     <p>জুবিন গাৰ্গৰ সংগীত-সত্তাৰ অন্যতম বিশেষ দিশ আছিল বিভিন্ন বাদ্যযন্ত্ৰৰ সৈতে তেওঁৰ পৰিচয় আৰু দক্ষতা।</p>
                     <div class="pills-box">
                         <span class="pill">Anandalahari</span> <span class="pill">Dhol</span> <span class="pill">Dotara</span> 
@@ -1070,13 +1070,12 @@
 
             if (bioObserver) bioObserver.disconnect();
 
-            // Unobserve handled elements to prevent re-triggering shaking/flashing
             bioObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
                         triggerCounters(entry.target);
-                        bioObserver.unobserve(entry.target); // Fixed: Stop observer once animated
+                        bioObserver.unobserve(entry.target);
                     }
                 });
             }, {
@@ -1087,7 +1086,6 @@
             const animElements = bioModal.querySelectorAll('.animate-scroll');
             animElements.forEach(el => bioObserver.observe(el));
 
-            // Optimized scroll listener for active section indicator
             let isTicking = false;
             bioModal.onscroll = () => {
                 if (!isTicking) {
@@ -1162,6 +1160,31 @@
             });
         }
 
+        /* 1. SEARCH BOX SYSTEM (Matched Song Brings to Top) */
+        function initSearchSystem() {
+            const searchInput = document.getElementById('searchInput');
+            if(!searchInput) return;
+
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.trim().toLowerCase();
+                if(!query) {
+                    filteredSongs = [...allSongs];
+                } else {
+                    const matched = [];
+                    const unmatched = [];
+                    allSongs.forEach(song => {
+                        if(song.title.toLowerCase().includes(query)) {
+                            matched.push(song);
+                        } else {
+                            unmatched.push(song);
+                        }
+                    });
+                    filteredSongs = [...matched, ...unmatched];
+                }
+                renderSongsList();
+            });
+        }
+
         /* Render Song Cards */
         function renderSongsList() {
             const container = document.getElementById('songsContainer');
@@ -1208,35 +1231,27 @@
             container.appendChild(fragment);
         }
 
-        /* Dynamic iFrame Precise Positioning */
+        /* 3. DYNAMIC IFRAME POSITIONING FIX FOR MINI & FULLSCREEN PLAYER */
         function refreshVideoFramePosition() {
             const holder = document.getElementById('unifiedVideoHolder');
-            if(!holder) return;
+            if(!holder || holder.classList.contains('hidden')) return;
 
+            let targetElement = null;
             if(isPlayerFullscreen) {
-                const anchor = document.getElementById('fullPlayerAnchor');
-                if(anchor) {
-                    const bounds = anchor.getBoundingClientRect();
-                    holder.style.top = `${bounds.top}px`;
-                    holder.style.left = `${bounds.left}px`;
-                    holder.style.width = `${bounds.width}px`;
-                    holder.style.height = `${bounds.height}px`;
-                    holder.style.bottom = "auto";
-                    holder.style.zIndex = "51";
-                    holder.style.borderRadius = "12px";
-                }
+                targetElement = document.getElementById('fullPlayerAnchor');
             } else {
-                const slot = document.getElementById('miniFrameSlot');
-                if(slot) {
-                    const bounds = slot.getBoundingClientRect();
-                    holder.style.top = `${bounds.top}px`;
-                    holder.style.left = `${bounds.left}px`;
-                    holder.style.width = `${bounds.width}px`;
-                    holder.style.height = `${bounds.height}px`;
-                    holder.style.bottom = "auto";
-                    holder.style.zIndex = "41";
-                    holder.style.borderRadius = "8px";
-                }
+                targetElement = document.getElementById('miniFrameSlot');
+            }
+
+            if(targetElement) {
+                const bounds = targetElement.getBoundingClientRect();
+                holder.style.top = `${bounds.top}px`;
+                holder.style.left = `${bounds.left}px`;
+                holder.style.width = `${bounds.width}px`;
+                holder.style.height = `${bounds.height}px`;
+                holder.style.bottom = "auto";
+                holder.style.zIndex = isPlayerFullscreen ? "51" : "41";
+                holder.style.borderRadius = isPlayerFullscreen ? "12px" : "8px";
             }
         }
 
@@ -1271,7 +1286,7 @@
             const holder = document.getElementById('unifiedVideoHolder');
             if(holder) holder.classList.remove('hidden');
             
-            setTimeout(refreshVideoFramePosition, 30);
+            setTimeout(refreshVideoFramePosition, 50);
 
             if (ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
                 ytPlayer.loadVideoById({
@@ -1363,7 +1378,7 @@
                 fullPly.classList.remove('hidden');
                 fullPly.classList.add('flex');
             }
-            refreshVideoFramePosition();
+            setTimeout(refreshVideoFramePosition, 50);
         }
 
         function closeFullScreenPlayer() {
@@ -1373,7 +1388,7 @@
                 fullPly.classList.add('hidden');
                 fullPly.classList.remove('flex');
             }
-            refreshVideoFramePosition();
+            setTimeout(refreshVideoFramePosition, 50);
         }
 
         function closeVideo() {
@@ -1388,6 +1403,73 @@
             currentSongIndex = -1;
             renderSongsList();
             closeFullScreenPlayer();
+        }
+
+        /* 2. TIMELINE DRAG & SEEK SECONDS CONTROL */
+        function seekSeconds(sec) {
+            if (!ytPlayer || typeof ytPlayer.getCurrentTime !== 'function') return;
+            const currentTime = ytPlayer.getCurrentTime();
+            const duration = ytPlayer.getDuration();
+            let targetTime = currentTime + sec;
+            if (targetTime < 0) targetTime = 0;
+            if (targetTime > duration) targetTime = duration;
+            ytPlayer.seekTo(targetTime, true);
+        }
+
+        function setupTimelineInteractions() {
+            const timelines = [
+                { id: 'miniTimeline', progressId: 'miniTimelineProgress', thumbId: 'miniTimelineThumb' },
+                { id: 'fullTimeline', progressId: 'fullTimelineProgress', thumbId: 'fullTimelineThumb' }
+            ];
+
+            timelines.forEach(tl => {
+                const elem = document.getElementById(tl.id);
+                if (!elem) return;
+
+                const handleSeek = (e) => {
+                    if (!ytPlayer || typeof ytPlayer.getDuration !== 'function') return;
+                    const rect = elem.getBoundingClientRect();
+                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                    let pos = (clientX - rect.left) / rect.width;
+                    if (pos < 0) pos = 0;
+                    if (pos > 1) pos = 1;
+
+                    const duration = ytPlayer.getDuration() || 0;
+                    const targetTime = pos * duration;
+
+                    const prog = document.getElementById(tl.progressId);
+                    const thumb = document.getElementById(tl.thumbId);
+                    if (prog) prog.style.width = `${pos * 100}%`;
+                    if (thumb) thumb.style.left = `${pos * 100}%`;
+
+                    ytPlayer.seekTo(targetTime, true);
+                };
+
+                const startDrag = (e) => {
+                    isDraggingTimeline = true;
+                    handleSeek(e);
+
+                    const moveHandler = (moveEvent) => {
+                        if (isDraggingTimeline) handleSeek(moveEvent);
+                    };
+
+                    const stopDrag = () => {
+                        isDraggingTimeline = false;
+                        window.removeEventListener('mousemove', moveHandler);
+                        window.removeEventListener('mouseup', stopDrag);
+                        window.removeEventListener('touchmove', moveHandler);
+                        window.removeEventListener('touchend', stopDrag);
+                    };
+
+                    window.addEventListener('mousemove', moveHandler);
+                    window.addEventListener('mouseup', stopDrag);
+                    window.addEventListener('touchmove', moveHandler);
+                    window.addEventListener('touchend', stopDrag);
+                };
+
+                elem.addEventListener('mousedown', startDrag);
+                elem.addEventListener('touchstart', startDrag, { passive: true });
+            });
         }
 
         function toggleDiscoSystem() {
@@ -1508,6 +1590,8 @@
         window.onload = function() {
             initDeviceFingerprint();
             loadSongsFromDatabase();
+            initSearchSystem();
+            setupTimelineInteractions();
         };
     </script>
 </body>

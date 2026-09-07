@@ -156,19 +156,27 @@
             --soft-shadow: 0 10px 30px rgba(234, 88, 12, 0.08);
         }
 
-        /* BIO MODAL FIXED SCROLL ISSUE */
+        /* BIO MODAL FIXED SCROLL & BREAK FIX */
         #bioPageModal {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100vw;
+            height: 100vh;
             font-family: 'Plus Jakarta Sans', 'Noto Serif Bengali', sans-serif;
             color: var(--text-dark);
-            background-color: #ffffff !important;
+            background-color: #fffbeb !important;
             background: var(--bg-gradient) !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
             overscroll-behavior: contain !important;
+            touch-action: pan-y !important;
             -webkit-overflow-scrolling: touch;
-            scroll-behavior: smooth;
             will-change: transform, opacity;
-            height: 100%;
-            width: 100%;
             box-sizing: border-box;
+            z-index: 70;
         }
 
         #bioPageModal .nav-wrapper {
@@ -451,7 +459,7 @@
     </div>
 
     <!-- BIO FULLSCREEN MODAL / WEBSITE OVERLAY -->
-    <div id="bioPageModal" class="fixed inset-0 z-[70] hidden flex-col overflow-y-auto transition-opacity duration-300 opacity-0">
+    <div id="bioPageModal" class="hidden transition-opacity duration-300 opacity-0">
         <!-- CLOSE BUTTON FOR BIO -->
         <button onclick="toggleBioModal()" class="fixed top-4 right-4 z-[1001] bg-black/70 hover:bg-black text-white w-9 h-9 rounded-full flex items-center justify-center shadow-lg transition-transform active:scale-95">
             <i class="fas fa-times text-base"></i>
@@ -667,7 +675,7 @@
                 </div>
 
                 <div class="card animate-scroll">
-                    <h3>A Master of Musical Styles • বিভিন্ন সংগীতধাৰাৰ এক বহুমুখী শিল্পী</h3>
+                    <h3>A Master of Musical Styles • विभिन्न সংগীতধাৰাৰ এক বহুমুখী শিল্পী</h3>
                     <p>From traditional folk to modern rock, his musical versatility crossed genres and generations.</p>
                     <div class="pills-box" style="margin-top: 8px;">
                         <span class="pill">Indian Folk</span> <span class="pill">Indian Pop</span> <span class="pill">Rock</span> 
@@ -1030,14 +1038,14 @@
             }
         }
 
-        /* Bio Page Overlay Modal Toggle & Scroll Animations */
+        /* Bio Page Overlay Modal Toggle & Scroll Lock Fix */
         function toggleBioModal() {
             const bioModal = document.getElementById('bioPageModal');
             if(!bioModal) return;
 
             if(bioModal.classList.contains('hidden')) {
                 bioModal.classList.remove('hidden');
-                bioModal.classList.add('flex');
+                bioModal.scrollTop = 0;
                 setTimeout(() => {
                     bioModal.classList.remove('opacity-0');
                     initBioAnimations();
@@ -1046,7 +1054,6 @@
                 bioModal.classList.add('opacity-0');
                 setTimeout(() => {
                     bioModal.classList.add('hidden');
-                    bioModal.classList.remove('flex');
                 }, 300);
             }
         }
